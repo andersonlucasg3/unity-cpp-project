@@ -1,4 +1,0 @@
-/Volumes/SSD_256GB/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Volumes/SSD_256GB/Projects/Aquiris/unity-cpp-project/CppSource
--- Configuring done
--- Generating done
--- Build files have been written to: /Volumes/SSD_256GB/Projects/Aquiris/unity-cpp-project/CppSource/cmake-build-debug

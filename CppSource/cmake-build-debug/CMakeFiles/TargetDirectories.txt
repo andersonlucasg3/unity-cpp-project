@@ -1,3 +1,0 @@
-/Volumes/SSD_256GB/Projects/Aquiris/unity-cpp-project/CppSource/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Volumes/SSD_256GB/Projects/Aquiris/unity-cpp-project/CppSource/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Volumes/SSD_256GB/Projects/Aquiris/unity-cpp-project/CppSource/cmake-build-debug/CMakeFiles/CppSource.dir
