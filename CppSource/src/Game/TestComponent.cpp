@@ -14,5 +14,13 @@ namespace CppSource::Game {
 
     }
 
+    void TestComponent::Update() {
+
+    }
+
+    void TestComponent::LateUpdate() {
+
+    }
+
     REQUIRED_COMPONENT_REGISTER(TestComponent)
 }

@@ -11,18 +11,14 @@ namespace CppSource::Components::Factory {
     }
 
     ComponentFactory::ComponentFactory() {
-        _componentMap = new std::map<std::string, CustomComponent *(*)()>;
+        _componentMap = new map<string, CustomComponent *(*)()>;
     }
 
-    intptr_t ComponentFactory::InstantiateHandle(const std::string& clsName) {
+    intptr_t ComponentFactory::InstantiateHandle(const string& clsName) {
         return intptr_t(_componentMap->find(clsName)->second());
     }
 
-    template<typename TComponent> void ComponentFactory::RegisterComponent(const std::string& clsName) {
-        _componentMap->insert(std::make_pair(clsName, &CreateInstance<TComponent>));
-    }
-
-    template<typename TComponent> CustomComponent *ComponentFactory::CreateInstance() {
-        return new TComponent;
+    void ComponentFactory::RegisterComponent(const string &clsName, CustomComponent *(*constructor)()) {
+        _componentMap->insert(make_pair(clsName, constructor));
     }
 }

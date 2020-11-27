@@ -9,15 +9,16 @@ REQUIRED_COMPONENT_HEADER
 using namespace CppSource::Components;
 
 namespace CppSource::Game {
-    class TestComponent : private CustomComponent {
+    class TestComponent : public CustomComponent {
     private:
         REQUIRED_COMPONENT_BODY(TestComponent)
 
-    protected:
+    public:
         TestComponent();
 
-    public:
         void Awake() override;
         void Start() override;
+        void Update() override;
+        void LateUpdate() override;
     };
 }

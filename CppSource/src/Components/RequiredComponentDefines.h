@@ -14,7 +14,10 @@ namespace CppSource::Components::Factory{ \
 #define REQUIRED_COMPONENT_REGISTER_NAMESPACE \
     using namespace CppSource::Components::Factory;
 #define REQUIRED_COMPONENT_REGISTER(CLASS) \
+    CustomComponent *CreateInstance() {    \
+        return new CLASS(); \
+    }\
     CLASS::constructor::constructor() { \
-        ComponentFactory::Instance().RegisterComponent<CLASS>("CLASS"); \
-    } \
+        ComponentFactory::Instance().RegisterComponent(#CLASS, &CreateInstance); \
+    }                                      \
     CLASS::constructor CLASS::cons;

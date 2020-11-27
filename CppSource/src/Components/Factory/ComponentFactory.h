@@ -2,8 +2,11 @@
 
 #include <string>
 #include <map>
+#include "../../Game/ComponentsRegistration.h"
 
 using namespace std;
+
+COMPONENTS_REGISTER_TEMPLATES_HEADER
 
 namespace CppSource::Components {
     class CustomComponent;
@@ -11,17 +14,15 @@ namespace CppSource::Components {
 
 namespace CppSource::Components::Factory {
     class ComponentFactory {
-    public:
-        static ComponentFactory Instance();
-
-        intptr_t InstantiateHandle(const std::string& clsName);
-        template<typename TComponent> void RegisterComponent(const std::string& clsName);
-
     private:
         map<string, CustomComponent *(*)()> *_componentMap;
 
         ComponentFactory();
 
-        template<typename TComponent> CustomComponent *CreateInstance();
+    public:
+        static ComponentFactory Instance();
+
+        intptr_t InstantiateHandle(const string& clsName);
+        void RegisterComponent(const string &clsName, CustomComponent *(*constructor)());
     };
 }
