@@ -6,28 +6,45 @@ namespace UnityCpp
 {
     public abstract class NativeComponent : MonoBehaviour
     {
-        [DllImport("__Internal", EntryPoint = "CreateCustomClassHandle")]
-        private static extern IntPtr CreateCustomClassHandle(string className);
-        [DllImport("__Internal", EntryPoint = "InvokeNativeAwake")]
-        private static extern void InvokeNativeAwake(IntPtr handle);
-        [DllImport("__Internal", EntryPoint = "InvokeNativeStart")]
-        private static extern void InvokeNativeStart(IntPtr handle);
+#if UNITY_EDITOR_WIN
+        private const string _nativePluginName = "CppSource.dll";
+#endif
+#if UNITY_EDITOR_OSX
+        private const string _nativePluginName = "libCppSource.dylib";
+#endif
 
-        private readonly IntPtr _nativeHandle;
+        private delegate void UnitySendMessageDelegate(
+            string gameObjectName,
+            string methodName,
+            string message
+        );
 
-        protected NativeComponent() : base()
-        {
-            _nativeHandle = CreateCustomClassHandle(GetType().Name);
-        }
+        [DllImport(_nativePluginName, EntryPoint = "SetUnitySendMessageMethod")]
+        private static extern void SetUnitySendMessageMethod(UnitySendMessageDelegate func);
+        [DllImport(_nativePluginName, EntryPoint = "CreateCustomClassHandle")]
+        private static extern long CreateCustomClassHandle(string className, string gameObjectName);
+        [DllImport(_nativePluginName, EntryPoint = "InvokeNativeAwake")]
+        private static extern void InvokeNativeAwake(long handle);
+        [DllImport(_nativePluginName, EntryPoint = "InvokeNativeStart")]
+        private static extern void InvokeNativeStart(long handle);
+
+        private long _nativeHandle;
 
         private void Awake()
         {
+            _nativeHandle = CreateCustomClassHandle(GetType().Name, gameObject.name);
+
             InvokeNativeAwake(_nativeHandle);            
         }
 
         private void Start()
         {
             InvokeNativeStart(_nativeHandle);
+        }
+
+        public void DoLog(string message)
+        {
+            Debug.Log(message);
         }
     }
 }

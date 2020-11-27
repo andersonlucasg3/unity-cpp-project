@@ -6,19 +6,21 @@ using namespace std;
 using namespace CppSource::Components;
 using namespace CppSource::Components::Factory;
 
-intptr_t CreateCustomClassHandle(const string& clsName)
+long long CreateCustomClassHandle(const char *clsName, const char *gameObjectName)
 {
-    return ComponentFactory::Instance().InstantiateHandle(clsName);
+    CustomComponent *component = ComponentFactory::Instance().InstantiateHandle(clsName);
+    component->SetGameObjectName(gameObjectName);
+    return intptr_t(component);
 }
 
 template<typename TComponent> TComponent *CastFrom(intptr_t handle) {
-    return (TComponent *)handle;
+    return (TComponent *)intptr_t(handle);
 }
 
-void InvokeNativeAwake(intptr_t handle) {
+void InvokeNativeAwake(int handle) {
     CastFrom<CustomComponent>(handle)->Awake();
 }
 
-void InvokeNativeStart(intptr_t handle) {
+void InvokeNativeStart(int handle) {
     CastFrom<CustomComponent>(handle)->Start();
 }

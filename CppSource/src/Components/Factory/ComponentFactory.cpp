@@ -14,8 +14,8 @@ namespace CppSource::Components::Factory {
         _componentMap = new map<string, CustomComponent *(*)()>;
     }
 
-    intptr_t ComponentFactory::InstantiateHandle(const string& clsName) {
-        return intptr_t(_componentMap->find(clsName)->second());
+    CustomComponent *ComponentFactory::InstantiateHandle(const string& clsName) {
+        return _componentMap->find(clsName)->second();
     }
 
     void ComponentFactory::RegisterComponent(const string &clsName, CustomComponent *(*constructor)()) {

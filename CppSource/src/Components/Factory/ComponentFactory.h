@@ -22,7 +22,7 @@ namespace CppSource::Components::Factory {
     public:
         static ComponentFactory Instance();
 
-        intptr_t InstantiateHandle(const string& clsName);
+        CustomComponent *InstantiateHandle(const string& clsName);
         void RegisterComponent(const string &clsName, CustomComponent *(*constructor)());
     };
 }

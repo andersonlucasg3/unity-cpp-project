@@ -12,6 +12,8 @@ add_library(CppSource SHARED
         src/Components/CustomComponent.h
         src/Game/TestComponent.cpp
         src/Game/TestComponent.h
-        src/UnityAPI/UnityAPIExtern.h src/Game/ComponentsRegistration.h src/Components/RequiredComponentDefines.h)
+        src/UnityAPI/UnityAPIExtern.h
+        src/Game/ComponentsRegistration.h
+        src/Components/RequiredComponentDefines.h)
 
 set(LIBRARY_OUTPUT_PATH ../../Assets/Plugins/NativeComponents)
