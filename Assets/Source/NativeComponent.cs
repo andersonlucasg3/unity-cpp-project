@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using UnityCpp.UnityEngineFacade;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -7,53 +8,48 @@ namespace UnityCpp
 {
     public abstract class NativeComponent : MonoBehaviour
     {
-        private delegate void UnitySendMessageDelegate(
-            [MarshalAs(UnmanagedType.LPStr)] string gameObjectName,
-            [MarshalAs(UnmanagedType.LPStr)] string methodName,
-            [MarshalAs(UnmanagedType.LPStr)] string message
-        );
-
         [DllImport(NativeConstants.nativePluginName, EntryPoint = "CreateNativeInstance")]
-        private static extern int CreateNativeInstance(
+        private static extern IntPtr CreateNativeInstance(
             [MarshalAs(UnmanagedType.LPStr)] string className, 
-            [MarshalAs(UnmanagedType.LPStr)] string gameObjectName
+            [MarshalAs(UnmanagedType.Struct)] GameObjectFacade gameObjectName
         );
         
-        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeAwake", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeAwake")]
         private static extern void InvokeNativeAwake(IntPtr handle);
         
-        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeStart", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeStart")]
         private static extern void InvokeNativeStart(IntPtr handle);
-        
-        [DllImport(NativeConstants.nativePluginName, EntryPoint = "SetUnitySendMessageMethod", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SetUnitySendMessageMethod(UnitySendMessageDelegate func);
 
-        
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeUpdate")]
+        private static extern void InvokeNativeUpdate(IntPtr handle);
 
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeLateUpdate")]
+        private static extern void InvokeNativeLateUpdate(IntPtr handle);
+        
         private IntPtr _nativeHandle;
+        private GameObjectFacade _gameObjectFacade;
 
         private void Awake()
         {
-            
-            
             string typeName = GetType().Name;
-            string objectName = gameObject.name;
-            CreateNativeInstance(typeName, objectName);
-            // SetUnitySendMessageMethod(UnitySendMessage);
-            // _nativeHandle = new IntPtr();
-            // 
-            //
-            // InvokeNativeAwake(_nativeHandle);
+            _gameObjectFacade = new GameObjectFacade(gameObject);
+            _nativeHandle = CreateNativeInstance(typeName, _gameObjectFacade);
+            InvokeNativeAwake(_nativeHandle);
         }
 
         private void Start()
         {
-            // InvokeNativeStart(_nativeHandle);
+            InvokeNativeStart(_nativeHandle);
         }
 
-        private static void UnitySendMessage(string gameObjectName, string methodName, string message)
+        private void Update()
         {
-            GameObject.Find(gameObjectName).SendMessage(methodName, message, SendMessageOptions.RequireReceiver);
+            InvokeNativeUpdate(_nativeHandle);
+        }
+
+        private void LateUpdate()
+        {
+            InvokeNativeLateUpdate(_nativeHandle);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace CppSource::Components::Factory {
     public:
         static ComponentFactory *Instance();
 
-        NativeComponent *InstantiateHandle(const char *clsName);
-        void RegisterComponent(const char *clsName, NativeComponent *(*constructor)());
+        NativeComponent *InstantiateHandle(const char *className);
+        void RegisterComponent(const char *className, NativeComponent *(*constructor)());
     };
 }

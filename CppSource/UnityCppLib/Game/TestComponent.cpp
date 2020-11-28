@@ -1,24 +1,24 @@
 #include "TestComponent.h"
-#include "../UnityAPI/UnityAPIExtern.h"
+#include "UnityAPI/UnityEngine/GameObject.h"
 
 using namespace UnityEngine;
 
 namespace CppSource::Game {
     TestComponent::TestComponent() = default;
 
-    void TestComponent::Awake() {
-        Debug::Log("Native TestComponent::Awake");
+    void TestComponent::awake() {
+
     }
 
-    void TestComponent::Start() {
-        Debug::Log("Native TestComponent::Awake");
+    void TestComponent::start() {
+
     }
 
-    void TestComponent::Update() {
-        Debug::Log("Native TestComponent::Update");
+    void TestComponent::update() {
+
     }
 
-    void TestComponent::LateUpdate() {
-        Debug::Log("Native TestComponent::LateUpdate");
+    void TestComponent::lateUpdate() {
+
     }
 }

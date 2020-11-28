@@ -9,9 +9,9 @@ namespace CppSource::Game {
     public:
         TestComponent();
 
-        void Awake() override;
-        void Start() override;
-        void Update() override;
-        void LateUpdate() override;
+        void awake() override;
+        void start() override;
+        void update() override;
+        void lateUpdate() override;
     };
 }

@@ -1,5 +1,11 @@
 #pragma once
 
+#include "../../UnityCppTestApp/UnityInitialization.h"
+#include "../Game/ComponentsRegistration.h"
+#include "../Components/Factory/ComponentFactory.h"
+#include "UnityAPIExtern.h"
+#include "UnityAPI/UnityEngine/GameObject.h"
+
 #ifndef UNITY_EXPORT
 #define UNITY_EXPORT __declspec(dllexport)
 #endif
@@ -9,16 +15,7 @@
 #endif
 
 typedef void (__cdecl *__UnitySendMessageFunc)(const char *gameObjectName, const char *methodName, const char *message);
-typedef void (__cdecl *__UnityDebugLogFunc)(const char *message);
 
 extern "C" {
     UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func);
-    UNITY_EXPORT void SetUnityDebugLogMethod(__UnityDebugLogFunc func);
-}
-
-namespace UnityEngine {
-    class Debug {
-    public:
-        static void Log(const char *message);
-    };
 }

@@ -2,24 +2,27 @@
 
 #include <string>
 
+namespace UnityEngine {
+    class GameObject;
+}
+
 using namespace std;
+using namespace UnityEngine;
 
 namespace CppSource::Components {
     class NativeComponent
     {
     protected:
-        const char *_gameObjectName;
+        GameObject *_gameObject;
 
         NativeComponent();
-        ~NativeComponent();
 
     public:
-        char *GetGameObjectName();
-        void SetGameObjectName(const char *gameObjectName);
+        GameObject *gameObject();
 
-        virtual void Awake() = 0;
-        virtual void Start() = 0;
-        virtual void Update() = 0;
-        virtual void LateUpdate() = 0;
+        virtual void awake() {}
+        virtual void start() {}
+        virtual void update() {}
+        virtual void lateUpdate() {}
     };
 }

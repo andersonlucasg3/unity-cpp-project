@@ -1,22 +1,20 @@
 #include "UnityAPIExtern.h"
 
+using namespace CppSource::Game;
+using namespace CppSource::Components;
+using namespace CppSource::Components::Factory;
+using namespace UnityEngine;
+
 __UnitySendMessageFunc UnitySendMessage = nullptr;
-__UnityDebugLogFunc UnityDebugLog = nullptr;
 
 extern "C" {
     UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func) {
         UnitySendMessage = func;
     }
 
-    UNITY_EXPORT void SetUnityDebugLogMethod(__UnityDebugLogFunc func) {
-        UnityDebugLog = func;
+    REGISTER_DECLARE_ALL_COMPONENTS
 
-        UnityEngine::Debug::Log("Unity Debug.Log function configured!");
-    }
-}
-
-namespace UnityEngine {
-    void Debug::Log(const char *message) {
-        UnityDebugLog(message);
+    UNITY_EXPORT void InitializeNative() {
+        REGISTER_ALL_COMPONENTS_CALL
     }
 }

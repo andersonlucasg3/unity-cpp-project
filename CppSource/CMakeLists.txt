@@ -14,13 +14,13 @@ add_library(UnityCppLib SHARED
         UnityCppLib/Game/ComponentsRegistration.h
         UnityCppLib/Components/RequiredComponentDefines.h
         UnityCppLib/UnityAPI/UnityAPIExtern.cpp
-        UnityCppLib/UnityAPI/UnityInitialization.cpp)
+        UnityCppLib/UnityAPI/UnityEngine/GameObject.cpp UnityCppLib/UnityAPI/UnityEngine/GameObject.h UnityCppLib/UnityAPI/UnityEngine/Debug.cpp UnityCppLib/UnityAPI/UnityEngine/Debug.h UnityCppLib/UnityAPI/UnityEngine/Transform.cpp UnityCppLib/UnityAPI/UnityEngine/Transform.h UnityCppLib/UnityAPI/UnityEngine/Component.cpp UnityCppLib/UnityAPI/UnityEngine/Component.h)
 target_include_directories(UnityCppLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib)
 
 add_executable(UnityCppTestApp
         UnityCppTestApp/main.cpp
         UnityCppTestApp/UnityInitialization.h
-        UnityCppTestApp/NativeComponentPrivate.h)
+        )
 
 target_include_directories(UnityCppTestApp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib)
 target_link_libraries(UnityCppTestApp LINK_PUBLIC UnityCppLib)

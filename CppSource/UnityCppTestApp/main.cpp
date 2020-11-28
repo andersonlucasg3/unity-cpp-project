@@ -1,6 +1,5 @@
 #include "UnityInitialization.h"
 #include "UnityAPI/UnityAPIExtern.h"
-#include "NativeComponentPrivate.h"
 #include "Game/TestComponent.h"
 
 #include <iostream>
@@ -13,12 +12,16 @@ void DebugLog(const char *message) {
     cout << messageStr.append("\n").c_str();
 }
 
+extern "C" {
+    UNITY_IMPORT void SetUnityDebugLogMethod(void (*)(const char *));
+    UNITY_IMPORT NativeComponent *CreateNativeInstance(const char *className);
+}
+
 int main(int argc, char **argv) {
     SetUnityDebugLogMethod(&DebugLog);
     InitializeNative();
 
-    NativeComponent *component = CreateNativeInstance("TestComponent", "TestGameObjectName");
+    NativeComponent *component = CreateNativeInstance("TestComponent");
     assert(typeid(*component) == typeid(TestComponent));
-    assert(strcmp(component->GetGameObjectName(), "TestGameObjectName") == 0);
     return 0;
 }
