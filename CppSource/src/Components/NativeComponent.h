@@ -5,15 +5,16 @@
 using namespace std;
 
 namespace CppSource::Components {
-    class CustomComponent
+    class NativeComponent
     {
     protected:
-        string _gameObjectName;
+        const char *_gameObjectName;
 
-        CustomComponent();
+        NativeComponent();
+        ~NativeComponent();
 
     public:
-        void SetGameObjectName(const string& gameObjectName);
+        void SetGameObjectName(const char *gameObjectName);
 
         virtual void Awake() = 0;
         virtual void Start() = 0;

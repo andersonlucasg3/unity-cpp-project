@@ -6,23 +6,21 @@
 
 using namespace std;
 
-COMPONENTS_REGISTER_TEMPLATES_HEADER
-
 namespace CppSource::Components {
-    class CustomComponent;
+    class NativeComponent;
 }
 
 namespace CppSource::Components::Factory {
     class ComponentFactory {
     private:
-        map<string, CustomComponent *(*)()> *_componentMap;
+        map<const char *, NativeComponent *(*)()> *_componentMap;
 
         ComponentFactory();
 
     public:
         static ComponentFactory Instance();
 
-        CustomComponent *InstantiateHandle(const string& clsName);
-        void RegisterComponent(const string &clsName, CustomComponent *(*constructor)());
+        NativeComponent *InstantiateHandle(const char *clsName);
+        void RegisterComponent(const char *clsName, NativeComponent *(*constructor)());
     };
 }

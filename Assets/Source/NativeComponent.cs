@@ -1,50 +1,59 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace UnityCpp
 {
     public abstract class NativeComponent : MonoBehaviour
     {
-#if UNITY_EDITOR_WIN
-        private const string _nativePluginName = "CppSource.dll";
-#endif
-#if UNITY_EDITOR_OSX
-        private const string _nativePluginName = "libCppSource.dylib";
-#endif
-
         private delegate void UnitySendMessageDelegate(
-            string gameObjectName,
-            string methodName,
-            string message
+            [MarshalAs(UnmanagedType.LPStr)] string gameObjectName,
+            [MarshalAs(UnmanagedType.LPStr)] string methodName,
+            [MarshalAs(UnmanagedType.LPStr)] string message
         );
 
-        [DllImport(_nativePluginName, EntryPoint = "SetUnitySendMessageMethod")]
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "CreateNativeInstance")]
+        private static extern int CreateNativeInstance(
+            [MarshalAs(UnmanagedType.LPStr)] string className, 
+            [MarshalAs(UnmanagedType.LPStr)] string gameObjectName
+        );
+        
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeAwake", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void InvokeNativeAwake(IntPtr handle);
+        
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InvokeNativeStart", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void InvokeNativeStart(IntPtr handle);
+        
+        [DllImport(NativeConstants.nativePluginName, EntryPoint = "SetUnitySendMessageMethod", CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetUnitySendMessageMethod(UnitySendMessageDelegate func);
-        [DllImport(_nativePluginName, EntryPoint = "CreateCustomClassHandle")]
-        private static extern long CreateCustomClassHandle(string className, string gameObjectName);
-        [DllImport(_nativePluginName, EntryPoint = "InvokeNativeAwake")]
-        private static extern void InvokeNativeAwake(long handle);
-        [DllImport(_nativePluginName, EntryPoint = "InvokeNativeStart")]
-        private static extern void InvokeNativeStart(long handle);
 
-        private long _nativeHandle;
+        
+
+        private IntPtr _nativeHandle;
 
         private void Awake()
         {
-            _nativeHandle = CreateCustomClassHandle(GetType().Name, gameObject.name);
-
-            InvokeNativeAwake(_nativeHandle);            
+            
+            
+            string typeName = GetType().Name;
+            string objectName = gameObject.name;
+            CreateNativeInstance(typeName, objectName);
+            // SetUnitySendMessageMethod(UnitySendMessage);
+            // _nativeHandle = new IntPtr();
+            // 
+            //
+            // InvokeNativeAwake(_nativeHandle);
         }
 
         private void Start()
         {
-            InvokeNativeStart(_nativeHandle);
+            // InvokeNativeStart(_nativeHandle);
         }
 
-        public void DoLog(string message)
+        private static void UnitySendMessage(string gameObjectName, string methodName, string message)
         {
-            Debug.Log(message);
+            GameObject.Find(gameObjectName).SendMessage(methodName, message, SendMessageOptions.RequireReceiver);
         }
     }
 }

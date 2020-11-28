@@ -1,4 +1,7 @@
 #include "ComponentFactory.h"
+#include "../../UnityAPI/UnityAPIExtern.h"
+
+using namespace UnityEngine;
 
 namespace CppSource::Components::Factory {
     ComponentFactory *_shared = nullptr;
@@ -11,14 +14,15 @@ namespace CppSource::Components::Factory {
     }
 
     ComponentFactory::ComponentFactory() {
-        _componentMap = new map<string, CustomComponent *(*)()>;
+        _componentMap = new map<const char *, NativeComponent *(*)()>;
     }
 
-    CustomComponent *ComponentFactory::InstantiateHandle(const string& clsName) {
+    NativeComponent *ComponentFactory::InstantiateHandle(const char *clsName) {
         return _componentMap->find(clsName)->second();
     }
 
-    void ComponentFactory::RegisterComponent(const string &clsName, CustomComponent *(*constructor)()) {
+    void ComponentFactory::RegisterComponent(const char *clsName, NativeComponent *(*constructor)()) {
+        Debug::Log(strcat(const_cast<char *>(clsName), " Registered"));
         _componentMap->insert(make_pair(clsName, constructor));
     }
 }

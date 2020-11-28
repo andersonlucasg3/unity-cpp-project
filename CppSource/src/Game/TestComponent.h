@@ -1,18 +1,11 @@
 #pragma once
 
-#include "../Components/RequiredComponentDefines.h"
-#include "../Components/CustomComponent.h"
-#include "ComponentsRegistration.h"
-
-REQUIRED_COMPONENT_HEADER
+#include "../Components/NativeComponent.h"
 
 using namespace CppSource::Components;
 
 namespace CppSource::Game {
-    class TestComponent : public CustomComponent {
-    private:
-        REQUIRED_COMPONENT_BODY(TestComponent)
-
+    class TestComponent : public NativeComponent {
     public:
         TestComponent();
 
