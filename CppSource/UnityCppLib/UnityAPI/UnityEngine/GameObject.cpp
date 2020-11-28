@@ -1,42 +1,36 @@
 #include "GameObject.h"
 #include "Transform.h"
+#include "UnityAPI/UnityAPIExtern.h"
+#include "Debug.h"
 
 #include <type_traits>
+#include <typeinfo>
 
 using namespace std;
 
 namespace UnityEngine {
-    GameObject::GameObject() {
-        _components = new list<Component>;
-        _transform = addComponent<Transform>();
+    GameObject::GameObject() : Object() {
+
     }
 
+    GameObject::GameObject(const char *name) : GameObject() {
+        Object::setValue("name", (void *)name);
+    }
+
+    GameObject::~GameObject() = default;
+
     Transform *GameObject::transform() const {
-        return _transform;
+        return nullptr; // TODO: make this happen
     }
 
     template<class TComponent> TComponent *GameObject::addComponent() const {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        auto *instance = new TComponent;
-        _components->push_back(*instance);
-        return instance;
-    }
-
-    bool ComponentCompare(Component *component, const type_info& componentType) {
-        return typeid(*component) == componentType;
+        return nullptr; // TODO: make this happen
     }
 
     template<class TComponent> TComponent *GameObject::getComponent() const {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        auto iterator = _components->begin();
-        for (int index = 0; index < _components->size(); ++index) {
-            advance(iterator, 1);
-            Component *current = iterator.operator->();
-            if (ComponentCompare(current, typeid(TComponent))) {
-                return current;
-            }
-        }
-        return nullptr;
+        return nullptr; // TODO: make this happen
     }
 
     template<class TComponent> bool GameObject::tryGetComponent(const TComponent &component) {

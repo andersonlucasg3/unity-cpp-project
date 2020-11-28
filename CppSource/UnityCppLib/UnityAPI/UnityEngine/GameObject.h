@@ -1,20 +1,16 @@
 #pragma once
 
-#include <list>
-
-using namespace std;
+#include "Object.h"
 
 namespace UnityEngine {
     class Transform;
     class Component;
 
-    class GameObject {
-    private:
-        list<Component> *_components;
-        Transform *_transform;
-
+    class GameObject : private Object {
     public:
         GameObject();
+        explicit GameObject(const char *name);
+        ~GameObject();
 
         [[nodiscard]] Transform *transform() const;
         template<class TComponent> TComponent *addComponent() const;

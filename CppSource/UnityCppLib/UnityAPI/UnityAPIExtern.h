@@ -1,10 +1,6 @@
 #pragma once
 
-#include "../../UnityCppTestApp/UnityInitialization.h"
-#include "../Game/ComponentsRegistration.h"
-#include "../Components/Factory/ComponentFactory.h"
-#include "UnityAPIExtern.h"
-#include "UnityAPI/UnityEngine/GameObject.h"
+#include <cstdint>
 
 #ifndef UNITY_EXPORT
 #define UNITY_EXPORT __declspec(dllexport)
@@ -14,8 +10,6 @@
 #define UNITY_IMPORT __declspec(dllimport)
 #endif
 
-typedef void (__cdecl *__UnitySendMessageFunc)(const char *gameObjectName, const char *methodName, const char *message);
-
-extern "C" {
-    UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func);
-}
+#ifndef UNITY_METHOD
+#define UNITY_METHOD __cdecl
+#endif

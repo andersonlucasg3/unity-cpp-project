@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using UnityCpp.NativeBridges;
 using UnityEngine;
 
 namespace UnityCpp
@@ -18,6 +19,7 @@ namespace UnityCpp
             SetUnityDebugLogMethod(DebugLog);
             SetUnitySendMessageMethod(UnitySendMessage);
             InitializeNative();
+            NativeBridge.Initialize();
         }
         
         private static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
