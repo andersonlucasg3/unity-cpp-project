@@ -17,12 +17,16 @@ namespace  CppSource::Components {
     void NativeComponent::SetGameObjectName(const char *gameObjectName) {
         _gameObjectName = gameObjectName;
     }
+
+    char *NativeComponent::GetGameObjectName() {
+        return const_cast<char *>(_gameObjectName);
+    }
 }
 
 extern "C" {
     UNITY_EXPORT NativeComponent *CreateNativeInstance(const char *className, const char *gameObjectName) {
         Debug::Log("Creating the component!");
-        NativeComponent *component = ComponentFactory::Instance().InstantiateHandle(className);
+        NativeComponent *component = ComponentFactory::Instance()->InstantiateHandle(className);
         Debug::Log("Component created");
         component->SetGameObjectName(gameObjectName);
         Debug::Log("Set game object name");

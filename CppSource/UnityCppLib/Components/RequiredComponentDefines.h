@@ -5,4 +5,4 @@
         return new CLASS(); \
     }
 #define REGISTER_COMPONENT_CALL(CLASS) \
-    ComponentFactory::Instance().RegisterComponent(#CLASS, &CreateInstance_##CLASS);
+    ComponentFactory::Instance()->RegisterComponent(#CLASS, &CreateInstance_##CLASS);

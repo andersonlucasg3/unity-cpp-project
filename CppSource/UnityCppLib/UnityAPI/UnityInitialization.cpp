@@ -1,3 +1,4 @@
+#include "../../UnityCppTestApp/UnityInitialization.h"
 #include "../Game/ComponentsRegistration.h"
 #include "../Components/Factory/ComponentFactory.h"
 #include "UnityAPIExtern.h"

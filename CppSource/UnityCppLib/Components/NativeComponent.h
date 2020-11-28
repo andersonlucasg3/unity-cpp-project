@@ -14,6 +14,7 @@ namespace CppSource::Components {
         ~NativeComponent();
 
     public:
+        char *GetGameObjectName();
         void SetGameObjectName(const char *gameObjectName);
 
         virtual void Awake() = 0;

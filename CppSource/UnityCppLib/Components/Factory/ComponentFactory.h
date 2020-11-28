@@ -13,12 +13,12 @@ namespace CppSource::Components {
 namespace CppSource::Components::Factory {
     class ComponentFactory {
     private:
-        map<const char *, NativeComponent *(*)()> *_componentMap;
+        map<string, NativeComponent *(*)()> _componentMap;
 
         ComponentFactory();
 
     public:
-        static ComponentFactory Instance();
+        static ComponentFactory *Instance();
 
         NativeComponent *InstantiateHandle(const char *clsName);
         void RegisterComponent(const char *clsName, NativeComponent *(*constructor)());
