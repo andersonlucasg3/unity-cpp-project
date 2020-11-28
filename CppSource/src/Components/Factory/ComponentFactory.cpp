@@ -8,6 +8,7 @@ namespace CppSource::Components::Factory {
 
     ComponentFactory ComponentFactory::Instance() {
         if (!_shared) {
+            Debug::Log("Creating new instance of the ComponentFactory");
             _shared = new ComponentFactory();
         }
         return *_shared;

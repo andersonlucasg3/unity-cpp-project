@@ -15,10 +15,10 @@ namespace UnityCpp
         [DllImport(NativeConstants.nativePluginName, EntryPoint = "SetUnityDebugLogMethod")]
         private static extern void SetUnityDebugLogMethod(UnityDebugLogDelegate action);
 
-        private NativeInitializer()
+        private void Awake()
         {
-            InitializeNative();
             SetUnityDebugLogMethod(DebugLog);
+            InitializeNative();
         }
         
         private static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
