@@ -10,7 +10,7 @@ namespace UnityCpp
     
     public class NativeEntryPoint : MonoBehaviour
     {
-        private static SetDelegate<UnityDebugLogDelegate> _setDebugLog;
+        private static SetUnityDebugLogDelegate _setDebugLog;
         private static NativeVoidMethod _initializeNative;
         private static NativeVoidMethod _nativeInitialized;
         
@@ -19,11 +19,11 @@ namespace UnityCpp
         private void Awake()
         {
             _nativeAssemblyHandle = NativeAssembly.Load(NativeConstants.nativeCodeAssemblyName);
-            _setDebugLog = NativeAssembly.GetMethod<SetDelegate<UnityDebugLogDelegate>>(_nativeAssemblyHandle, "SetUnityDebugLogMethod");
+            _setDebugLog = NativeAssembly.GetMethod<SetUnityDebugLogDelegate>(_nativeAssemblyHandle, "SetUnityDebugLogMethod");
             _initializeNative = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "InitializeNative");
             _nativeInitialized = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "NativeInitialized");
 
-            _setDebugLog(DebugLog);
+            _setDebugLog.Invoke(DebugLog);
             _initializeNative.Invoke();
             NativeMethods.Initialize(_nativeAssemblyHandle);
             _nativeInitialized.Invoke();

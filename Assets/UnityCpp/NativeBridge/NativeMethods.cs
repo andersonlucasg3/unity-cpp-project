@@ -4,7 +4,7 @@ using UnityEditor.Profiling.Memory.Experimental;
 
 namespace UnityCpp.NativeBridge
 {
-    using static NativeImports;
+    using static NativeFunctions;
     using static NativeMethodsImpl;
     using static NativeDelegates;
     
@@ -12,33 +12,33 @@ namespace UnityCpp.NativeBridge
     {
         public static void Initialize(IntPtr assemblyHandle)
         {
-            _setUnitySendMessage = NativeAssembly.GetMethod<SetDelegate<SendMessageDelegate>>(assemblyHandle, "SetUnitySendMessageMethod");
+            _setUnitySendMessage = NativeAssembly.GetMethod<SetSendMessageDelegate>(assemblyHandle, "SetUnitySendMessageMethod");
             _setUnitySendMessage.Invoke(UnitySendMessageMethod);
 
-            _setManagedConstructor = NativeAssembly.GetMethod<SetDelegate<ConstructorDelegate>>(assemblyHandle, "SetManagedConstructorMethod");
+            _setManagedConstructor = NativeAssembly.GetMethod<SetConstructorDelegate>(assemblyHandle, "SetManagedConstructorMethod");
             _setManagedConstructor.Invoke(ConstructorMethod);
-            _setManagedDestructor = NativeAssembly.GetMethod<SetDelegate<DestructorDelegate>>(assemblyHandle, "SetManagedDestructorMethod");
+            _setManagedDestructor = NativeAssembly.GetMethod<SetDestructorDelegate>(assemblyHandle, "SetManagedDestructorMethod");
             _setManagedDestructor.Invoke(DestructorMethod);
 
-            _setManagedGetMemberPtr = NativeAssembly.GetMethod<SetDelegate<GetMemberPtrDelegate>>(assemblyHandle, "SetManagedGetMemberPtrMethod");
+            _setManagedGetMemberPtr = NativeAssembly.GetMethod<SetGetMemberPtrDelegate>(assemblyHandle, "SetManagedGetMemberPtrMethod");
             _setManagedGetMemberPtr.Invoke(GetMemberPtr);
 
-            _setManagedGetSetString = NativeAssembly.GetMethod<SetDelegates<GetValueDelegate<string>, SetValueDelegate<string>>>(assemblyHandle, "SetManagedGetSetStringMethod");
+            _setManagedGetSetString = NativeAssembly.GetMethod<SetGetSetStringDelegate>(assemblyHandle, "SetManagedGetSetStringMethod");
             _setManagedGetSetString.Invoke(GetMemberValue, SetMemberValue);
 
-            _setManagedGetSetInt = NativeAssembly.GetMethod<SetDelegates<GetValueDelegate<int>, SetValueDelegate<int>>>(assemblyHandle, "SetManagedGetSetIntMethod");
+            _setManagedGetSetInt = NativeAssembly.GetMethod<SetGetSetIntDelegate>(assemblyHandle, "SetManagedGetSetIntMethod");
             _setManagedGetSetInt.Invoke(GetMemberValue, SetMemberValue);
 
-            _setManagedGetSetLong = NativeAssembly.GetMethod<SetDelegates<GetValueDelegate<long>, SetValueDelegate<long>>>(assemblyHandle, "SetManagedGetSetLongMethod");
+            _setManagedGetSetLong = NativeAssembly.GetMethod<SetGetSetLongDelegate>(assemblyHandle, "SetManagedGetSetLongMethod");
             _setManagedGetSetLong.Invoke(GetMemberValue, SetMemberValue);
 
-            _setManagedGetSetFloat = NativeAssembly.GetMethod<SetDelegates<GetValueDelegate<float>, SetValueDelegate<float>>>(assemblyHandle, "SetManagedGetSetFloatMethod");
+            _setManagedGetSetFloat = NativeAssembly.GetMethod<SetGetSetFloatDelegate>(assemblyHandle, "SetManagedGetSetFloatMethod");
             _setManagedGetSetFloat.Invoke(GetMemberValue, SetMemberValue);
 
-            _setManagedGetSetDouble = NativeAssembly.GetMethod<SetDelegates<GetValueDelegate<double>, SetValueDelegate<double>>>(assemblyHandle, "SetManagedGetSetDoubleMethod");
+            _setManagedGetSetDouble = NativeAssembly.GetMethod<SetGetSetDoubleDelegate>(assemblyHandle, "SetManagedGetSetDoubleMethod");
             _setManagedGetSetDouble.Invoke(GetMemberValue, SetMemberValue);
 
-            _setManagedGetSetObject = NativeAssembly.GetMethod<SetDelegates<GetValueDelegate<IntPtr>, SetValueDelegate<IntPtr>>>(assemblyHandle, "SetManagedGetSetObjectMethod");
+            _setManagedGetSetObject = NativeAssembly.GetMethod<SetGetSetObjectDelegate>(assemblyHandle, "SetManagedGetSetObjectMethod");
             _setManagedGetSetObject.Invoke(GetMemberValue, SetMemberValue);
         }
     }

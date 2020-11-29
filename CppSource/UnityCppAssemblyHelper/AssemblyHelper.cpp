@@ -1,5 +1,8 @@
 #include <dlfcn.h>
 #include <cstdint>
+#include <string>
+
+using namespace std;
 
 #define METHOD_EXPORT __declspec(dllexport)
 
@@ -10,8 +13,14 @@ extern "C" {
     }
 
     METHOD_EXPORT const char *GetError() {
-        const char *error = const_cast<const char *>(dlerror());
-        return error;
+        char *error = dlerror();
+        if (error) {
+            size_t strLen = sizeof(char) * strlen(error);
+            char *retError = (char *) malloc(strLen);
+            strcpy(retError, (const char *) error);
+            return static_cast<const char *>(retError);
+        }
+        return nullptr;
     }
 
     METHOD_EXPORT bool FreeLibrary(intptr_t *assemblyName) {

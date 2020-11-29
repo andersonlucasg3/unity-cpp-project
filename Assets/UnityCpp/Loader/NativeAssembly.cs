@@ -7,14 +7,14 @@ namespace UnityCpp.Loader
     public static class NativeAssembly
     {
         [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "LoadLibrary", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern IntPtr _LoadLibrary(string assemblyName);
+        private static extern IntPtr _LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string assemblyName);
         
         [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "FreeLibrary", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool _FreeLibrary(IntPtr handle);
 
         [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "GetProcAddress")]
-        private static extern IntPtr _GetProcAddress(IntPtr handle, string methodName);
+        private static extern IntPtr _GetProcAddress(IntPtr handle, [MarshalAs(UnmanagedType.LPStr)] string methodName);
 
         [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "GetError")]
         [return: MarshalAs(UnmanagedType.LPStr)]
