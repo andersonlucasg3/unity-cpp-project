@@ -3,7 +3,7 @@
 #include "ManagedMember.h"
 #include "UnityAPI/UnityAPIExtern.h"
 
-namespace UnityEngine::valuePointer {
+namespace UnityEngine::ManagedBridge {
     typedef void (UNITY_METHOD *__UnitySendMessageFunc)(const char *gameObjectName, const char *methodName, const char *message);
 
     typedef intptr_t *(UNITY_METHOD *__UnityManagedConstructorFunc)(const char *typeName);
@@ -54,7 +54,7 @@ namespace UnityEngine::valuePointer {
 #pragma endregion
 }
 
-using namespace UnityEngine::valuePointer;
+using namespace UnityEngine::ManagedBridge;
 
 extern "C" {
 [[maybe_unused]] UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func) { Managed::UnitySendMessage = func; }

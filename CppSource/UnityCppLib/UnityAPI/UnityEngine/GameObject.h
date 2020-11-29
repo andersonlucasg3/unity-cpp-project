@@ -7,6 +7,8 @@ namespace UnityEngine {
     class Component;
 
     class GameObject : public Object {
+        friend class Component;
+
     private:
         ManagedMember *_activeInHierarchyProperty{};
         ManagedMember *_activeSelfProperty{};
@@ -17,6 +19,7 @@ namespace UnityEngine {
 
         Transform *_transform{};
 
+        explicit GameObject(intptr_t *instance);
         void InitializeMembers() override;
 
     public:

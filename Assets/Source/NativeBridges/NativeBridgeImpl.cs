@@ -42,12 +42,13 @@ namespace UnityCpp.NativeBridges
             {
                 case MemberType.field:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
+                    object valueInstance = fieldInfo.GetValue(objectInstance);
                     if (typeof(TValue) != typeof(IntPtr))
                     {
-                        value = (TValue) fieldInfo.GetValue(objectInstance);
+                        value = (TValue) valueInstance;
                         return;
                     }
-                    value = (TValue) (object) AllocObjectPtr(fieldInfo.GetValue(objectInstance));
+                    value = (TValue) (object) AllocObjectPtr(valueInstance);
                     return;
                 case MemberType.property:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
@@ -115,9 +116,13 @@ namespace UnityCpp.NativeBridges
             return IntPtr.Zero;
         }
 
-        private static IntPtr AllocObjectPtr(object @object)
+        private static IntPtr AllocObjectPtr(object objectInstance)
         {
-            return (IntPtr) GCHandle.Alloc(@object);
+            if (objectInstance == null)
+            {
+                return IntPtr.Zero;
+            }
+            return (IntPtr) GCHandle.Alloc(objectInstance);
         }
 
         private static TOutput ConvertPtrTo<TOutput>(IntPtr intPtr)

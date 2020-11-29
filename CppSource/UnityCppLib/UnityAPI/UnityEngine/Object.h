@@ -2,12 +2,12 @@
 
 #include <cstdint>
 
-namespace UnityEngine::valuePointer {
+namespace UnityEngine::ManagedBridge {
     class Managed;
     class ManagedMember;
 }
 
-using namespace UnityEngine::valuePointer;
+using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
     enum HideFlags;

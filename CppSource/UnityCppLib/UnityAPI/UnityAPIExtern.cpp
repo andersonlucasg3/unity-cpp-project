@@ -18,7 +18,12 @@ extern "C" {
 
     UNITY_EXPORT void NativeInitialized() {
         GameObject *gameObject = new GameObject();
-        gameObject->setName("Teste com transform");
+        gameObject->setName("Transform test");
+
+        GameObject *otherGameObject = new GameObject();
+        gameObject->setName("Transform test child");
+
+        otherGameObject->transform()->setParent(gameObject->transform());
 
         int count = gameObject->transform()->childCount();
         string str("Número de filhos do transform: ");

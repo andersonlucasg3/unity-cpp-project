@@ -8,10 +8,13 @@ namespace UnityEngine {
 
     class Component : public Object {
     private:
-        const GameObject *_gameObject;
-        ManagedMember *_tagProperty;
+        ManagedMember *_gameObjectProperty{};
+        ManagedMember *_tagProperty{};
+
+        const GameObject *_gameObject{};
 
     protected:
+        Component(intptr_t *instance);
         Component(const GameObject *gameObject, intptr_t *instance);
         ~Component();
         void InitializeMembers() override;

@@ -2,7 +2,11 @@
 
 #include <cstdint>
 
-namespace UnityEngine::valuePointer {
+namespace UnityEngine {
+    class Object;
+}
+
+namespace UnityEngine::ManagedBridge {
     class Managed;
 
     enum MemberType {
@@ -41,6 +45,6 @@ namespace UnityEngine::valuePointer {
         [[maybe_unused]] void setDouble(double value) const;
 
         [[nodiscard,maybe_unused]] intptr_t *getObject() const;
-        [[maybe_unused]] void setObject(intptr_t *value) const;
+        [[maybe_unused]] void setObject(Managed *object) const;
     };
 }

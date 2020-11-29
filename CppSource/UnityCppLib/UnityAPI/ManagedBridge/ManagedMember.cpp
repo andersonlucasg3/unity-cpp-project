@@ -2,8 +2,9 @@
 #include "ManagedMember.h"
 #include "Managed.h"
 #include "UnityAPI/UnityAPIExtern.h"
+#include "UnityAPI/UnityEngine/Object.h"
 
-using namespace UnityEngine::valuePointer;
+using namespace UnityEngine::ManagedBridge;
 
 typedef void (UNITY_METHOD *GetValueFunc)(intptr_t *instancePtr, intptr_t *memberPtr, MemberType type, void **value);
 typedef void (UNITY_METHOD *SetValueFunc)(intptr_t *instancePtr, intptr_t *memberPtr, MemberType type, void *value);
@@ -26,7 +27,7 @@ GetSetValue *getSetFloat = nullptr;
 GetSetValue *getSetDouble = nullptr;
 GetSetValue *getSetObject = nullptr;
 
-namespace UnityEngine::valuePointer {
+namespace UnityEngine::ManagedBridge {
     ManagedMember::ManagedMember(intptr_t *memberPtr, intptr_t *managedPtr, MemberType type) {
         _memberPtr = memberPtr;
         _managedPtr = managedPtr;
@@ -101,8 +102,8 @@ namespace UnityEngine::valuePointer {
         return ptr;
     }
 
-    void ManagedMember::setObject(intptr_t *value) const {
-        callSet((void *)getSetObject->setValue, (void *)value);
+    void ManagedMember::setObject(Managed *object) const {
+        callSet((void *)getSetObject->setValue, (void *)object->_instance);
     }
 }
 

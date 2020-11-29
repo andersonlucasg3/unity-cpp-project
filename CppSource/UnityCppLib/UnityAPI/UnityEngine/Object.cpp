@@ -3,7 +3,7 @@
 #include "UnityAPI/ManagedBridge/ManagedMember.h"
 
 using namespace std;
-using namespace UnityEngine::valuePointer;
+using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
     Object::Object() {

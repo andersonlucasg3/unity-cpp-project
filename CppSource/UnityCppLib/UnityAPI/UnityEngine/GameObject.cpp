@@ -17,6 +17,8 @@ namespace UnityEngine {
         createManagedInstance(_gameObjectClassName);
     }
 
+    GameObject::GameObject(intptr_t *instance) : Object(instance) {}
+
     GameObject::~GameObject() {
         Managed::destroy(_activeInHierarchyProperty);
         Managed::destroy(_activeSelfProperty);
