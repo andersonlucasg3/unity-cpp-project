@@ -1,3 +1,4 @@
+#if defined(__APPLE__) || defined(__MACH__)
 #include <dlfcn.h>
 #include <cstdint>
 #include <string>
@@ -33,3 +34,4 @@ extern "C" {
         return (intptr_t *)ptr;
     }
 }
+#endif

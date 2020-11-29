@@ -3,6 +3,26 @@ project(CppSource)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if (APPLE)
+add_library(
+        UnityCppAssemblyHelper
+        SHARED
+        UnityCppAssemblyHelper/AssemblyHelper.cpp
+)
+
+target_sources(
+        UnityCppAssemblyHelper
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppAssemblyHelper
+)
+
+target_include_directories(
+        UnityCppAssemblyHelper
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppAssemblyHelper
+)
+endif(APPLE)
+
 add_library(
         UnityCppLib
         SHARED
@@ -32,15 +52,19 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.h 
         UnityCppLib/UnityAPI/UnityEngine/HideFlags.h
         UnityCppLib/UnityAPI/ManagedBridge/MemberType.h
-        UnityCppAssemblyHelper/AssemblyHelper.cpp)
-
-add_library(
-        UnityCppAssemblyHelper
-        SHARED
-        UnityCppAssemblyHelper/AssemblyHelper.cpp
 )
 
-target_include_directories(UnityCppLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib)
+target_sources(
+        UnityCppLib
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib
+)
+
+target_include_directories(
+        UnityCppLib
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib
+)
 
 set(CMAKE_CXX_FLAGS "-fdeclspec")
 
