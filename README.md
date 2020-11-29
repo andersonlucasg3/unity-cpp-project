@@ -22,4 +22,4 @@ There may be a way to fix that, but that's a problem for another time.
 - [ ] Have more of Unity's API available;
 - [ ] Test it in a real game scenario;
 - [ ] Integrate the Cpp build with the Editor;
-- [ ] Reload the binary when it has been built;
+- [ ] Reload the binary when it has been rebuilt;
