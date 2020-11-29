@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace UnityEngine::ManagedBridge {
+namespace UnityEngine::valuePointer {
     typedef void (*UnitySendMessageMethod)(const char *gameObjectName, const char *methodName, const char *message);
 
     class ManagedMember;
@@ -17,6 +17,7 @@ namespace UnityEngine::ManagedBridge {
         static UnitySendMessageMethod UnitySendMessage;
 
         Managed();
+        explicit Managed(intptr_t *instance);
         ~Managed();
 
         void construct(const char *typeName);

@@ -24,7 +24,7 @@ add_library(
         UnityCppLib/UnityAPI/UnityEngine/Transform.h
         UnityCppLib/UnityAPI/UnityEngine/Component.cpp
         UnityCppLib/UnityAPI/UnityEngine/Component.h
-        UnityCppLib/UnityAPI/ManagedBridge/Managed.cpp UnityCppLib/UnityAPI/ManagedBridge/Managed.h UnityCppLib/UnityAPI/UnityEngine/Object.cpp UnityCppLib/UnityAPI/UnityEngine/Object.h UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.cpp UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.h)
+        UnityCppLib/UnityAPI/ManagedBridge/Managed.cpp UnityCppLib/UnityAPI/ManagedBridge/Managed.h UnityCppLib/UnityAPI/UnityEngine/Object.cpp UnityCppLib/UnityAPI/UnityEngine/Object.h UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.cpp UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.h UnityCppLib/UnityAPI/UnityEngine/HideFlags.h)
 
 target_include_directories(UnityCppLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib)
 

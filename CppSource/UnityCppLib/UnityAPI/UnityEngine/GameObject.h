@@ -7,13 +7,25 @@ namespace UnityEngine {
     class Component;
 
     class GameObject : public Object {
+    private:
+        ManagedMember *_activeInHierarchyProperty{};
+        ManagedMember *_activeSelfProperty{};
+        ManagedMember *_isStaticProperty{};
+        ManagedMember *_layerProperty{};
+        ManagedMember *_tagProperty{};
+        ManagedMember *_transformProperty{};
+
+        Transform *_transform{};
+
+        void InitializeMembers() override;
+
     public:
         GameObject();
         ~GameObject();
 
-        [[nodiscard]] Transform *transform() const;
-        template<class TComponent> TComponent *addComponent() const;
-        template<class TComponent> TComponent *getComponent() const;
-        template<class TComponent> bool tryGetComponent(const TComponent &component);
+        [[nodiscard,maybe_unused]] Transform *transform() const;
+        template<class TComponent> [[nodiscard,maybe_unused]] TComponent *addComponent() const;
+        template<class TComponent> [[nodiscard,maybe_unused]] TComponent *getComponent() const;
+        template<class TComponent> [[nodiscard,maybe_unused]] bool tryGetComponent(const TComponent &component);
     };
 }

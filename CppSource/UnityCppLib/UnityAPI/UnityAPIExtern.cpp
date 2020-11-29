@@ -1,9 +1,13 @@
+#include <UnityAPI/UnityEngine/Debug.h>
 #include "UnityAPIExtern.h"
 
 #include "Components/Factory/ComponentFactory.h"
+#include "UnityAPI/UnityEngine/GameObject.h"
+#include "UnityAPI/UnityEngine/Transform.h"
 
 using namespace CppSource::Components;
 using namespace CppSource::Components::Factory;
+using namespace UnityEngine;
 
 extern "C" {
     REGISTER_DECLARE_ALL_COMPONENTS
@@ -13,7 +17,12 @@ extern "C" {
     }
 
     UNITY_EXPORT void NativeInitialized() {
-        // TODO: if anything should be started
-        // TODO: now would be the moment
+        auto *gameObject = new GameObject();
+        gameObject->setName("Teste com transform");
+
+        auto count = gameObject->transform()->childCount();
+        string str("Número de filhos do transform: ");
+        str = str.append(to_string(count));
+        Debug::Log(str);
     }
 }

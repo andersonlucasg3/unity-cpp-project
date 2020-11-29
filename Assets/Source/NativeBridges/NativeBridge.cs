@@ -1,5 +1,3 @@
-using System;
-
 namespace UnityCpp.NativeBridges
 {
     using static NativeImports;
@@ -16,11 +14,12 @@ namespace UnityCpp.NativeBridges
             
             SetManagedGetMemberPtrMethod(GetMemberPtr);
 
-            SetManagedGetSetStringMethod(GetMemberValue<string>, SetMemberValue);
-            SetManagedGetSetIntMethod(GetMemberValue<int>, SetMemberValue);
-            SetManagedGetSetLongMethod(GetMemberValue<long>, SetMemberValue);
-            SetManagedGetSetFloatMethod(GetMemberValue<float>, SetMemberValue);
-            SetManagedGetSetDoubleMethod(GetMemberValue<double>, SetMemberValue);
+            SetManagedGetSetStringMethod(GetMemberValue, SetMemberValue);
+            SetManagedGetSetIntMethod(GetMemberValue, SetMemberValue);
+            SetManagedGetSetLongMethod(GetMemberValue, SetMemberValue);
+            SetManagedGetSetFloatMethod(GetMemberValue, SetMemberValue);
+            SetManagedGetSetDoubleMethod(GetMemberValue, SetMemberValue);
+            SetManagedGetSetObjectMethod(GetMemberValue, SetMemberValue);
         }
     }
 }

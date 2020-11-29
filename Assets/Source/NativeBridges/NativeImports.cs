@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace UnityCpp.NativeBridges
 {
@@ -53,6 +54,11 @@ namespace UnityCpp.NativeBridges
         internal static extern void SetManagedGetSetDoubleMethod(
             NativeGetValuePrimitiveDelegate<double> getCall,
             NativeSetValuePrimitiveDelegate<double> setCall);
+
+        [DllImport(NativeConstants.nativePluginName)]
+        internal static extern void SetManagedGetSetObjectMethod(
+            NativeGetValuePrimitiveDelegate<IntPtr> getCall,
+            NativeSetValuePrimitiveDelegate<IntPtr> setCall);
 
         #endregion
     }

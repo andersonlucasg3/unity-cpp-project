@@ -3,29 +3,43 @@
 #include "UnityAPI/ManagedBridge/ManagedMember.h"
 
 using namespace std;
-using namespace UnityEngine::ManagedBridge;
+using namespace UnityEngine::valuePointer;
 
 namespace UnityEngine {
     Object::Object() {
         _managed = new Managed();
-        _nameProperty = nullptr;
+    }
+
+    Object::Object(intptr_t *instance) {
+        _managed = new Managed(instance);
+        InitializeMembers();
     }
 
     Object::~Object() {
         Managed::destroy(_nameProperty);
+        Managed::destroy(_hideFlagsProperty);
         delete _managed;
     }
 
     void Object::createManagedInstance(const char *className) {
         _managed->construct(className);
-        _nameProperty = _managed->getMember("name", MemberType::property);
+        InitializeMembers();
+    }
+
+    void Object::InitializeMembers() {
+        _nameProperty = _managed->getMember("name", property);
+        _hideFlagsProperty = _managed->getMember("hideFlags", property);
+    }
+
+    HideFlags Object::hideFlags() const {
+        return (HideFlags) _hideFlagsProperty->getInt();
     }
 
     const char * Object::name() const {
-        return _nameProperty->getValueString();
+        return _nameProperty->getString();
     }
 
     void Object::setName(const char *name) const {
-        _nameProperty->setValueString(name);
+        _nameProperty->setString(name);
     }
 }

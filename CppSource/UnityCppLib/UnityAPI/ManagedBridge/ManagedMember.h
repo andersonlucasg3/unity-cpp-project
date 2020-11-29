@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace UnityEngine::ManagedBridge {
+namespace UnityEngine::valuePointer {
     class Managed;
 
     enum MemberType {
@@ -21,23 +21,26 @@ namespace UnityEngine::ManagedBridge {
         ManagedMember(intptr_t *memberPtr, intptr_t *managedPtr, MemberType type);
         ~ManagedMember();
 
-        template<typename TValue> TValue *callGet(void *) const;
+        template<typename TValue> void callGet(void *func, TValue *pointer) const;
         template<typename TValue> void callSet(void *, TValue *value) const;
 
     public:
-        [[nodiscard,maybe_unused]] const char *getValueString() const;
-        [[maybe_unused]] void setValueString(const char *value) const;
+        [[nodiscard,maybe_unused]] const char *getString() const;
+        [[maybe_unused]] void setString(const char *value) const;
 
-        [[nodiscard,maybe_unused]] int getValueInt() const;
-        [[maybe_unused]] void setValueInt(int value) const;
+        [[nodiscard,maybe_unused]] int getInt() const;
+        [[maybe_unused]] void setInt(int value) const;
 
-        [[nodiscard,maybe_unused]] long getValueLong() const;
-        [[maybe_unused]] void setValueLong(long value) const;
+        [[nodiscard,maybe_unused]] long getLong() const;
+        [[maybe_unused]] void setLong(long value) const;
 
-        [[nodiscard,maybe_unused]] float getValueFloat() const;
-        [[maybe_unused]] void setValueFloat(float value) const;
+        [[nodiscard,maybe_unused]] float getFloat() const;
+        [[maybe_unused]] void setFloat(float value) const;
 
-        [[nodiscard,maybe_unused]] double getValueDouble() const;
-        [[maybe_unused]] void setValueDouble(double value) const;
+        [[nodiscard,maybe_unused]] double getDouble() const;
+        [[maybe_unused]] void setDouble(double value) const;
+
+        [[nodiscard,maybe_unused]] intptr_t *getObject() const;
+        [[maybe_unused]] void setObject(intptr_t *value) const;
     };
 }

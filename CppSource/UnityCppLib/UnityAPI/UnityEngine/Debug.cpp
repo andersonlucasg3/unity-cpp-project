@@ -15,4 +15,8 @@ namespace UnityEngine {
     void Debug::Log(const char *message) {
         UnityDebugLog(message);
     }
+
+    void Debug::Log(const string& message) {
+        UnityDebugLog(message.c_str());
+    }
 }

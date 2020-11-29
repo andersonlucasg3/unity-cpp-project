@@ -35,17 +35,29 @@ namespace UnityCpp.NativeBridges
 
         #endregion
 
-        internal static TValue GetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type)
+        internal static void GetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, out TValue value)
         {
             object objectInstance = null;
             switch (type)
             {
                 case MemberType.field:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
-                    return (TValue) fieldInfo.GetValue(objectInstance);
+                    if (typeof(TValue) != typeof(IntPtr))
+                    {
+                        value = (TValue) fieldInfo.GetValue(objectInstance);
+                        return;
+                    }
+                    value = (TValue) (object) AllocObjectPtr(fieldInfo.GetValue(objectInstance));
+                    return;
                 case MemberType.property:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
-                    return (TValue) propertyInfo.GetValue(objectInstance);
+                    if (typeof(TValue) != typeof(IntPtr))
+                    {
+                        value = (TValue) propertyInfo.GetValue(objectInstance);
+                        return;
+                    }
+                    value = (TValue) (object) AllocObjectPtr(propertyInfo.GetValue(objectInstance));
+                    return;
                 case MemberType.method:
                     throw new MissingMethodException();
                 default:
@@ -59,12 +71,25 @@ namespace UnityCpp.NativeBridges
             switch (type)
             {
                 case MemberType.field:
+                {
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
-                    fieldInfo.SetValue(objectInstance, value);
+                    switch (value)
+                    {
+                        case IntPtr valuePtr: fieldInfo.SetValue(objectInstance, ConvertPtrTo<object>(valuePtr)); break;
+                        default: fieldInfo.SetValue(objectInstance, value); break;
+                    }
+                }
                     break;
+
                 case MemberType.property:
+                {
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
-                    propertyInfo.SetValue(objectInstance, value);
+                    switch (value)
+                    {
+                        case IntPtr valuePtr: propertyInfo.SetValue(objectInstance, ConvertPtrTo<object>(valuePtr)); break;
+                        default: propertyInfo.SetValue(objectInstance, value); break;
+                    }
+                }
                     break;
                 case MemberType.method:
                     throw new MissingMethodException();
@@ -72,27 +97,33 @@ namespace UnityCpp.NativeBridges
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
-        
+
         internal static IntPtr GetMemberPtr(IntPtr intPtr, string name)
         {
             return AllocMemberPtr(intPtr, name);
         }
 
         #region Private methods
-        
+
         private static IntPtr AllocMemberPtr(IntPtr intPtr, string name)
         {
             if (TryGetMember(intPtr, name, out MemberInfo info))
             {
-                return (IntPtr)GCHandle.Alloc(info);
+                return (IntPtr) GCHandle.Alloc(info);
             }
+
             return IntPtr.Zero;
+        }
+
+        private static IntPtr AllocObjectPtr(object @object)
+        {
+            return (IntPtr) GCHandle.Alloc(@object);
         }
 
         private static TOutput ConvertPtrTo<TOutput>(IntPtr intPtr)
         {
             GCHandle handle = (GCHandle) intPtr;
-            return (TOutput)handle.Target;
+            return (TOutput) handle.Target;
         }
 
         private static bool TryGetMember(IntPtr intPtr, string name, out MemberInfo memberInfo)

@@ -1,10 +1,11 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "UnityAPI/UnityAPIExtern.h"
+#include "UnityAPI/ManagedBridge/Managed.h"
+#include "UnityAPI/ManagedBridge/ManagedMember.h"
 #include "Debug.h"
 
 #include <type_traits>
-#include <typeinfo>
 
 using namespace std;
 
@@ -15,10 +16,34 @@ namespace UnityEngine {
         createManagedInstance(_gameObjectClassName);
     }
 
-    GameObject::~GameObject() = default;
+    GameObject::~GameObject() {
+        Managed::destroy(_activeInHierarchyProperty);
+        Managed::destroy(_activeSelfProperty);
+        Managed::destroy(_isStaticProperty);
+        Managed::destroy(_layerProperty);
+        Managed::destroy(_tagProperty);
+        Managed::destroy(_transformProperty);
+
+        delete _transform;
+    }
+
+    void GameObject::InitializeMembers() {
+        _activeInHierarchyProperty = _managed->getMember("activeInHierarchy", property);
+        _activeSelfProperty = _managed->getMember("activeSelf", property);
+        _isStaticProperty = _managed->getMember("isStatic", property);
+        _layerProperty = _managed->getMember("layer", property);
+        _tagProperty = _managed->getMember("tag", property);
+        _transformProperty = _managed->getMember("transform", property);
+
+        intptr_t *transformPtr = _transformProperty->getObject();
+        string str("Transform ptr ");
+        str = str.append(to_string(*transformPtr));
+        Debug::Log(str);
+        _transform = new Transform(this, transformPtr);
+    }
 
     Transform *GameObject::transform() const {
-        return nullptr; // TODO: make this happen
+        return _transform;
     }
 
     template<class TComponent> TComponent *GameObject::addComponent() const {
