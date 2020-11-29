@@ -15,3 +15,11 @@ Meaning that we have to close the Editor everytime we want to rebuild the Cpp co
 There may be a way to fix that, but that's a problem for another time.
 
 [Here](https://forum.unity.com/threads/unloading-native-plugins-in-the-unity-editor.198296/) is a possible approach to avoid this problem of having to open and close the editor to rebuild.
+
+
+### Next steps
+
+- [ ] Have more of Unity's API available;
+- [ ] Test it in a real game scenario;
+- [ ] Integrate the Cpp build with the Editor;
+- [ ] Reload the binary when it has been built;
