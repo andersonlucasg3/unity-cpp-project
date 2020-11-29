@@ -2,8 +2,6 @@
 #include "ManagedMember.h"
 #include "UnityAPI/UnityAPIExtern.h"
 
-#include <typeinfo>
-
 namespace UnityEngine::ManagedBridge {
     typedef void (UNITY_METHOD *__UnitySendMessageFunc)(const char *gameObjectName, const char *methodName, const char *message);
 
@@ -18,7 +16,7 @@ namespace UnityEngine::ManagedBridge {
 
 #pragma region Managed implementation
 
-    UnitySendMessageMethod Managed::UnitySendMessage = nullptr;
+    [[maybe_unused]] UnitySendMessageMethod Managed::UnitySendMessage = nullptr;
 
     Managed::Managed() {
         _instance = nullptr;
@@ -28,13 +26,18 @@ namespace UnityEngine::ManagedBridge {
         UnityManagedDestructor(_instance);
     }
 
-    void Managed::newInstance(const char *typeName) {
+    void Managed::construct(const char *typeName) {
         _instance = UnityManagedConstructor(typeName);
     }
 
     ManagedMember *Managed::getMember(const char *memberName, MemberType type) {
         intptr_t *memberPtr = UnityManagedGetMemberPtr(_instance, memberName, type);;
-        return new ManagedMember(memberPtr, this, type);
+        return new ManagedMember(memberPtr, _instance, type);
+    }
+
+    void Managed::destroy(ManagedMember *member) {
+        UnityManagedDestructor(member->_memberPtr);
+        delete member;
     }
 
 #pragma endregion
@@ -43,8 +46,8 @@ namespace UnityEngine::ManagedBridge {
 using namespace UnityEngine::ManagedBridge;
 
 extern "C" {
-UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func) { Managed::UnitySendMessage = func; }
-UNITY_EXPORT void SetManagedConstructorMethod(__UnityManagedConstructorFunc func) { UnityManagedConstructor = func; }
-UNITY_EXPORT void SetManagedDestructorMethod(__UnityManagedDestructorFunc func) { UnityManagedDestructor = func; }
-UNITY_EXPORT void SetManagedGetMemberPtrMethod(__UnityManagedGetMemberPtrFunc func) { UnityManagedGetMemberPtr = func; }
+[[maybe_unused]] UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func) { Managed::UnitySendMessage = func; }
+[[maybe_unused]] UNITY_EXPORT void SetManagedConstructorMethod(__UnityManagedConstructorFunc func) { UnityManagedConstructor = func; }
+[[maybe_unused]] UNITY_EXPORT void SetManagedDestructorMethod(__UnityManagedDestructorFunc func) { UnityManagedDestructor = func; }
+[[maybe_unused]] UNITY_EXPORT void SetManagedGetMemberPtrMethod(__UnityManagedGetMemberPtrFunc func) { UnityManagedGetMemberPtr = func; }
 }

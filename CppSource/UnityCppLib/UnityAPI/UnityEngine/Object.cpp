@@ -12,11 +12,12 @@ namespace UnityEngine {
     }
 
     Object::~Object() {
+        Managed::destroy(_nameProperty);
         delete _managed;
     }
 
     void Object::createManagedInstance(const char *className) {
-        _managed->newInstance(className);
+        _managed->construct(className);
         _nameProperty = _managed->getMember("name", MemberType::property);
     }
 

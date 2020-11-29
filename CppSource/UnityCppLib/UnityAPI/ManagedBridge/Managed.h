@@ -19,8 +19,10 @@ namespace UnityEngine::ManagedBridge {
         Managed();
         ~Managed();
 
-        void newInstance(const char *typeName);
+        void construct(const char *typeName);
+
         ManagedMember *getMember(const char *memberName, MemberType type);
+        static void destroy(ManagedMember *member);
     };
 
 
