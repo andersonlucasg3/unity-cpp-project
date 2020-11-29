@@ -1,9 +1,9 @@
 namespace UnityCpp.NativeBridges
 {
     using static NativeImports;
-    using static NativeBridgeImpl;
+    using static NativeMethodsImplementation;
     
-    public static class NativeBridge
+    public static class NativeMethods
     {
         public static void Initialize()
         {

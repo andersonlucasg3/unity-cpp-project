@@ -20,7 +20,7 @@ namespace UnityCpp
         {
             SetUnityDebugLogMethod(DebugLog);
             InitializeNative();
-            NativeBridge.Initialize();
+            NativeMethods.Initialize();
             NativeInitialized();
         }
         

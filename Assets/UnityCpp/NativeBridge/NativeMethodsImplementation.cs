@@ -6,7 +6,7 @@ using static UnityCpp.NativeBridges.NativeDelegates;
 
 namespace UnityCpp.NativeBridges
 {
-    internal static class NativeBridgeImpl
+    internal static class NativeMethodsImplementation
     {
         internal static void UnitySendMessageMethod(string gameObjectName, string methodName, string message)
         {
