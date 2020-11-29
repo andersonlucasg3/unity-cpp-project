@@ -21,7 +21,7 @@ namespace UnityEngine::valuePointer {
         ManagedMember(intptr_t *memberPtr, intptr_t *managedPtr, MemberType type);
         ~ManagedMember();
 
-        template<typename TValue> void callGet(void *func, TValue *pointer) const;
+        template<typename TValue> void callGet(void *func, TValue &pointer) const;
         template<typename TValue> void callSet(void *, TValue *value) const;
 
     public:

@@ -9,7 +9,6 @@ namespace UnityEngine::valuePointer {
     enum MemberType;
 
     class Managed {
-        friend class ManagedMember;
     private:
         intptr_t *_instance;
 
@@ -24,6 +23,7 @@ namespace UnityEngine::valuePointer {
 
         ManagedMember *getMember(const char *memberName, MemberType type);
         static void destroy(ManagedMember *member);
+        static void destroy(ManagedMember *member, bool freeMemberPtr);
     };
 
 

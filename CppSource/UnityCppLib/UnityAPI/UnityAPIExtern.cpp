@@ -17,10 +17,10 @@ extern "C" {
     }
 
     UNITY_EXPORT void NativeInitialized() {
-        auto *gameObject = new GameObject();
+        GameObject *gameObject = new GameObject();
         gameObject->setName("Teste com transform");
 
-        auto count = gameObject->transform()->childCount();
+        int count = gameObject->transform()->childCount();
         string str("Número de filhos do transform: ");
         str = str.append(to_string(count));
         Debug::Log(str);

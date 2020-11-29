@@ -35,19 +35,19 @@ namespace UnityEngine::valuePointer {
 
     ManagedMember::~ManagedMember() = default;
 
-    template<typename TValue> void ManagedMember::callGet(void *func, TValue *valuePointer) const {
-        auto getValue = (GetValueFunc)func;
+    template<typename TValue> void ManagedMember::callGet(void *func, TValue &valuePointer) const {
+        GetValueFunc getValue = (GetValueFunc)func;
         getValue(_managedPtr, _memberPtr, _type, (void **)&valuePointer);
     }
 
     template<typename TValue> void ManagedMember::callSet(void *func, TValue *value) const {
-        auto setValue = (SetValueFunc)func;
+        SetValueFunc setValue = (SetValueFunc)func;
         setValue(_managedPtr, _memberPtr, _type, (void *)value);
     }
 
     const char * ManagedMember::getString() const {
-        const char *value;
-        callGet<const char *>((void *) getSetString->getValue, &value);
+        const char *value = nullptr;
+        callGet<const char *>((void *) getSetString->getValue, value);
         return value;
     }
 
@@ -57,7 +57,7 @@ namespace UnityEngine::valuePointer {
 
     int ManagedMember::getInt() const {
         int value;
-        callGet<int>((void *)getSetInt->getValue, &value);
+        callGet<int>((void *)getSetInt->getValue, value);
         return value;
     }
 
@@ -67,7 +67,7 @@ namespace UnityEngine::valuePointer {
 
     long ManagedMember::getLong() const {
         long value;
-        callGet<long>((void *)getSetLong->getValue, &value);
+        callGet<long>((void *)getSetLong->getValue, value);
         return value;
     }
 
@@ -77,7 +77,7 @@ namespace UnityEngine::valuePointer {
 
     float ManagedMember::getFloat() const {
         float value;
-        callGet<float>((void*)getSetFloat->getValue, &value);
+        callGet<float>((void*)getSetFloat->getValue, value);
         return value;
     }
 
@@ -87,7 +87,7 @@ namespace UnityEngine::valuePointer {
 
     double ManagedMember::getDouble() const {
         double value;
-        callGet<double>((void *)getSetDouble->getValue, &value);
+        callGet<double>((void *)getSetDouble->getValue, value);
         return value;
     }
 
@@ -97,8 +97,8 @@ namespace UnityEngine::valuePointer {
 
     intptr_t *ManagedMember::getObject() const {
         intptr_t *ptr = nullptr;
-        callGet<intptr_t *>((void *)getSetObject->getValue, &ptr);
-        return (intptr_t *)ptr;
+        callGet<intptr_t *>((void *)getSetObject->getValue, ptr);
+        return ptr;
     }
 
     void ManagedMember::setObject(intptr_t *value) const {

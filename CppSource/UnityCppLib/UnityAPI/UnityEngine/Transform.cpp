@@ -6,6 +6,7 @@
 namespace UnityEngine {
     Transform::Transform(const GameObject *gameObject, intptr_t *instance) : Component(gameObject, instance) {
         _childCountProperty = nullptr;
+        InitializeMembers();
     }
 
     Transform::~Transform() {

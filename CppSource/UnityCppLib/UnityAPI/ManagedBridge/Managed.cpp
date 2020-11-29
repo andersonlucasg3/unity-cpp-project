@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "Managed.h"
 #include "ManagedMember.h"
 #include "UnityAPI/UnityAPIExtern.h"
@@ -41,6 +42,12 @@ namespace UnityEngine::valuePointer {
 
     void Managed::destroy(ManagedMember *member) {
         UnityManagedDestructor(member->_memberPtr);
+        delete member;
+    }
+
+    void Managed::destroy(ManagedMember *member, bool freeMemberPtr) {
+        UnityManagedDestructor(member->_memberPtr);
+        free(member->_memberPtr);
         delete member;
     }
 

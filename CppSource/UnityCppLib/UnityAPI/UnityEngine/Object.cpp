@@ -12,7 +12,6 @@ namespace UnityEngine {
 
     Object::Object(intptr_t *instance) {
         _managed = new Managed(instance);
-        InitializeMembers();
     }
 
     Object::~Object() {

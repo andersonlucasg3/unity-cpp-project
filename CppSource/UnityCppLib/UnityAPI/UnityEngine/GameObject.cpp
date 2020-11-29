@@ -6,6 +6,7 @@
 #include "Debug.h"
 
 #include <type_traits>
+#include <iostream>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ namespace UnityEngine {
     }
 
     void GameObject::InitializeMembers() {
+        Object::InitializeMembers();
         _activeInHierarchyProperty = _managed->getMember("activeInHierarchy", property);
         _activeSelfProperty = _managed->getMember("activeSelf", property);
         _isStaticProperty = _managed->getMember("isStatic", property);
@@ -36,9 +38,6 @@ namespace UnityEngine {
         _transformProperty = _managed->getMember("transform", property);
 
         intptr_t *transformPtr = _transformProperty->getObject();
-        string str("Transform ptr ");
-        str = str.append(to_string(*transformPtr));
-        Debug::Log(str);
         _transform = new Transform(this, transformPtr);
     }
 
