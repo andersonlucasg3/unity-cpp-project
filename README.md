@@ -13,3 +13,5 @@ If you a going to test this locally in your machine, before starting the Unity E
 As Unity does not unloads the native libraries after it has been loaded, we need to close and open the Editor every time the binary changes.
 Meaning that we have to close the Editor everytime we want to rebuild the Cpp code.
 There may be a way to fix that, but that's a problem for another time.
+
+[Here](https://forum.unity.com/threads/unloading-native-plugins-in-the-unity-editor.198296/) is a possible approach to avoid this problem on having to open and close the editor to rebuild.
