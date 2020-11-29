@@ -2,11 +2,12 @@
 
 #include <cstdint>
 
+#include "MemberType.h"
+
 namespace UnityEngine::ManagedBridge {
     typedef void (*UnitySendMessageMethod)(const char *gameObjectName, const char *methodName, const char *message);
 
     class ManagedMember;
-    enum MemberType;
 
     class Managed {
         friend class ManagedMember;

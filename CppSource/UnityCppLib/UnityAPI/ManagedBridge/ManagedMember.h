@@ -2,18 +2,14 @@
 
 #include <cstdint>
 
+#include "MemberType.h"
+
 namespace UnityEngine {
     class Object;
 }
 
 namespace UnityEngine::ManagedBridge {
     class Managed;
-
-    enum MemberType {
-        field = 0,
-        property,
-        method
-    };
 
     class ManagedMember {
         friend class Managed;

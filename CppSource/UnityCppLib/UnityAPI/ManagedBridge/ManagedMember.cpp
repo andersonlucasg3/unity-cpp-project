@@ -1,8 +1,6 @@
-#include <malloc.h>
 #include "ManagedMember.h"
 #include "Managed.h"
 #include "UnityAPI/UnityAPIExtern.h"
-#include "UnityAPI/UnityEngine/Object.h"
 
 using namespace UnityEngine::ManagedBridge;
 

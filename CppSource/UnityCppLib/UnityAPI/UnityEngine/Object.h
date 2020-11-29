@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#include "HideFlags.h"
+
 namespace UnityEngine::ManagedBridge {
     class Managed;
     class ManagedMember;
@@ -10,8 +12,6 @@ namespace UnityEngine::ManagedBridge {
 using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
-    enum HideFlags;
-
     class Object {
     private:
         ManagedMember *_nameProperty{};
