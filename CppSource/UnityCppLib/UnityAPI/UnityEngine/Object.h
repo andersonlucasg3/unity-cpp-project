@@ -1,16 +1,26 @@
 #pragma once
 
-namespace UnityEngine {
+namespace UnityEngine::ManagedBridge {
     class Managed;
+    class ManagedMember;
+}
 
+using namespace UnityEngine::ManagedBridge;
+
+namespace UnityEngine {
     class Object {
     private:
         Managed *_managed;
+        ManagedMember *_nameProperty;
 
     protected:
         Object();
         ~Object();
 
-        void setValue(const char *propertyName, void *value);
+        void createManagedInstance(const char *className);
+
+    public:
+        [[nodiscard]] const char *name() const;
+        void setName(const char *name) const;
     };
 }

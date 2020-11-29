@@ -1,19 +1,30 @@
 #include "Object.h"
-#include "Managed.h"
+#include "UnityAPI/ManagedBridge/Managed.h"
+#include "UnityAPI/ManagedBridge/ManagedMember.h"
 
-#include <typeinfo>
+using namespace std;
+using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
     Object::Object() {
-        _managed = new Managed;
-        _managed->newInstance(typeid(this).name());
+        _managed = new Managed();
+        _nameProperty = nullptr;
     }
 
     Object::~Object() {
         delete _managed;
     }
 
-    void Object::setValue(const char *propertyName, void *value) {
-        _managed->setValue(propertyName, value);
+    void Object::createManagedInstance(const char *className) {
+        _managed->newInstance(className);
+        _nameProperty = _managed->getMember("name", MemberType::property);
+    }
+
+    const char * Object::name() const {
+        return _nameProperty->getValueString();
+    }
+
+    void Object::setName(const char *name) const {
+        _nameProperty->setValueString(name);
     }
 }

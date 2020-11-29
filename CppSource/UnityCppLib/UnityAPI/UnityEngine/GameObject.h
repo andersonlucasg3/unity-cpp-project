@@ -6,10 +6,9 @@ namespace UnityEngine {
     class Transform;
     class Component;
 
-    class GameObject : private Object {
+    class GameObject : public Object {
     public:
         GameObject();
-        explicit GameObject(const char *name);
         ~GameObject();
 
         [[nodiscard]] Transform *transform() const;

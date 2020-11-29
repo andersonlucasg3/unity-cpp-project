@@ -1,36 +1,26 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace UnityCpp.NativeBridges
 {
+    using static NativeImports;
+    using static NativeBridgeImpl;
+    
     public static class NativeBridge
     {
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void SetManagedConstructorCallMethod(NativeNewCallDelegate call);
-
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void SetManagedDestroyCallMethod(NativeDestroyCallDelegate call);
-
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void SetManagedSetValueMethod(NativeSetValueCallDelegate call);
-
         public static void Initialize()
         {
-            SetManagedConstructorCallMethod(NativeBridgeImpl.ConstructorCallMethod);
-            SetManagedDestroyCallMethod(NativeBridgeImpl.DestroyCallMethod);
-            SetManagedSetValueMethod(NativeBridgeImpl.SetValueCallMethod);
-        }
+            SetUnitySendMessageMethod(UnitySendMessageMethod);
+            
+            SetManagedConstructorMethod(ConstructorMethod);
+            SetManagedDestructorMethod(DestructorMethod);
+            
+            SetManagedGetMemberPtrMethod(GetMemberPtr);
 
-        private delegate IntPtr NativeNewCallDelegate(
-            [MarshalAs(UnmanagedType.LPStr)] string typeName
-            );
-        
-        private delegate void NativeDestroyCallDelegate(IntPtr instance);
-        
-        private delegate void NativeSetValueCallDelegate(
-            IntPtr instance, 
-            [MarshalAs(UnmanagedType.LPStr)] string property, 
-            [MarshalAs(UnmanagedType.AsAny)] object value
-            );
+            SetManagedGetSetStringMethod(GetMemberValue<string>, SetMemberValue);
+            SetManagedGetSetIntMethod(GetMemberValue<int>, SetMemberValue);
+            SetManagedGetSetLongMethod(GetMemberValue<long>, SetMemberValue);
+            SetManagedGetSetFloatMethod(GetMemberValue<float>, SetMemberValue);
+            SetManagedGetSetDoubleMethod(GetMemberValue<double>, SetMemberValue);
+        }
     }
 }

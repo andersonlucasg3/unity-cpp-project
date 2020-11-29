@@ -9,12 +9,10 @@
 using namespace std;
 
 namespace UnityEngine {
+    const char * const _gameObjectClassName = "UnityEngine.GameObject, UnityEngine.dll";
+
     GameObject::GameObject() : Object() {
-
-    }
-
-    GameObject::GameObject(const char *name) : GameObject() {
-        Object::setValue("name", (void *)name);
+        createManagedInstance(_gameObjectClassName);
     }
 
     GameObject::~GameObject() = default;

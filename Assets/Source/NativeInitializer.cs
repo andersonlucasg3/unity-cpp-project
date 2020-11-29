@@ -6,20 +6,23 @@ namespace UnityCpp
 {
     public class NativeInitializer : MonoBehaviour
     {
-        [DllImport(NativeConstants.nativePluginName, EntryPoint = "InitializeNative")]
+        [DllImport(NativeConstants.nativePluginName)]
         private static extern void InitializeNative();
+
+        [DllImport(NativeConstants.nativePluginName)]
+        private static extern void NativeInitialized();
         
-        [DllImport(NativeConstants.nativePluginName, EntryPoint = "SetUnityDebugLogMethod")]
+        [DllImport(NativeConstants.nativePluginName)]
         private static extern void SetUnityDebugLogMethod(UnityDebugLogDelegate action);
-        [DllImport(NativeConstants.nativePluginName, EntryPoint = "SetUnitySendMessageMethod", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SetUnitySendMessageMethod(UnitySendMessageDelegate func);
 
         private void Awake()
         {
             SetUnityDebugLogMethod(DebugLog);
-            SetUnitySendMessageMethod(UnitySendMessage);
             InitializeNative();
             NativeBridge.Initialize();
+            
+            // native application entry-point
+            NativeInitialized();
         }
         
         private static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
@@ -27,18 +30,7 @@ namespace UnityCpp
             Debug.Log(message);
         }
         
-        private static void UnitySendMessage(string gameObjectName, string methodName, string message)
-        {
-            GameObject.Find(gameObjectName).SendMessage(methodName, message, SendMessageOptions.RequireReceiver);
-        }
-        
         private delegate void UnityDebugLogDelegate(
-            [MarshalAs(UnmanagedType.LPStr)] string message
-        );
-        
-        private delegate void UnitySendMessageDelegate(
-            [MarshalAs(UnmanagedType.LPStr)] string gameObjectName,
-            [MarshalAs(UnmanagedType.LPStr)] string methodName,
             [MarshalAs(UnmanagedType.LPStr)] string message
         );
     }

@@ -2,40 +2,115 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using static UnityCpp.NativeBridges.NativeDelegates;
 
 namespace UnityCpp.NativeBridges
 {
     internal static class NativeBridgeImpl
     {
-        internal static IntPtr ConstructorCallMethod(string typeName)
+        internal static void UnitySendMessageMethod(string gameObjectName, string methodName, string message)
+        {
+            GameObject.Find(gameObjectName).SendMessage(methodName, message, SendMessageOptions.RequireReceiver);
+        }
+
+        #region Constructor & Destructor
+
+        internal static IntPtr ConstructorMethod(string typeName)
         {
             Type managedType = Type.GetType(typeName);
             if (managedType == null)
             {
                 return IntPtr.Zero;
             }
+
             object instance = Activator.CreateInstance(managedType);
-            return (IntPtr)GCHandle.Alloc(instance);
+            return (IntPtr) GCHandle.Alloc(instance);
         }
 
-        internal static void DestroyCallMethod(IntPtr instance)
+        internal static void DestructorMethod(IntPtr intPtr)
         {
-            Marshal.Release(instance);
+            GCHandle handle = (GCHandle) intPtr;
+            handle.Free();
         }
 
-        internal static void SetValueCallMethod(IntPtr instance, string property, object value)
+        #endregion
+
+        internal static TValue GetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type)
         {
-            object objectInstance = instance;
-            Type type = objectInstance.GetType();
-            PropertyInfo propertyInfo = type.GetProperty(property);
-            if (propertyInfo == null)
+            object objectInstance = null;
+            switch (type)
             {
-                Debug.Log($"Unmanaged code trying to set property ({property}) of object ({objectInstance}) that does not exists.");
-            }
-            else
-            {
-                propertyInfo.SetValue(objectInstance, value);                
+                case MemberType.field:
+                    GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
+                    return (TValue) fieldInfo.GetValue(objectInstance);
+                case MemberType.property:
+                    GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
+                    return (TValue) propertyInfo.GetValue(objectInstance);
+                case MemberType.method:
+                    throw new MissingMethodException();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
+
+        internal static void SetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, TValue value)
+        {
+            object objectInstance = null;
+            switch (type)
+            {
+                case MemberType.field:
+                    GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
+                    fieldInfo.SetValue(objectInstance, value);
+                    break;
+                case MemberType.property:
+                    GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
+                    propertyInfo.SetValue(objectInstance, value);
+                    break;
+                case MemberType.method:
+                    throw new MissingMethodException();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+        
+        internal static IntPtr GetMemberPtr(IntPtr intPtr, string name)
+        {
+            return AllocMemberPtr(intPtr, name);
+        }
+
+        #region Private methods
+        
+        private static IntPtr AllocMemberPtr(IntPtr intPtr, string name)
+        {
+            if (TryGetMember(intPtr, name, out MemberInfo info))
+            {
+                return (IntPtr)GCHandle.Alloc(info);
+            }
+            return IntPtr.Zero;
+        }
+
+        private static TOutput ConvertPtrTo<TOutput>(IntPtr intPtr)
+        {
+            GCHandle handle = (GCHandle) intPtr;
+            return (TOutput)handle.Target;
+        }
+
+        private static bool TryGetMember(IntPtr intPtr, string name, out MemberInfo memberInfo)
+        {
+            object objectInstance = ConvertPtrTo<object>(intPtr);
+            Type objectType = objectInstance.GetType();
+            memberInfo = objectType.GetProperty(name);
+            if (memberInfo != null) return true;
+            Debug.Log($"Unmanaged code trying to get {memberInfo} of object {objectInstance} that does not exists.");
+            return false;
+        }
+
+        private static void GetObjectAndInfo<TInfo>(IntPtr objectPtr, IntPtr infoPtr, out object objectInstance, out TInfo info)
+        {
+            objectInstance = ConvertPtrTo<object>(objectPtr);
+            info = ConvertPtrTo<TInfo>(infoPtr);
+        }
+
+        #endregion
     }
 }
