@@ -1,10 +1,11 @@
+using System;
 using System.Runtime.InteropServices;
 using UnityCpp.NativeBridges;
 using UnityEngine;
 
 namespace UnityCpp
 {
-    public class NativeInitializer : MonoBehaviour
+    public class NativeEntryPoint : MonoBehaviour
     {
         [DllImport(NativeConstants.nativePluginName)]
         private static extern void InitializeNative();
@@ -20,8 +21,6 @@ namespace UnityCpp
             SetUnityDebugLogMethod(DebugLog);
             InitializeNative();
             NativeBridge.Initialize();
-            
-            // native application entry-point
             NativeInitialized();
         }
         
