@@ -18,7 +18,14 @@ namespace UnityCpp
         
         private void Awake()
         {
-            _nativeAssemblyHandle = NativeAssembly.Load(NativeConstants.nativeCodeAssemblyName);
+            const string assemblyName = NativeConstants.nativeCodeAssemblyName;
+            
+            _nativeAssemblyHandle = NativeAssembly.Load(assemblyName);
+            if (_nativeAssemblyHandle == IntPtr.Zero)
+            {
+                Debug.Log($"Failed to load native assembly {assemblyName}");
+                return;
+            }
             _setDebugLog = NativeAssembly.GetMethod<SetUnityDebugLogDelegate>(_nativeAssemblyHandle, "SetUnityDebugLogMethod");
             _initializeNative = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "InitializeNative");
             _nativeInitialized = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "NativeInitialized");

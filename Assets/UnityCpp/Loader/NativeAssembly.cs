@@ -4,19 +4,21 @@ using UnityEngine;
 
 namespace UnityCpp.Loader
 {
+    using static NativeConstants;
+    
     public static class NativeAssembly
     {
-        [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "LoadLibrary", SetLastError = true, CharSet = CharSet.Unicode)]
+        [DllImport(nativeLoaderName, EntryPoint = nativeLoadLibraryFuncName, SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern IntPtr _LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string assemblyName);
         
-        [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "FreeLibrary", SetLastError = true)]
+        [DllImport(nativeLoaderName, EntryPoint = nativeFreeLibraryFuncName, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool _FreeLibrary(IntPtr handle);
 
-        [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "GetProcAddress")]
+        [DllImport(nativeLoaderName, EntryPoint = nativeGetProcAddressFuncName)]
         private static extern IntPtr _GetProcAddress(IntPtr handle, [MarshalAs(UnmanagedType.LPStr)] string methodName);
 
-        [DllImport(NativeConstants.nativeLoaderName, EntryPoint = "GetError")]
+        [DllImport(nativeLoaderName, EntryPoint = nativeGetErrorFuncName)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private static extern string _GetError();
         
