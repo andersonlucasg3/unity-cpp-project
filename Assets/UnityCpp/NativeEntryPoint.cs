@@ -1,36 +1,45 @@
 using System;
 using System.Runtime.InteropServices;
-using UnityCpp.NativeBridges;
+using UnityCpp.Loader;
+using UnityCpp.NativeBridge;
 using UnityEngine;
 
 namespace UnityCpp
 {
+    using static NativeBridge.NativeDelegates;
+    
     public class NativeEntryPoint : MonoBehaviour
     {
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void InitializeNative();
-
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void NativeInitialized();
+        private static SetDelegate<UnityDebugLogDelegate> _setDebugLog;
+        private static NativeVoidMethod _initializeNative;
+        private static NativeVoidMethod _nativeInitialized;
         
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void SetUnityDebugLogMethod(UnityDebugLogDelegate action);
-
+        private IntPtr _nativeAssemblyHandle = IntPtr.Zero;
+        
         private void Awake()
         {
-            SetUnityDebugLogMethod(DebugLog);
-            InitializeNative();
-            NativeMethods.Initialize();
-            NativeInitialized();
+            _nativeAssemblyHandle = NativeAssembly.Load(NativeConstants.nativeCodeAssemblyName);
+            _setDebugLog = NativeAssembly.GetMethod<SetDelegate<UnityDebugLogDelegate>>(_nativeAssemblyHandle, "SetUnityDebugLogMethod");
+            _initializeNative = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "InitializeNative");
+            _nativeInitialized = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "NativeInitialized");
+
+            _setDebugLog(DebugLog);
+            _initializeNative.Invoke();
+            NativeMethods.Initialize(_nativeAssemblyHandle);
+            _nativeInitialized.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            if (!NativeAssembly.Unload(_nativeAssemblyHandle))
+            {
+                Debug.Log("Something went wrong unloading native code handle.");
+            }
         }
         
         private static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
         {
             Debug.Log(message);
         }
-        
-        private delegate void UnityDebugLogDelegate(
-            [MarshalAs(UnmanagedType.LPStr)] string message
-        );
     }
 }

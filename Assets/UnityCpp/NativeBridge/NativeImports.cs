@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace UnityCpp.NativeBridges
+namespace UnityCpp.NativeBridge
 {
     using static NativeDelegates;
     
@@ -9,56 +9,33 @@ namespace UnityCpp.NativeBridges
     {
         #region SendMessage
         
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetUnitySendMessageMethod(UnitySendMessageDelegate func);
+        internal static SetDelegate<SendMessageDelegate> _setUnitySendMessage;
         
         #endregion
         
         #region Constructor & Destructor
         
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedConstructorMethod(NativeConstructorDelegate call);
-
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedDestructorMethod(NativeDestructorDelegate call);
+        internal static SetDelegate<ConstructorDelegate> _setManagedConstructor;
+        
+        internal static SetDelegate<DestructorDelegate> _setManagedDestructor;
         
         #endregion
 
         #region Getters & Setters
 
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedGetMemberPtrMethod(NativeGetMemberPtrDelegate call);
-        
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedGetSetStringMethod(
-            NativeGetValuePrimitiveDelegate<string> getCall, 
-            NativeSetValuePrimitiveDelegate<string> setCall);
+        internal static SetDelegate<GetMemberPtrDelegate> _setManagedGetMemberPtr;
 
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedGetSetIntMethod(
-            NativeGetValuePrimitiveDelegate<int> getCall, 
-            NativeSetValuePrimitiveDelegate<int> setCall);
-        
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedGetSetLongMethod(
-            NativeGetValuePrimitiveDelegate<long> getCall, 
-            NativeSetValuePrimitiveDelegate<long> setCall);
-        
-        
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedGetSetFloatMethod(
-            NativeGetValuePrimitiveDelegate<float> getCall, 
-            NativeSetValuePrimitiveDelegate<float> setCall);
+        internal static SetDelegates<GetValueDelegate<string>, SetValueDelegate<string>> _setManagedGetSetString;
 
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedGetSetDoubleMethod(
-            NativeGetValuePrimitiveDelegate<double> getCall,
-            NativeSetValuePrimitiveDelegate<double> setCall);
+        internal static SetDelegates<GetValueDelegate<int>, SetValueDelegate<int>> _setManagedGetSetInt;
 
-        [DllImport(NativeConstants.nativePluginName)]
-        internal static extern void SetManagedGetSetObjectMethod(
-            NativeGetValuePrimitiveDelegate<IntPtr> getCall,
-            NativeSetValuePrimitiveDelegate<IntPtr> setCall);
+        internal static SetDelegates<GetValueDelegate<long>, SetValueDelegate<long>> _setManagedGetSetLong;
+
+        internal static SetDelegates<GetValueDelegate<float>, SetValueDelegate<float>> _setManagedGetSetFloat;
+
+        internal static SetDelegates<GetValueDelegate<double>, SetValueDelegate<double>> _setManagedGetSetDouble;
+
+        internal static SetDelegates<GetValueDelegate<IntPtr>, SetValueDelegate<IntPtr>> _setManagedGetSetObject;
 
         #endregion
     }

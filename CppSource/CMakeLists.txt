@@ -32,6 +32,12 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.h 
         UnityCppLib/UnityAPI/UnityEngine/HideFlags.h
         UnityCppLib/UnityAPI/ManagedBridge/MemberType.h
+        UnityCppAssemblyHelper/AssemblyHelper.cpp)
+
+add_library(
+        UnityCppAssemblyHelper
+        SHARED
+        UnityCppAssemblyHelper/AssemblyHelper.cpp
 )
 
 target_include_directories(UnityCppLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib)

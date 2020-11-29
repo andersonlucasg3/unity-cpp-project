@@ -2,11 +2,11 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using static UnityCpp.NativeBridges.NativeDelegates;
+using static UnityCpp.NativeBridge.NativeDelegates;
 
-namespace UnityCpp.NativeBridges
+namespace UnityCpp.NativeBridge
 {
-    internal static class NativeMethodsImplementation
+    internal static class NativeMethodsImpl
     {
         internal static void UnitySendMessageMethod(string gameObjectName, string methodName, string message)
         {
@@ -35,12 +35,14 @@ namespace UnityCpp.NativeBridges
 
         #endregion
 
-        internal static void GetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, out TValue value)
+        #region Getters & Setters
+
+        internal static void GetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, NativeDelegates.MemberType type, out TValue value)
         {
             object objectInstance = null;
             switch (type)
             {
-                case MemberType.field:
+                case NativeDelegates.MemberType.field:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
                     object valueInstance = fieldInfo.GetValue(objectInstance);
                     if (typeof(TValue) != typeof(IntPtr))
@@ -50,7 +52,7 @@ namespace UnityCpp.NativeBridges
                     }
                     value = (TValue) (object) AllocObjectPtr(valueInstance);
                     return;
-                case MemberType.property:
+                case NativeDelegates.MemberType.property:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
                     if (typeof(TValue) != typeof(IntPtr))
                     {
@@ -59,19 +61,19 @@ namespace UnityCpp.NativeBridges
                     }
                     value = (TValue) (object) AllocObjectPtr(propertyInfo.GetValue(objectInstance));
                     return;
-                case MemberType.method:
+                case NativeDelegates.MemberType.method:
                     throw new MissingMethodException();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
 
-        internal static void SetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, TValue value)
+        internal static void SetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, NativeDelegates.MemberType type, TValue value)
         {
             object objectInstance = null;
             switch (type)
             {
-                case MemberType.field:
+                case NativeDelegates.MemberType.field:
                 {
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
                     switch (value)
@@ -82,7 +84,7 @@ namespace UnityCpp.NativeBridges
                 }
                     break;
 
-                case MemberType.property:
+                case NativeDelegates.MemberType.property:
                 {
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
                     switch (value)
@@ -92,7 +94,7 @@ namespace UnityCpp.NativeBridges
                     }
                 }
                     break;
-                case MemberType.method:
+                case NativeDelegates.MemberType.method:
                     throw new MissingMethodException();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -103,6 +105,8 @@ namespace UnityCpp.NativeBridges
         {
             return AllocMemberPtr(intPtr, name);
         }
+
+        #endregion
 
         #region Private methods
 
