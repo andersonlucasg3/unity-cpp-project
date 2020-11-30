@@ -1,54 +1,35 @@
-#include <cstdlib>
 #include "Managed.h"
-#include "ManagedMember.h"
 #include "UnityAPI/UnityAPIExtern.h"
 
 namespace UnityEngine::ManagedBridge {
     typedef void (UNITY_METHOD *__UnitySendMessageFunc)(const char *gameObjectName, const char *methodName, const char *message);
+    typedef void (UNITY_METHOD *__UnityManagedDestructorFunc)(const void *instancePtr);
 
-    typedef intptr_t *(UNITY_METHOD *__UnityManagedConstructorFunc)(const char *typeName);
-    typedef void (UNITY_METHOD *__UnityManagedDestructorFunc)(intptr_t *instance);
-
-    typedef intptr_t *(UNITY_METHOD *__UnityManagedGetMemberPtrFunc)(intptr_t *instance, const char *memberName, MemberType type);
-
-    __UnityManagedConstructorFunc UnityManagedConstructor = nullptr;
     __UnityManagedDestructorFunc UnityManagedDestructor = nullptr;
-    __UnityManagedGetMemberPtrFunc UnityManagedGetMemberPtr = nullptr;
 
 #pragma region Managed implementation
 
     [[maybe_unused]] UnitySendMessageMethod Managed::UnitySendMessage = nullptr;
 
-    Managed::Managed() {
-        _instance = nullptr;
+    Managed::Managed(ManagedPointer ptr) {
+        _ptr = ptr;
     }
 
-    Managed::Managed(intptr_t *instance) {
-        _instance = instance;
+    Managed::operator ManagedPointer const () const {
+        return _ptr;
     }
 
-    Managed::~Managed() {
-        UnityManagedDestructor(_instance);
+    void Managed::destroy(Managed *managed) {
+        destroy(*managed);
+        delete managed;
     }
 
-    void Managed::construct(const char *typeName) {
-        _instance = UnityManagedConstructor(typeName);
+    void Managed::destroy(const Managed &managed) {
+        destroy((ManagedPointer)managed);
     }
 
-    ManagedMember *Managed::getMember(const char *memberName, MemberType type) {
-        intptr_t *memberPtr = UnityManagedGetMemberPtr(_instance, memberName, type);;
-        return new ManagedMember(memberPtr, _instance, type);
-    }
-
-    void Managed::destroy(ManagedMember *member) {
-        UnityManagedDestructor(member->_memberPtr);
-        delete member;
-    }
-
-    void Managed::destroy(ManagedMember *member, bool freeMemberPtr) {
-        UnityManagedDestructor(member->_memberPtr);
-        free(member->_memberPtr);
-        delete member;
+    void Managed::destroy(ManagedPointer pointer) {
+        UnityManagedDestructor(pointer);
     }
 
 #pragma endregion
@@ -58,7 +39,5 @@ using namespace UnityEngine::ManagedBridge;
 
 extern "C" {
 [[maybe_unused]] UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func) { Managed::UnitySendMessage = func; }
-[[maybe_unused]] UNITY_EXPORT void SetManagedConstructorMethod(__UnityManagedConstructorFunc func) { UnityManagedConstructor = func; }
 [[maybe_unused]] UNITY_EXPORT void SetManagedDestructorMethod(__UnityManagedDestructorFunc func) { UnityManagedDestructor = func; }
-[[maybe_unused]] UNITY_EXPORT void SetManagedGetMemberPtrMethod(__UnityManagedGetMemberPtrFunc func) { UnityManagedGetMemberPtr = func; }
 }

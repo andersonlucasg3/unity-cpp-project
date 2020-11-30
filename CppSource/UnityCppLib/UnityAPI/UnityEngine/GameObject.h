@@ -19,11 +19,9 @@ namespace UnityEngine {
 
         Transform *_transform{};
 
-        explicit GameObject(intptr_t *instance);
-        void InitializeMembers() override;
-
     public:
         GameObject();
+        explicit GameObject(const char *name);
         ~GameObject();
 
         [[nodiscard,maybe_unused]] Transform *transform() const;

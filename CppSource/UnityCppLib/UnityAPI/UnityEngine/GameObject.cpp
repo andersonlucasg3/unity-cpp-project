@@ -2,18 +2,20 @@
 #include "Transform.h"
 #include "UnityAPI/UnityAPIExtern.h"
 #include "UnityAPI/ManagedBridge/Managed.h"
-#include "UnityAPI/ManagedBridge/ManagedMember.h"
 #include "Debug.h"
 
 #include <type_traits>
-#include <iostream>
 
 using namespace std;
 
 namespace UnityEngine {
     const char * const _gameObjectClassName = "UnityEngine.GameObject, UnityEngine.dll";
 
-    GameObject::GameObject() : Object() {
+    GameObject::GameObject() {
+        createManagedInstance(_gameObjectClassName);
+    }
+
+    GameObject::GameObject(const char *name) {
         createManagedInstance(_gameObjectClassName);
     }
 
@@ -39,7 +41,7 @@ namespace UnityEngine {
         _tagProperty = _managed->getMember("tag", property);
         _transformProperty = _managed->getMember("transform", property);
 
-        intptr_t *transformPtr = _transformProperty->getObject();
+        intptr_t *transformPtr = _transformProperty->getValue<intptr_t *>();
         _transform = new Transform(this, transformPtr);
     }
 

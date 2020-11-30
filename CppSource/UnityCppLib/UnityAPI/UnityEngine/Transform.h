@@ -5,20 +5,20 @@
 namespace UnityEngine {
     class GameObject;
 
+    using namespace ManagedBridge::Members;
+
     class Transform : public Component {
         friend class GameObject;
 
     private:
-        ManagedMember *_childCountProperty{};
-        ManagedMember *_parentProperty{};
+        PropertyMember _childCountProperty = PropertyMember::null;
+        PropertyMember _parentProperty = PropertyMember::null;
 
-        Transform *_parent{};
+        Transform *_parent = nullptr;
 
     protected:
-        explicit Transform(intptr_t *instance);
-        Transform(const GameObject *gameObject, intptr_t *instance);
+        explicit Transform(const GameObject *gameObject, ManagedInstance instance);
         ~Transform();
-        void InitializeMembers() override;
 
     public:
         [[maybe_unused,nodiscard]] int childCount() const;

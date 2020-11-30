@@ -1,37 +1,32 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "UnityAPI/ManagedBridge/Managed.h"
-#include "UnityAPI/ManagedBridge/ManagedMember.h"
 
 using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
-    Component::Component(intptr_t *instance) : Object(instance) { }
-
-    Component::Component(const GameObject *gameObject, intptr_t *instance) : Object(instance) {
+    Component::Component(const GameObject *gameObject, ManagedInstance instance) : Object(instance) {
+        _tagProperty = instance.type().getProperty("tag");
+        _gameObjectProperty = instance.type().getProperty("gameObject");
         _gameObject = gameObject;
     }
 
     Component::~Component() {
         Managed::destroy(_tagProperty);
-    }
-
-    void Component::InitializeMembers() {
-        Object::InitializeMembers();
-        _tagProperty = _managed->getMember("tag", property);
-        _gameObjectProperty = _managed->getMember("gameObject", property);
-
-        if (!_gameObject) {
-            intptr_t *gameObjectPtr = _gameObjectProperty->getObject();
-            _gameObject = new GameObject(gameObjectPtr);
-        }
+        Managed::destroy(_gameObjectProperty);
     }
 
     Transform * Component::transform() const {
         return _gameObject->transform();
     }
 
-    const GameObject *Component::gameObject() const {
+    const GameObject *Component::gameObject() {
+        if (_gameObject) return _gameObject;
+
+        ManagedPointer pointer = _gameObjectProperty.get<ManagedPointer>(_instance);
+        if (pointer != ManagedPointer::null) {
+            _gameObject = new GameObject(pointer);
+        }
         return _gameObject;
     }
 }

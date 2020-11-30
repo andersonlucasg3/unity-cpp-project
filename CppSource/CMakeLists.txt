@@ -45,12 +45,24 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/Managed.cpp 
         UnityCppLib/UnityAPI/ManagedBridge/Managed.h 
         UnityCppLib/UnityAPI/UnityEngine/Object.cpp 
-        UnityCppLib/UnityAPI/UnityEngine/Object.h 
-        UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.cpp 
-        UnityCppLib/UnityAPI/ManagedBridge/ManagedMember.h 
+        UnityCppLib/UnityAPI/UnityEngine/Object.h
+        UnityCppLib/UnityAPI/ManagedBridge/Members/ManagedMember.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/Members/ManagedMember.h
         UnityCppLib/UnityAPI/UnityEngine/HideFlags.h
-        UnityCppLib/UnityAPI/ManagedBridge/MemberType.h
-)
+        UnityCppLib/UnityAPI/ManagedBridge/Members/MemberType.h
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedType.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedType.h
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedPointer.h
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedPointer.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedInstance.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedInstance.h
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedAssembly.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedAssembly.h
+        UnityCppLib/UnityAPI/ManagedBridge/Members/ConstructorMember.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/Members/ConstructorMember.h
+        UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.h
+        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.cpp UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.h)
 
 target_sources(
         UnityCppLib
