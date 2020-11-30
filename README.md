@@ -20,3 +20,7 @@ There may be a way to fix that, but that's a problem for another time.
 - [ ] Test it in a real game scenario;
 - [ ] Integrate the Cpp build with the Editor;
 - [X] Reload the binary when it has been rebuilt;
+
+### Updates
+Now the Cpp assembly is loaded when the game starts playing and unloaded when the game stops playing.
+So the problem with the rebuild of the native library is solved allowing to better integrate the native code.
