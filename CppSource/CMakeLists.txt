@@ -3,7 +3,6 @@ project(CppSource)
 
 set(CMAKE_CXX_STANDARD 20)
 
-if (APPLE)
 add_library(
         UnityCppAssemblyHelper
         SHARED
@@ -21,7 +20,6 @@ target_include_directories(
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppAssemblyHelper
 )
-endif(APPLE)
 
 add_library(
         UnityCppLib

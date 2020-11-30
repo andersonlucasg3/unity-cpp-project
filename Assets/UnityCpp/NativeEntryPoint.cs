@@ -1,12 +1,13 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityCpp.Loader;
-using UnityCpp.NativeBridge;
 using UnityEngine;
 
 namespace UnityCpp
 {
     using static NativeBridge.NativeDelegates;
+    using static NativeBridge.NativeMethods;
+    using static NativeBridge.NativeMethodsImpl;
     
     public class NativeEntryPoint : MonoBehaviour
     {
@@ -18,8 +19,8 @@ namespace UnityCpp
         
         private void Awake()
         {
-            const string assemblyName = NativeConstants.nativeCodeAssemblyName;
-            
+            const string assemblyName =  NativeConstants.nativeCodeAssemblyPath;
+
             _nativeAssemblyHandle = NativeAssembly.Load(assemblyName);
             if (_nativeAssemblyHandle == IntPtr.Zero)
             {
@@ -32,7 +33,7 @@ namespace UnityCpp
 
             _setDebugLog.Invoke(DebugLog);
             _initializeNative.Invoke();
-            NativeMethods.Initialize(_nativeAssemblyHandle);
+            Initialize(_nativeAssemblyHandle);
             _nativeInitialized.Invoke();
         }
 
@@ -42,11 +43,6 @@ namespace UnityCpp
             {
                 Debug.Log("Something went wrong unloading native code handle.");
             }
-        }
-        
-        private static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
-        {
-            Debug.Log(message);
         }
     }
 }

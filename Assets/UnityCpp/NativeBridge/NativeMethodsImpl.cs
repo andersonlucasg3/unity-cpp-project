@@ -8,10 +8,19 @@ namespace UnityCpp.NativeBridge
 {
     internal static class NativeMethodsImpl
     {
+        #region Unity methods
+
         internal static void UnitySendMessageMethod(string gameObjectName, string methodName, string message)
         {
             GameObject.Find(gameObjectName).SendMessage(methodName, message, SendMessageOptions.RequireReceiver);
         }
+        
+        internal static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
+        {
+            Debug.Log(message);
+        }
+
+        #endregion
 
         #region Constructor & Destructor
 
