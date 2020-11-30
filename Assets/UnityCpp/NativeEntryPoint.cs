@@ -1,36 +1,48 @@
 using System;
 using System.Runtime.InteropServices;
-using UnityCpp.NativeBridges;
+using UnityCpp.Loader;
 using UnityEngine;
 
 namespace UnityCpp
 {
+    using static NativeBridge.NativeDelegates;
+    using static NativeBridge.NativeMethods;
+    using static NativeBridge.NativeMethodsImpl;
+    
     public class NativeEntryPoint : MonoBehaviour
     {
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void InitializeNative();
-
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void NativeInitialized();
+        private static SetUnityDebugLogDelegate _setDebugLog;
+        private static NativeVoidMethod _initializeNative;
+        private static NativeVoidMethod _nativeInitialized;
         
-        [DllImport(NativeConstants.nativePluginName)]
-        private static extern void SetUnityDebugLogMethod(UnityDebugLogDelegate action);
-
+        private IntPtr _nativeAssemblyHandle = IntPtr.Zero;
+        
         private void Awake()
         {
-            SetUnityDebugLogMethod(DebugLog);
-            InitializeNative();
-            NativeMethods.Initialize();
-            NativeInitialized();
+            const string assemblyName =  NativeConstants.nativeCodeAssemblyPath;
+
+            _nativeAssemblyHandle = NativeAssembly.Load(assemblyName);
+            if (_nativeAssemblyHandle == IntPtr.Zero)
+            {
+                Debug.Log($"Failed to load native assembly {assemblyName}");
+                return;
+            }
+            _setDebugLog = NativeAssembly.GetMethod<SetUnityDebugLogDelegate>(_nativeAssemblyHandle, "SetUnityDebugLogMethod");
+            _initializeNative = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "InitializeNative");
+            _nativeInitialized = NativeAssembly.GetMethod<NativeVoidMethod>(_nativeAssemblyHandle, "NativeInitialized");
+
+            _setDebugLog.Invoke(DebugLog);
+            _initializeNative.Invoke();
+            Initialize(_nativeAssemblyHandle);
+            _nativeInitialized.Invoke();
         }
-        
-        private static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
+
+        private void OnDestroy()
         {
-            Debug.Log(message);
+            if (!NativeAssembly.Unload(_nativeAssemblyHandle))
+            {
+                Debug.Log("Something went wrong unloading native code handle.");
+            }
         }
-        
-        private delegate void UnityDebugLogDelegate(
-            [MarshalAs(UnmanagedType.LPStr)] string message
-        );
     }
 }

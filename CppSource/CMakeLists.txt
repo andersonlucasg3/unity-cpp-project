@@ -4,6 +4,24 @@ project(CppSource)
 set(CMAKE_CXX_STANDARD 20)
 
 add_library(
+        UnityCppAssemblyHelper
+        SHARED
+        UnityCppAssemblyHelper/AssemblyHelper.cpp
+)
+
+target_sources(
+        UnityCppAssemblyHelper
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppAssemblyHelper
+)
+
+target_include_directories(
+        UnityCppAssemblyHelper
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppAssemblyHelper
+)
+
+add_library(
         UnityCppLib
         SHARED
         UnityCppLib/Components/Factory/ComponentFactory.cpp
@@ -34,7 +52,17 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/MemberType.h
 )
 
-target_include_directories(UnityCppLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib)
+target_sources(
+        UnityCppLib
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib
+)
+
+target_include_directories(
+        UnityCppLib
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib
+)
 
 set(CMAKE_CXX_FLAGS "-fdeclspec")
 
