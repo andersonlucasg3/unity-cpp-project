@@ -22,5 +22,5 @@ There may be a way to fix that, but that's a problem for another time.
 - [X] Reload the binary when it has been rebuilt;
 
 ### Updates
-Now the Cpp assembly is loaded when the game starts playing and unloaded when the game stops playing.
-So the problem with the rebuild of the native library is solved allowing to better integrate the native code.
+- Now the Cpp assembly is loaded when the game starts playing and unloaded when the game stops playing.
+  So the problem with the rebuild of the native library is solved allowing to better integrate the native code.
