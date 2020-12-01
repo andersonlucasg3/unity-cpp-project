@@ -2,7 +2,6 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using static UnityCpp.NativeBridge.NativeDelegates;
 
 namespace UnityCpp.NativeBridge
 {
@@ -15,27 +14,50 @@ namespace UnityCpp.NativeBridge
             GameObject.Find(gameObjectName).SendMessage(methodName, message, SendMessageOptions.RequireReceiver);
         }
         
-        internal static void DebugLog([MarshalAs(UnmanagedType.LPStr)] string message)
+        internal static void DebugLog(string message)
         {
             Debug.Log(message);
         }
 
         #endregion
+        
+        #region Types methods
 
-        #region Constructor & Destructor
-
-        internal static IntPtr ConstructorMethod(string typeName)
+        internal static IntPtr GetTypePtr(string assemblyName)
         {
-            Type managedType = Type.GetType(typeName);
-            if (managedType == null)
-            {
-                return IntPtr.Zero;
-            }
-            
-            object instance = Activator.CreateInstance(managedType);
-            return (IntPtr) GCHandle.Alloc(instance);
+            Type type = Type.GetType(assemblyName);
+            return (IntPtr)GCHandle.Alloc(type);
         }
 
+        internal static IntPtr GetTypeConstructorPtr(IntPtr typePtr, int constructorIndex)
+        {
+            Type type = ConvertPtrTo<Type>(typePtr);
+            ConstructorInfo info = type.GetConstructors()[constructorIndex];
+            return AllocObjectPtr(info);
+        }
+        
+        internal static IntPtr GetTypeMemberPtr(IntPtr intPtr, string name)
+        {
+            return AllocMemberPtr(intPtr, name);
+        }
+
+        internal static IntPtr Constructor(IntPtr constructorPtr, IntPtr[] parameters, int paramCount)
+        {
+            ConstructorInfo info = ConvertPtrTo<ConstructorInfo>(constructorPtr);
+            object[] objects = new object[paramCount];
+            for (int index = 0; index < paramCount; index++)
+            {
+                objects[index] = ConvertPtrTo<object>(parameters[index]);
+            }
+
+            object instance = info.Invoke(objects);
+            return AllocObjectPtr(instance);
+        }
+        
+        #endregion
+
+        #region Constructor & Destructor
+        
         internal static void DestructorMethod(IntPtr intPtr)
         {
             GCHandle handle = (GCHandle) intPtr;
@@ -48,7 +70,7 @@ namespace UnityCpp.NativeBridge
 
         internal static void GetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, out TValue value)
         {
-            object objectInstance = null;
+            object objectInstance;
             switch (type)
             {
                 case MemberType.field:
@@ -72,6 +94,8 @@ namespace UnityCpp.NativeBridge
                     return;
                 case MemberType.method:
                     throw new MissingMethodException();
+                case MemberType.constructor:
+                    throw new MissingMemberException();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -79,7 +103,7 @@ namespace UnityCpp.NativeBridge
 
         internal static void SetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, TValue value)
         {
-            object objectInstance = null;
+            object objectInstance;
             switch (type)
             {
                 case MemberType.field:
@@ -105,14 +129,11 @@ namespace UnityCpp.NativeBridge
                     break;
                 case MemberType.method:
                     throw new MissingMethodException();
+                case MemberType.constructor:
+                    throw new MissingMemberException();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
-        }
-
-        internal static IntPtr GetMemberPtr(IntPtr intPtr, string name)
-        {
-            return AllocMemberPtr(intPtr, name);
         }
 
         #endregion

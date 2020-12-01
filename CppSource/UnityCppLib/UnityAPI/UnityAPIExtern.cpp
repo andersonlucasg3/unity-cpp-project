@@ -1,12 +1,11 @@
 #include <UnityAPI/UnityEngine/Debug.h>
 #include "UnityAPIExtern.h"
 
+#include "UnityAPI/UnityEngine/UnityEngine.h"
 #include "Components/Factory/ComponentFactory.h"
-#include "UnityAPI/UnityEngine/GameObject.h"
-#include "UnityAPI/UnityEngine/Transform.h"
 
 using namespace CppSource::Components;
-using namespace CppSource::Components::Factory;
+using namespace CppSource::Components::Factory;\
 using namespace UnityEngine;
 
 extern "C" {
@@ -14,9 +13,9 @@ extern "C" {
 
     UNITY_EXPORT void InitializeNative() {
         REGISTER_ALL_COMPONENTS_CALL
-    }
 
-    UNITY_EXPORT void NativeInitialized() {
+        UnityEngine::InitializeManagedBridge();
+
         GameObject *gameObject = new GameObject();
         gameObject->setName("Transform test");
 

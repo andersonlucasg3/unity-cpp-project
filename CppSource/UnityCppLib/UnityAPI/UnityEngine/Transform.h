@@ -23,5 +23,6 @@ namespace UnityEngine {
         [[maybe_unused]] void setParent(Transform *parent);
 
         static const ManagedType type();
+        static void InitializeManagedBridge();
     };
 }

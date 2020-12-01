@@ -1,13 +1,15 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
+#include "UnityAPI/UnityAPIExtern.h"
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _transformAssemblyInfo("UnityEngine.Transform", "UnityEngine.dll");
-    const ManagedType _transformType(_transformAssemblyInfo);
 
-    const PropertyMember _childCountProperty = _transformType.getProperty("childCount");
-    const PropertyMember _parentProperty = _transformType.getProperty("parent");
+    ManagedType _transformType = ManagedType::null;
+
+    PropertyMember _childCountProperty = PropertyMember::null;
+    PropertyMember _parentProperty = PropertyMember::null;
 
     Transform::Transform(ManagedInstance instance, const GameObject *gameObject) : Component(instance, gameObject) {
         // nothing yet
@@ -44,5 +46,12 @@ namespace UnityEngine {
 
     const ManagedType Transform::type() {
         return _transformType;
+    }
+
+    void Transform::InitializeManagedBridge() {
+        _transformType = ManagedType(_transformAssemblyInfo);
+
+        _childCountProperty = _transformType.getProperty("childCount");
+        _parentProperty = _transformType.getProperty("parent");
     }
 }

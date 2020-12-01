@@ -29,5 +29,6 @@ namespace UnityEngine {
         [[nodiscard,maybe_unused]] HideFlags hideFlags() const;
 
         static const ManagedType type();
+        static void InitializeManagedBridge();
     };
 }

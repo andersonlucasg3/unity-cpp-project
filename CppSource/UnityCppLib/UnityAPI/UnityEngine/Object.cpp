@@ -8,10 +8,11 @@ using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _objectAssemblyInfo("UnityEngine.Object", "UnityEngine.dll");
-    const ManagedType _objectType(_objectAssemblyInfo);
 
-    const PropertyMember _nameProperty = _objectType.getProperty("name");
-    const PropertyMember _hideFlagsProperty = _objectType.getProperty("hasFlags");
+    ManagedType _objectType = ManagedType::null;
+
+    PropertyMember _nameProperty = PropertyMember::null;
+    PropertyMember _hideFlagsProperty = PropertyMember::null;
 
     Object::Object(ManagedType type) {
         _type = type;
@@ -39,5 +40,12 @@ namespace UnityEngine {
 
     const ManagedType Object::type() {
         return _objectType;
+    }
+
+    void Object::InitializeManagedBridge() {
+        _objectType = ManagedType(_objectAssemblyInfo);
+
+        _nameProperty = _objectType.getProperty("name");
+        _hideFlagsProperty = _objectType.getProperty("hasFlags");
     }
 }

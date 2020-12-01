@@ -22,7 +22,7 @@ namespace UnityEngine::ManagedBridge {
 
         ManagedType();
         explicit ManagedType(ManagedPointer ptr);
-        explicit ManagedType(ManagedAssemblyInfo assembly);
+        explicit ManagedType(const ManagedAssemblyInfo& assembly);
 
         ConstructorMember getConstructor(int constructorIndex) const;
         FieldMember getField(const char *fieldName) const;

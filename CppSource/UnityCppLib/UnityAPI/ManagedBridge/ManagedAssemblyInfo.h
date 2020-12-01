@@ -3,11 +3,11 @@
 namespace UnityEngine::ManagedBridge {
     struct ManagedAssemblyInfo {
     private:
-        const char *_type;
-        const char *_assembly;
+        const char *_fullName;
 
     public:
         ManagedAssemblyInfo(const char *type, const char *assembly);
+        ~ManagedAssemblyInfo();
 
         [[nodiscard]] const char *name() const;
     };

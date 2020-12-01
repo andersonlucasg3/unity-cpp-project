@@ -12,6 +12,17 @@ namespace UnityEngine {
         friend class Component;
 
     private:
+        static ManagedType _gameObjectType;
+        static ConstructorMember _defaultConstructor;
+        static ConstructorMember _secondConstructor;
+        static ConstructorMember _thirdConstructor;
+        static PropertyMember _activeInHierarchyProperty;
+        static PropertyMember _activeSelfProperty;
+        static PropertyMember _isStaticProperty;
+        static PropertyMember _layerProperty;
+        static PropertyMember _tagProperty;
+        static PropertyMember _transformProperty;
+
         Transform *_transform = nullptr;
 
         GameObject(ManagedInstance instance);
@@ -28,5 +39,6 @@ namespace UnityEngine {
         template<class TComponent> [[nodiscard,maybe_unused]] bool tryGetComponent(const TComponent &component);
 
         static const ManagedType type();
+        static void InitializeManagedBridge();
     };
 }

@@ -4,7 +4,7 @@
 #include "UnityAPI/UnityAPIExtern.h"
 
 namespace UnityEngine::ManagedBridge::Members {
-    typedef void *(UNITY_METHOD *__UnityManagedConstructorFunc)(const void *typePtr, const void *constructorPtr, void **parameters, int paramCount);
+    typedef void *(UNITY_METHOD *__UnityManagedConstructorFunc)(const void *constructorPtr, void **parameters, int paramCount);
 
     __UnityManagedConstructorFunc _constructor = nullptr;
 
@@ -19,13 +19,12 @@ namespace UnityEngine::ManagedBridge::Members {
         // nothing yet
     }
 
-    ManagedInstance ConstructorMember::constructor(ManagedType type, void *parameters[], int paramCount) const {
-        ManagedPointer const typePtr = type;
+    ManagedInstance ConstructorMember::constructor(void *parameters[], int paramCount) const {
         void **paramPtr = new void *[paramCount];
         for (int index = 0; index < paramCount; ++index) {
             paramPtr[index] = (void *)(const void *)parameters[index];
         }
-        ManagedInstance instance(_constructor(typePtr, this, paramPtr, paramCount));
+        ManagedInstance instance(_constructor(this, paramPtr, paramCount));
         delete[] paramPtr;
         return instance;
     }

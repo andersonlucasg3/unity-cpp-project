@@ -21,5 +21,6 @@ namespace UnityEngine {
         [[nodiscard,maybe_unused]] const GameObject *gameObject() const;
 
         static const ManagedType type();
+        static void InitializeManagedBridge();
     };
 }

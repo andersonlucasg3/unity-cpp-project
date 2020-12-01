@@ -6,10 +6,11 @@ using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _componentAssemblyInfo("UnityEngine.Component", "UnityEngine.dll");
-    const ManagedType _componentType(_componentAssemblyInfo);
 
-    const PropertyMember _gameObjectProperty = _componentType.getProperty("gameObject");
-    const PropertyMember _tagProperty = _componentType.getProperty("tagProperty");
+    ManagedType _componentType = ManagedType::null;
+
+    PropertyMember _gameObjectProperty = PropertyMember::null;
+    PropertyMember _gameObjectTransformProperty = PropertyMember::null;
 
     Component::Component(ManagedType type) : Object(type) {
         _gameObject = new GameObject(_gameObjectProperty.get<ManagedPointer>(_instance));
@@ -23,10 +24,7 @@ namespace UnityEngine {
         _gameObject = gameObject;
     }
 
-    Component::~Component() {
-        Managed::destroy(_tagProperty);
-        Managed::destroy(_gameObjectProperty);
-    }
+    Component::~Component() = default;
 
     const Transform *Component::transform() const {
         return _gameObject->transform();
@@ -38,5 +36,12 @@ namespace UnityEngine {
 
     const ManagedType Component::type() {
         return _componentType;
+    }
+
+    void Component::InitializeManagedBridge() {
+        _componentType = ManagedType(_componentAssemblyInfo);
+
+        _gameObjectProperty = _componentType.getProperty("gameObject");
+        _gameObjectTransformProperty = _componentType.getProperty("transform");
     }
 }
