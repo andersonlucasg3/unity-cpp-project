@@ -75,7 +75,7 @@ void setGetSetMethod(GetValueFunc getFunc, SetValueFunc setFunc) {
 extern "C" {
     [[maybe_unused]] UNITY_EXPORT
     void SetManagedGetSetStringMethod(GetValueFunc getFunc, SetValueFunc setFunc) {
-        setGetSetMethod<const char *>(getFunc, setFunc);
+        setGetSetMethod<char *>(getFunc, setFunc);
     }
 
     [[maybe_unused]] UNITY_EXPORT
