@@ -29,11 +29,11 @@ namespace UnityEngine {
     }
 
     const char * Object::name() const {
-        return _nameProperty.get<const char *>(_instance);
+        return _nameProperty.get<char *>(_instance);
     }
 
     void Object::setName(const char *name) const {
-        _nameProperty.set(_instance, name);
+        _nameProperty.set(_instance, (char *)name);
     }
 
     const ManagedType Object::type() {

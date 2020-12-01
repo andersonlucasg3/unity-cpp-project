@@ -33,8 +33,8 @@ namespace ManagedBridge {
         _type = type;
     }
 
-    template const char *ManagedMember::get(ManagedInstance instance) const;
-    template void ManagedMember::set(ManagedInstance instance, const char *value)const ;
+    template char *ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, char *value)const ;
     template int ManagedMember::get(ManagedInstance instance) const;
     template void ManagedMember::set(ManagedInstance instance, int value) const;
     template long ManagedMember::get(ManagedInstance instance) const;
@@ -45,15 +45,13 @@ namespace ManagedBridge {
     template void ManagedMember::set(ManagedInstance instance, double value) const;
     template void *ManagedMember::get(ManagedInstance instance) const;
     template void ManagedMember::set(ManagedInstance instance, void *value) const;
-    template ManagedPointer ManagedMember::get(ManagedInstance instance) const;
-    template void ManagedMember::set(ManagedInstance instance, ManagedPointer value) const;
 
     template<typename TValue>
     [[maybe_unused]] TValue ManagedMember::get(ManagedInstance instance) const {
         GetValueFunc func = _getSetMap[typeid(TValue)].getValue;
-        TValue value;
         const void *instancePtr = instance.toPointer().toManaged();
         const void *memberPtr = this->toPointer().toManaged();
+        TValue value;
         func(instancePtr, memberPtr, _type, (void **)&value);
         return value;
     }
