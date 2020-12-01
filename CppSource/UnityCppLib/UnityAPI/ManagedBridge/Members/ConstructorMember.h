@@ -19,6 +19,6 @@ namespace UnityEngine::ManagedBridge::Members {
     public:
         static const ConstructorMember null;
 
-        ManagedInstance constructor(ManagedType type, void **parameters, int paramCount) const;
+        ManagedInstance constructor(ManagedType type, void *parameters[], int paramCount) const;
     };
 }

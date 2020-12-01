@@ -6,7 +6,7 @@
 
 namespace UnityEngine::ManagedBridge {
     struct ManagedPointer;
-    struct ManagedAssembly;
+    struct ManagedAssemblyInfo;
 
     namespace Members {
         class ConstructorMember;
@@ -17,17 +17,14 @@ namespace UnityEngine::ManagedBridge {
     using namespace Members;
 
     class ManagedType : public Managed {
-        friend class ManagedInstance;
-
-    private:
-        ManagedType();
-        explicit ManagedType(ManagedPointer ptr);
-        explicit ManagedType(ManagedAssembly assembly);
-
     public:
         static const ManagedType null;
 
-        ConstructorMember getConstructor(char **parameters, int paramCount) const;
+        ManagedType();
+        explicit ManagedType(ManagedPointer ptr);
+        explicit ManagedType(ManagedAssemblyInfo assembly);
+
+        ConstructorMember getConstructor(int constructorIndex) const;
         FieldMember getField(const char *fieldName) const;
         PropertyMember getProperty(const char *propertyName) const;
     };

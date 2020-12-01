@@ -15,14 +15,12 @@ namespace UnityEngine::ManagedBridge {
         friend class Members::ConstructorMember;
 
     private:
-        ManagedType _type = ManagedType(ManagedPointer::null);
-
         ManagedInstance();
 
     public:
         static const ManagedInstance null;
 
-        ManagedInstance(ManagedType type, ManagedPointer ptr);
+        ManagedInstance(ManagedPointer ptr);
 
         [[nodiscard]] const ManagedType type() const;
     };

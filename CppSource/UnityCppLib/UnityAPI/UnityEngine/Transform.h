@@ -11,18 +11,17 @@ namespace UnityEngine {
         friend class GameObject;
 
     private:
-        PropertyMember _childCountProperty = PropertyMember::null;
-        PropertyMember _parentProperty = PropertyMember::null;
-
         Transform *_parent = nullptr;
 
     protected:
-        explicit Transform(const GameObject *gameObject, ManagedInstance instance);
+        explicit Transform(ManagedInstance instance, const GameObject *gameObject = nullptr);
         ~Transform();
 
     public:
         [[maybe_unused,nodiscard]] int childCount() const;
         [[maybe_unused,nodiscard]] Transform * parent();
         [[maybe_unused]] void setParent(Transform *parent);
+
+        static const ManagedType type();
     };
 }

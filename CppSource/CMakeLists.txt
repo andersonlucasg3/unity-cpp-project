@@ -56,13 +56,15 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/ManagedPointer.cpp
         UnityCppLib/UnityAPI/ManagedBridge/ManagedInstance.cpp
         UnityCppLib/UnityAPI/ManagedBridge/ManagedInstance.h
-        UnityCppLib/UnityAPI/ManagedBridge/ManagedAssembly.cpp
-        UnityCppLib/UnityAPI/ManagedBridge/ManagedAssembly.h
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedAssemblyInfo.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/ManagedAssemblyInfo.h
         UnityCppLib/UnityAPI/ManagedBridge/Members/ConstructorMember.cpp
         UnityCppLib/UnityAPI/ManagedBridge/Members/ConstructorMember.h
         UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.cpp
         UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.h
-        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.cpp UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.h)
+        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.h
+        UnityCppLib/UnityAPI/ManagedBridge/CommonTypes/CommonType.h)
 
 target_sources(
         UnityCppLib

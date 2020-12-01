@@ -1,13 +1,25 @@
 #include "Component.h"
 #include "GameObject.h"
-#include "UnityAPI/ManagedBridge/Managed.h"
+#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 
 using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
-    Component::Component(const GameObject *gameObject, ManagedInstance instance) : Object(instance) {
-        _tagProperty = instance.type().getProperty("tag");
-        _gameObjectProperty = instance.type().getProperty("gameObject");
+    const ManagedAssemblyInfo _componentAssemblyInfo("UnityEngine.Component", "UnityEngine.dll");
+    const ManagedType _componentType(_componentAssemblyInfo);
+
+    const PropertyMember _gameObjectProperty = _componentType.getProperty("gameObject");
+    const PropertyMember _tagProperty = _componentType.getProperty("tagProperty");
+
+    Component::Component(ManagedType type) : Object(type) {
+        _gameObject = new GameObject(_gameObjectProperty.get<ManagedPointer>(_instance));
+    }
+
+    Component::Component(ManagedInstance instance) : Object(instance) {
+        _gameObject = new GameObject(_gameObjectProperty.get<ManagedPointer>(_instance));
+    }
+
+    Component::Component(ManagedInstance instance, const GameObject *gameObject) : Object(instance) {
         _gameObject = gameObject;
     }
 
@@ -16,17 +28,15 @@ namespace UnityEngine {
         Managed::destroy(_gameObjectProperty);
     }
 
-    Transform * Component::transform() const {
+    const Transform *Component::transform() const {
         return _gameObject->transform();
     }
 
-    const GameObject *Component::gameObject() {
-        if (_gameObject) return _gameObject;
-
-        ManagedPointer pointer = _gameObjectProperty.get<ManagedPointer>(_instance);
-        if (pointer != ManagedPointer::null) {
-            _gameObject = new GameObject(pointer);
-        }
+    const GameObject *Component::gameObject() const {
         return _gameObject;
+    }
+
+    const ManagedType Component::type() {
+        return _componentType;
     }
 }

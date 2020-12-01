@@ -1,9 +1,7 @@
 #include "ManagedType.h"
-#include "ManagedPointer.h"
-#include "ManagedAssembly.h"
+#include "ManagedAssemblyInfo.h"
 #include "ManagedInstance.h"
 #include "UnityAPI/UnityAPIExtern.h"
-#include "UnityAPI/ManagedBridge/Members/MemberType.h"
 #include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
 #include "UnityAPI/ManagedBridge/Members/FieldMember.h"
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
@@ -12,7 +10,7 @@ using namespace std;
 
 namespace UnityEngine::ManagedBridge {
     typedef void *(UNITY_METHOD *__UnityManagedGetTypePtrFunc)(const char *typeName);
-    typedef void *(UNITY_METHOD *__UnityManagedGetConstructorPtrFunc)(char **parameters, int paramCount);
+    typedef void *(UNITY_METHOD *__UnityManagedGetConstructorPtrFunc)(int constructorIndex);
     typedef void *(UNITY_METHOD *__UnityManagedGetMemberPtrFunc)(const void *typePtr, const char *memberName, MemberType type);
 
     __UnityManagedGetTypePtrFunc _getTypePtr = nullptr;
@@ -31,12 +29,12 @@ namespace UnityEngine::ManagedBridge {
         // nothing yet
     }
 
-    ManagedType::ManagedType(ManagedAssembly assembly) : Managed(_getTypePtr(assembly.name())) {
+    ManagedType::ManagedType(ManagedAssemblyInfo assembly) : Managed(_getTypePtr(assembly.name())) {
         // nothing yet
     }
 
-    ConstructorMember ManagedType::getConstructor(char **parameters, int paramCount) const {
-        return ConstructorMember(_getConstructorPtr(parameters, paramCount));
+    ConstructorMember ManagedType::getConstructor(int constructorIndex) const {
+        return ConstructorMember(_getConstructorPtr(constructorIndex));
     }
 
     FieldMember ManagedType::getField(const char *fieldName) const {

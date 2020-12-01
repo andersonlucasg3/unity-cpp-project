@@ -4,15 +4,7 @@
 namespace UnityEngine::ManagedBridge {
     const ManagedInstance ManagedInstance::null = ManagedInstance();
 
-    ManagedInstance::ManagedInstance() : Managed(ManagedPointer::null) {
-        _type = ManagedType(ManagedPointer::null);
-    }
+    ManagedInstance::ManagedInstance() : Managed(nullptr) { }
 
-    ManagedInstance::ManagedInstance(ManagedType type, ManagedPointer ptr) : Managed(ptr) {
-        _type = type;
-    }
-
-    const ManagedType ManagedInstance::type() const {
-        return _type;
-    }
+    ManagedInstance::ManagedInstance(ManagedPointer ptr) : Managed(ptr) { }
 }

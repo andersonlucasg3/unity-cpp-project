@@ -15,7 +15,7 @@ namespace UnityEngine::ManagedBridge {
         _ptr = ptr;
     }
 
-    Managed::operator ManagedPointer const () const {
+    Managed::operator ManagedPointer() const {
         return _ptr;
     }
 

@@ -16,4 +16,6 @@ namespace UnityEngine::ManagedBridge::Members {
     void FieldMember::set(ManagedInstance instance, TValue value) const {
         ManagedMember::push(instance, value);
     }
+
+    template TValue FieldMember::get<typename TValue>(ManagedInstance instance) const {}
 }

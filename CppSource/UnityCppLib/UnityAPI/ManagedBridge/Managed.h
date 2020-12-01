@@ -24,7 +24,7 @@ namespace UnityEngine::ManagedBridge {
     public:
         static UnitySendMessageMethod UnitySendMessage;
 
-        operator ManagedPointer const () const;
+        operator ManagedPointer () const;
 
         static void destroy(Managed *managed);
         static void destroy(const Managed &managed);

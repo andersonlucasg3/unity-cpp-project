@@ -15,5 +15,9 @@ namespace UnityEngine::ManagedBridge {
         [[nodiscard]] bool notNull() const;
 
         operator const void *() const;
+        bool operator==(ManagedPointer other);
+        bool operator!=(ManagedPointer other);
+        bool operator==(void *pointer);
+        bool operator!=(void *pointer);
     };
 }

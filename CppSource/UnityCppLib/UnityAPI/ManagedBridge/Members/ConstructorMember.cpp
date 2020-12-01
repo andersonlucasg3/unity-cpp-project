@@ -19,9 +19,15 @@ namespace UnityEngine::ManagedBridge::Members {
         // nothing yet
     }
 
-    ManagedInstance ConstructorMember::constructor(ManagedType type, void **parameters, int paramCount) const {
+    ManagedInstance ConstructorMember::constructor(ManagedType type, void *parameters[], int paramCount) const {
         ManagedPointer const typePtr = type;
-        return ManagedInstance(type, _constructor(typePtr, this, parameters, paramCount));
+        void **paramPtr = new void *[paramCount];
+        for (int index = 0; index < paramCount; ++index) {
+            paramPtr[index] = (void *)(const void *)parameters[index];
+        }
+        ManagedInstance instance(_constructor(typePtr, this, paramPtr, paramCount));
+        delete[] paramPtr;
+        return instance;
     }
 
 #pragma endregion

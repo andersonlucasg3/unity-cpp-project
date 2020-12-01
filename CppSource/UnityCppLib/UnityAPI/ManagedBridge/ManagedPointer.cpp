@@ -14,4 +14,20 @@ namespace UnityEngine::ManagedBridge {
     ManagedPointer::operator const void *() const {
         return _managedRef;
     }
+
+    bool ManagedPointer::operator==(ManagedPointer other) {
+        return _managedRef == other._managedRef;
+    }
+
+    bool ManagedPointer::operator!=(ManagedPointer other) {
+        return _managedRef != other._managedRef;
+    }
+
+    bool ManagedPointer::operator==(void *pointer) {
+        return _managedRef == pointer;
+    }
+
+    bool ManagedPointer::operator!=(void *pointer) {
+        return _managedRef != pointer;
+    }
 }

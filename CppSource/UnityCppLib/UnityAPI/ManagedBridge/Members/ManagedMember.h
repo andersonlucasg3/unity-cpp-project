@@ -1,12 +1,10 @@
 #pragma once
 
-#include "UnityAPI/ManagedBridge/Managed.h"
+#include "UnityAPI/ManagedBridge/ManagedInstance.h"
 
 #include <cstdint>
 
-namespace UnityEngine::ManagedBridge {
-    class ManagedInstance;
-}
+using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine::ManagedBridge::Members {
     class ManagedMember : public Managed {
@@ -21,4 +19,14 @@ namespace UnityEngine::ManagedBridge::Members {
         template<typename TValue>
         [[maybe_unused]] void push(ManagedInstance instance, TValue value) const;
     };
+
+    template<>
+    ManagedPointer ManagedMember::pull<ManagedPointer>(ManagedInstance instance) const {
+        return pull<void *>(instance);
+    }
+
+    template<>
+    void ManagedMember::push(ManagedInstance instance, ManagedPointer value) const {
+        push<const void *>(instance, value);
+    }
 }

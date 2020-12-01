@@ -21,4 +21,15 @@ namespace UnityEngine::ManagedBridge::Members {
     void PropertyMember::set(ManagedInstance instance, TValue value) const {
         ManagedMember::push(instance, value);
     }
+
+    bool PropertyMember::operator==(PropertyMember other) {
+        ManagedPointer pointer = this;
+        ManagedPointer otherPointer = other;
+        return pointer == otherPointer;
+    }
+
+    bool PropertyMember::operator==(void *pointer) {
+        ManagedPointer thisPtr = this;
+        return thisPtr == pointer;
+    }
 }

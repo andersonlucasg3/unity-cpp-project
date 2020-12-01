@@ -1,15 +1,24 @@
 #include "Object.h"
+#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
 
 using namespace std;
 using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine {
-    Object::Object(ManagedInstance instance) {
-        _instance = instance;
+    const ManagedAssemblyInfo _objectAssemblyInfo("UnityEngine.Object", "UnityEngine.dll");
+    const ManagedType _objectType(_objectAssemblyInfo);
 
-        _nameProperty = instance.type().getProperty("name");
-        _hideFlagsProperty = instance.type().getProperty("hideFlags");
+    const PropertyMember _nameProperty = _objectType.getProperty("name");
+    const PropertyMember _hideFlagsProperty = _objectType.getProperty("hasFlags");
+
+    Object::Object(ManagedType type) {
+        _type = type;
+    }
+
+    Object::Object(ManagedInstance instance) {
+        _type = instance.type();
+        _instance = instance;
     }
 
     Object::~Object() {
@@ -28,5 +37,9 @@ namespace UnityEngine {
 
     void Object::setName(const char *name) const {
         _nameProperty.set(_instance, name);
+    }
+
+    const ManagedType Object::type() {
+        return _objectType;
     }
 }

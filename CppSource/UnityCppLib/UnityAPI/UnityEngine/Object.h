@@ -14,13 +14,11 @@ namespace UnityEngine {
     using namespace ManagedBridge::Members;
 
     class Object {
-    private:
-        PropertyMember _nameProperty = PropertyMember::null;
-        PropertyMember _hideFlagsProperty = PropertyMember::null;
-
     protected:
+        ManagedType _type = ManagedType::null;
         ManagedInstance _instance = ManagedInstance::null;
 
+        explicit Object(ManagedType type);
         explicit Object(ManagedInstance instance);
         ~Object();
 
@@ -29,5 +27,7 @@ namespace UnityEngine {
         [[maybe_unused]] void setName(const char *name) const;
 
         [[nodiscard,maybe_unused]] HideFlags hideFlags() const;
+
+        static const ManagedType type();
     };
 }

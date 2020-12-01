@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Object.h"
+#include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
+#include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
 
 namespace UnityEngine {
     class Transform;
@@ -10,23 +12,21 @@ namespace UnityEngine {
         friend class Component;
 
     private:
-        ManagedMember *_activeInHierarchyProperty{};
-        ManagedMember *_activeSelfProperty{};
-        ManagedMember *_isStaticProperty{};
-        ManagedMember *_layerProperty{};
-        ManagedMember *_tagProperty{};
-        ManagedMember *_transformProperty{};
+        Transform *_transform = nullptr;
 
-        Transform *_transform{};
+        GameObject(ManagedInstance instance);
 
     public:
-        GameObject();
+        explicit GameObject();
         explicit GameObject(const char *name);
+        explicit GameObject(const char *name, ManagedType components[], int componentCount);
         ~GameObject();
 
         [[nodiscard,maybe_unused]] Transform *transform() const;
         template<class TComponent> [[nodiscard,maybe_unused]] TComponent *addComponent() const;
         template<class TComponent> [[nodiscard,maybe_unused]] TComponent *getComponent() const;
         template<class TComponent> [[nodiscard,maybe_unused]] bool tryGetComponent(const TComponent &component);
+
+        static const ManagedType type();
     };
 }
