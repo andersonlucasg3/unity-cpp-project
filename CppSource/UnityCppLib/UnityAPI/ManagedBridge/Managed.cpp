@@ -21,14 +21,14 @@ namespace UnityEngine::ManagedBridge {
     }
 
     void Managed::destroy(const Managed &managed) {
-        destroy((ManagedPointer)managed);
+        destroy(managed.toPointer());
     }
 
     void Managed::destroy(ManagedPointer pointer) {
-        UnityManagedDestructor(pointer);
+        UnityManagedDestructor(pointer.toManaged());
     }
 
-    Managed::operator ManagedPointer() const {
+    ManagedPointer Managed::toPointer() const {
         return _ptr;
     }
 

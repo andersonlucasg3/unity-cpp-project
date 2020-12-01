@@ -39,11 +39,11 @@ namespace UnityEngine {
     }
 
     GameObject::GameObject(const char *name, ManagedType components[], int componentCount) : Object(_gameObjectType) {
-        void **componentsPtr = new void *[componentCount];
+        void ** componentsPtr = new void *[componentCount];
         ManagedPointer ptr = ManagedPointer::null;
         for (int index = 0; index < componentCount; ++index) {
-            ptr = components[index];
-            componentsPtr[index] = (void *)(const void *)ptr;
+            ptr = components[index].toPointer();
+            componentsPtr[index] = (void *)ptr.toManaged();
         }
         void **parametersPtr = new void *[] { (void *)name, (void *)components };
         _instance = _thirdConstructor.constructor(parametersPtr, 2);

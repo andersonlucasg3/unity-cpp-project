@@ -29,16 +29,21 @@ namespace UnityCpp.NativeBridge
             return (IntPtr)GCHandle.Alloc(type);
         }
 
-        internal static IntPtr GetTypeConstructorPtr(IntPtr typePtr, int constructorIndex)
+        internal static IntPtr GetTypeConstructorPtr(IntPtr typePtr, IntPtr[] parameterTypes, int paramCount)
         {
             Type type = ConvertPtrTo<Type>(typePtr);
-            ConstructorInfo info = type.GetConstructors()[constructorIndex];
+            Type[] types = new Type[paramCount];
+            for (int index = 0; index < paramCount; index++)
+            {
+                types[index] = ConvertPtrTo<Type>(parameterTypes[index]);
+            }
+            ConstructorInfo info = type.GetConstructor(types);
             return AllocObjectPtr(info);
         }
         
-        internal static IntPtr GetTypeMemberPtr(IntPtr intPtr, string name)
+        internal static IntPtr GetTypeMemberPtr(IntPtr typePtr, string name)
         {
-            return AllocMemberPtr(intPtr, name);
+            return AllocMemberPtr(typePtr, name);
         }
 
         internal static IntPtr Constructor(IntPtr constructorPtr, IntPtr[] parameters, int paramCount)
@@ -140,9 +145,9 @@ namespace UnityCpp.NativeBridge
 
         #region Private methods
 
-        private static IntPtr AllocMemberPtr(IntPtr intPtr, string name)
+        private static IntPtr AllocMemberPtr(IntPtr typePtr, string name)
         {
-            if (TryGetMember(intPtr, name, out MemberInfo info))
+            if (TryGetMember(typePtr, name, out MemberInfo info))
             {
                 return (IntPtr) GCHandle.Alloc(info);
             }

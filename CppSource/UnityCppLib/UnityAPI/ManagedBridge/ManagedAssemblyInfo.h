@@ -7,7 +7,6 @@ namespace UnityEngine::ManagedBridge {
 
     public:
         ManagedAssemblyInfo(const char *type, const char *assembly);
-        ~ManagedAssemblyInfo();
 
         [[nodiscard]] const char *name() const;
     };

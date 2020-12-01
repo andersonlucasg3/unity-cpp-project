@@ -24,7 +24,8 @@ namespace UnityEngine::ManagedBridge::Members {
         for (int index = 0; index < paramCount; ++index) {
             paramPtr[index] = (void *)(const void *)parameters[index];
         }
-        ManagedInstance instance(_constructor(this, paramPtr, paramCount));
+        ManagedPointer instancePtr(_constructor(this->toPointer().toManaged(), paramPtr, paramCount));
+        ManagedInstance instance(instancePtr);
         delete[] paramPtr;
         return instance;
     }
@@ -35,5 +36,5 @@ namespace UnityEngine::ManagedBridge::Members {
 using namespace UnityEngine::ManagedBridge::Members;
 
 extern "C" {
-    UNITY_EXPORT void SetManagedConstructorMethod(__UnityManagedConstructorFunc func) { _constructor = func; }
+    [[maybe_unused]] UNITY_EXPORT void SetManagedConstructorMethod(__UnityManagedConstructorFunc func) { _constructor = func; }
 }

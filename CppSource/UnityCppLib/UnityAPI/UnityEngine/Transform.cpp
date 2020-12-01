@@ -24,7 +24,7 @@ namespace UnityEngine {
     Transform * Transform::parent() {
         if (_parent != nullptr) {
             ManagedPointer pointer = _parentProperty.get<ManagedPointer>(_instance);
-            ManagedPointer currentPointer = _parent->_instance;
+            ManagedPointer currentPointer = _parent->_instance.toPointer();
             if (currentPointer != pointer) {
                 delete _parent;
                 if (pointer != nullptr) {
@@ -40,7 +40,7 @@ namespace UnityEngine {
     }
 
     void Transform::setParent(Transform *parent) {
-        _parentProperty.set(_instance, (ManagedPointer)parent->_instance);
+        _parentProperty.set(_instance, parent->_instance.toPointer());
         _parent = parent;
     }
 

@@ -50,18 +50,16 @@ namespace UnityEngine::ManagedBridge {
 
     template<typename TValue>
     [[maybe_unused]] TValue ManagedMember::get(ManagedInstance instance) const {
-        TValue value;
         GetValueFunc func = _getSetMap[typeid(TValue)].getValue;
-        ManagedPointer instancePtr = instance;
-        func(instancePtr, this, _type, (void **)&value);
+        TValue value;
+        func(instance.toPointer().toManaged(), this->toPointer().toManaged(), _type, (void **)&value);
         return value;
     }
 
     template<typename TValue>
     [[maybe_unused]] void ManagedMember::set(ManagedInstance instance, TValue value) const {
         SetValueFunc func = _getSetMap[typeid(TValue)].setValue;
-        ManagedPointer instancePtr = instance;
-        func(instancePtr, this, _type, &value);
+        func(instance.toPointer().toManaged(), this->toPointer().toManaged(), _type, &value);
     }
 
 #pragma endregion

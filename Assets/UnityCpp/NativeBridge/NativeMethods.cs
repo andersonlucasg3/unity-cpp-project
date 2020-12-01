@@ -45,7 +45,7 @@ namespace UnityCpp.NativeBridge
         private delegate void SetManagedGetTypePtrDelegate(GetTypePtrDelegate del);
         private static SetManagedGetTypePtrDelegate _setManagedGetTypePtr;
 
-        private delegate IntPtr GetTypeConstructorPtrDelegate(IntPtr typePtr, int constructorIndex);
+        private delegate IntPtr GetTypeConstructorPtrDelegate(IntPtr typePtr, IntPtr[] parameterTypes, int paramCount);
         private delegate void SetManagedGetTypeConstructorPtrDelegate(GetTypeConstructorPtrDelegate del);
         private static SetManagedGetTypeConstructorPtrDelegate _setManagedGetConstructorPtr;
 

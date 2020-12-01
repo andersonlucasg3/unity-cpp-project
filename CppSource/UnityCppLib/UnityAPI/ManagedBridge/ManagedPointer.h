@@ -11,11 +11,10 @@ namespace UnityEngine::ManagedBridge {
         static const ManagedPointer null;
 
         ManagedPointer();
-        ManagedPointer(const void *pointer);
+        explicit ManagedPointer(const void *pointer);
 
-        [[nodiscard]] bool notNull() const;
+        const void *toManaged() const;
 
-        operator const void *() const;
         bool operator==(ManagedPointer other);
         bool operator!=(ManagedPointer other);
         bool operator==(void *pointer);

@@ -11,11 +11,7 @@ namespace UnityEngine::ManagedBridge {
         _managedRef = pointer;
     }
 
-    bool ManagedPointer::notNull() const {
-        return _managedRef != nullptr;
-    }
-
-    ManagedPointer::operator const void *() const {
+    const void *ManagedPointer::toManaged() const {
         return _managedRef;
     }
 

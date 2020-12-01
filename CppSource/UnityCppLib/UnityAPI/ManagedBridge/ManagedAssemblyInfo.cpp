@@ -7,14 +7,9 @@ using namespace std;
 namespace UnityEngine::ManagedBridge {
     ManagedAssemblyInfo::ManagedAssemblyInfo(const char *type, const char *assembly) {
         string str(type);
-        str = str.append(", ").append(assembly);
-        char *fullName = new char [str.length()];
-        str.copy(fullName, str.length());
-        _fullName = fullName;
-    }
-
-    ManagedAssemblyInfo::~ManagedAssemblyInfo() {
-        delete[] _fullName;
+        const char *namePtr = str.append(", ").append(assembly).c_str();
+        _fullName = new char [strlen(namePtr)];
+        strcpy((char *)_fullName, namePtr);
     }
 
     const char * ManagedAssemblyInfo::name() const {

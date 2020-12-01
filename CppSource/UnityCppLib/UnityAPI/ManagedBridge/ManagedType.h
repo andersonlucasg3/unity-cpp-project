@@ -24,7 +24,7 @@ namespace UnityEngine::ManagedBridge {
         explicit ManagedType(ManagedPointer ptr);
         explicit ManagedType(const ManagedAssemblyInfo& assembly);
 
-        ConstructorMember getConstructor(int constructorIndex) const;
+        ConstructorMember getConstructor(ManagedType parameterTypes[], int paramCount) const;
         FieldMember getField(const char *fieldName) const;
         PropertyMember getProperty(const char *propertyName) const;
     };
