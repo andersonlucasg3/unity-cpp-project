@@ -63,8 +63,7 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.cpp
         UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.h
         UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.cpp
-        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.h
-        UnityCppLib/UnityAPI/ManagedBridge/CommonTypes/CommonType.h)
+        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.h)
 
 target_sources(
         UnityCppLib

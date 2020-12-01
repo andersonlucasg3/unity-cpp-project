@@ -15,10 +15,6 @@ namespace UnityEngine::ManagedBridge {
         _ptr = ptr;
     }
 
-    Managed::operator ManagedPointer() const {
-        return _ptr;
-    }
-
     void Managed::destroy(Managed *managed) {
         destroy(*managed);
         delete managed;
@@ -30,6 +26,26 @@ namespace UnityEngine::ManagedBridge {
 
     void Managed::destroy(ManagedPointer pointer) {
         UnityManagedDestructor(pointer);
+    }
+
+    Managed::operator ManagedPointer() const {
+        return _ptr;
+    }
+
+    bool Managed::operator==(void *ptr) {
+        return _ptr == ptr;
+    }
+
+    bool Managed::operator!=(void *ptr) {
+        return _ptr != ptr;
+    }
+
+    bool Managed::operator==(Managed other) {
+        return _ptr == other._ptr;
+    }
+
+    bool Managed::operator!=(Managed other) {
+        return _ptr != other._ptr;
     }
 
 #pragma endregion

@@ -1,6 +1,7 @@
 #include "Object.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
+#include "UnityAPI/ManagedBridge/ManagedType.h"
 
 using namespace std;
 using namespace UnityEngine::ManagedBridge;
@@ -17,14 +18,11 @@ namespace UnityEngine {
     }
 
     Object::Object(ManagedInstance instance) {
-        _type = instance.type();
         _instance = instance;
     }
 
     Object::~Object() {
         Managed::destroy(_instance);
-        Managed::destroy(_nameProperty);
-        Managed::destroy(_hideFlagsProperty);
     }
 
     HideFlags Object::hideFlags() const {

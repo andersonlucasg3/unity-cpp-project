@@ -18,23 +18,5 @@ namespace UnityEngine::ManagedBridge::Members {
 
     public:
         static const PropertyMember null;
-
-        template<typename TValue>
-        TValue get(ManagedInstance instance) const;
-        template<typename TValue>
-        void set(ManagedInstance instance, TValue value) const;
-
-        bool operator==(PropertyMember other);
-        bool operator==(void *pointer);
     };
-
-    template<>
-    ManagedPointer PropertyMember::get(ManagedInstance instance) const {
-        return pull<ManagedPointer>(instance);
-    }
-
-    template<>
-    void PropertyMember::set(ManagedInstance instance, ManagedPointer value) const {
-        push(instance, value);
-    }
 }

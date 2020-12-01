@@ -21,7 +21,5 @@ namespace UnityEngine::ManagedBridge {
         static const ManagedInstance null;
 
         ManagedInstance(ManagedPointer ptr);
-
-        [[nodiscard]] const ManagedType type() const;
     };
 }

@@ -14,19 +14,10 @@ namespace UnityEngine::ManagedBridge::Members {
     protected:
         ManagedMember(ManagedPointer ptr, MemberType type);
 
+    public:
         template<typename TValue>
-        [[maybe_unused,nodiscard]] TValue pull(ManagedInstance instance) const;
+        [[maybe_unused,nodiscard]] TValue get(ManagedInstance instance) const;
         template<typename TValue>
-        [[maybe_unused]] void push(ManagedInstance instance, TValue value) const;
+        [[maybe_unused]] void set(ManagedInstance instance, TValue value) const;
     };
-
-    template<>
-    ManagedPointer ManagedMember::pull<ManagedPointer>(ManagedInstance instance) const {
-        return pull<void *>(instance);
-    }
-
-    template<>
-    void ManagedMember::push(ManagedInstance instance, ManagedPointer value) const {
-        push<const void *>(instance, value);
-    }
 }

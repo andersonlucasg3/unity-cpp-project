@@ -10,6 +10,7 @@ namespace UnityEngine::ManagedBridge {
     public:
         static const ManagedPointer null;
 
+        ManagedPointer();
         ManagedPointer(const void *pointer);
 
         [[nodiscard]] bool notNull() const;

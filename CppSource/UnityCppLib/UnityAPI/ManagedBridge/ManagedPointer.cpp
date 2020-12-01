@@ -3,6 +3,10 @@
 namespace UnityEngine::ManagedBridge {
     const ManagedPointer ManagedPointer::null = ManagedPointer((void *)nullptr);
 
+    ManagedPointer::ManagedPointer() {
+        _managedRef = nullptr;
+    }
+
     ManagedPointer::ManagedPointer(const void *pointer) {
         _managedRef = pointer;
     }

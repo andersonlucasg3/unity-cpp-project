@@ -1,12 +1,12 @@
 #include "ManagedMember.h"
 #include "UnityAPI/ManagedBridge/ManagedInstance.h"
+#include "UnityAPI/ManagedBridge/ManagedPointer.h"
 #include "UnityAPI/UnityAPIExtern.h"
 
 #include <typeindex>
 #include <map>
 
 using namespace std;
-using namespace UnityEngine::ManagedBridge;
 
 namespace UnityEngine::ManagedBridge {
     typedef void (UNITY_METHOD *GetValueFunc)(const void *instancePtr, const void *memberPtr, MemberType type, void **value);
@@ -33,8 +33,23 @@ namespace UnityEngine::ManagedBridge {
         _type = type;
     }
 
+    template const char *ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, const char *value)const ;
+    template int ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, int value) const;
+    template long ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, long value) const;
+    template float ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, float value) const;
+    template double ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, double value) const;
+    template void *ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, void *value) const;
+    template ManagedPointer ManagedMember::get(ManagedInstance instance) const;
+    template void ManagedMember::set(ManagedInstance instance, ManagedPointer value) const;
+
     template<typename TValue>
-    [[maybe_unused]] TValue ManagedMember::pull(ManagedInstance instance) const {
+    [[maybe_unused]] TValue ManagedMember::get(ManagedInstance instance) const {
         TValue value;
         GetValueFunc func = _getSetMap[typeid(TValue)].getValue;
         ManagedPointer instancePtr = instance;
@@ -43,24 +58,11 @@ namespace UnityEngine::ManagedBridge {
     }
 
     template<typename TValue>
-    [[maybe_unused]] void ManagedMember::push(ManagedInstance instance, TValue value) const {
+    [[maybe_unused]] void ManagedMember::set(ManagedInstance instance, TValue value) const {
         SetValueFunc func = _getSetMap[typeid(TValue)].setValue;
         ManagedPointer instancePtr = instance;
         func(instancePtr, this, _type, &value);
     }
-
-    template const char *ManagedMember::pull(ManagedInstance instance) const;
-    template void ManagedMember::push(ManagedInstance instance, const char *)const ;
-    template int ManagedMember::pull(ManagedInstance instance) const;
-    template void ManagedMember::push(ManagedInstance instance, int value) const;
-    template long ManagedMember::pull(ManagedInstance instance) const;
-    template void ManagedMember::push(ManagedInstance instance, long value) const;
-    template float ManagedMember::pull(ManagedInstance instance) const;
-    template void ManagedMember::push(ManagedInstance instance, float value) const;
-    template double ManagedMember::pull(ManagedInstance instance) const;
-    template void ManagedMember::push(ManagedInstance instance, double value) const;
-    template void *ManagedMember::pull(ManagedInstance instance) const;
-    template void ManagedMember::push(ManagedInstance instance, void *value) const;
 
 #pragma endregion
 }

@@ -29,5 +29,10 @@ namespace UnityEngine::ManagedBridge {
         static void destroy(Managed *managed);
         static void destroy(const Managed &managed);
         static void destroy(ManagedPointer pointer);
+
+        bool operator==(Managed other);
+        bool operator!=(Managed other);
+        bool operator==(void *ptr);
+        bool operator!=(void *ptr);
     };
 }

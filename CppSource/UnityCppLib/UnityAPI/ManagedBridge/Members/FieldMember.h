@@ -10,13 +10,13 @@ namespace UnityEngine::ManagedBridge::Members {
     class FieldMember : public ManagedMember {
         friend class ManagedBridge::ManagedType;
 
+    private:
+        FieldMember();
+
     protected:
         FieldMember(ManagedPointer ptr);
 
     public:
-        template<typename TValue>
-        [[maybe_unused,nodiscard]] TValue get(ManagedInstance instance) const;
-        template<typename TValue>
-        [[maybe_unused]] void set(ManagedInstance instance, TValue value) const;
+        static const FieldMember null;
     };
 }
