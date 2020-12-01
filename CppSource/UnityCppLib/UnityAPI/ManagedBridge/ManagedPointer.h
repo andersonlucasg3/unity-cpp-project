@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     struct ManagedPointer {
     private:
         const void *_managedRef;

@@ -7,9 +7,9 @@
 
 using namespace std;
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     typedef void *(UNITY_METHOD *__UnityManagedGetTypePtrFunc)(const char *typeName);
-    typedef void *(UNITY_METHOD *__UnityManagedGetConstructorPtrFunc)(const void *typePtr, const void *parameterTypes[], int constructorIndex);
+    typedef void *(UNITY_METHOD *__UnityManagedGetConstructorPtrFunc)(const void *typePtr, const void *parameterTypes[], int paramCount);
     typedef void *(UNITY_METHOD *__UnityManagedGetMemberPtrFunc)(const void *typePtr, const char *memberName, MemberType type);
 
     __UnityManagedGetTypePtrFunc _getTypePtr = nullptr;
@@ -64,7 +64,7 @@ namespace UnityEngine::ManagedBridge {
 #pragma endregion
 }
 
-using namespace UnityEngine::ManagedBridge;
+using namespace ManagedBridge;
 
 extern "C" {
 [[maybe_unused]] UNITY_EXPORT void SetManagedGetTypePtrMethod(__UnityManagedGetTypePtrFunc func) { _getTypePtr = func; }

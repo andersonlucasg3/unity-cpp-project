@@ -1,7 +1,7 @@
 #include "PropertyMember.h"
 #include "UnityAPI/ManagedBridge/ManagedInstance.h"
 
-namespace UnityEngine::ManagedBridge::Members {
+namespace ManagedBridge::Members {
     const PropertyMember PropertyMember::null = PropertyMember();
 
     PropertyMember::PropertyMember() : ManagedMember(ManagedPointer::null, MemberType::property) {

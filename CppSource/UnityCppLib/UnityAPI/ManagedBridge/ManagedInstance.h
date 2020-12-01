@@ -3,7 +3,7 @@
 #include "Managed.h"
 #include "ManagedType.h"
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     class ManagedType;
     struct ManagedPointer;
 

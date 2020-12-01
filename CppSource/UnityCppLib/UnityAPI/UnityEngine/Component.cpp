@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 
-using namespace UnityEngine::ManagedBridge;
+using namespace ManagedBridge;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _componentAssemblyInfo("UnityEngine.Component", "UnityEngine.dll");

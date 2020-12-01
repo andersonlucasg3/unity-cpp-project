@@ -2,11 +2,11 @@
 
 #include "ManagedMember.h"
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     class ManagedType;
 }
 
-namespace UnityEngine::ManagedBridge::Members {
+namespace ManagedBridge::Members {
     class PropertyMember : public ManagedMember {
         friend class ManagedBridge::ManagedType;
 

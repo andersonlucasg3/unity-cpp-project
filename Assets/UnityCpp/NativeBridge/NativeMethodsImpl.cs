@@ -170,13 +170,12 @@ namespace UnityCpp.NativeBridge
             return (TOutput) handle.Target;
         }
 
-        private static bool TryGetMember(IntPtr intPtr, string name, out MemberInfo memberInfo)
+        private static bool TryGetMember(IntPtr typePtr, string name, out MemberInfo memberInfo)
         {
-            object objectInstance = ConvertPtrTo<object>(intPtr);
-            Type objectType = objectInstance.GetType();
-            memberInfo = objectType.GetProperty(name);
+            Type type = ConvertPtrTo<Type>(typePtr);
+            memberInfo = type.GetProperty(name);
             if (memberInfo != null) return true;
-            Debug.Log($"Unmanaged code trying to get {memberInfo} of object {objectInstance} that does not exists.");
+            Debug.Log($"Unmanaged code trying to get {memberInfo} of type {type} that does not exists.");
             return false;
         }
 

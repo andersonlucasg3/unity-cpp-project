@@ -3,7 +3,7 @@
 #include "UnityAPI/ManagedBridge/ManagedInstance.h"
 #include "UnityAPI/UnityAPIExtern.h"
 
-namespace UnityEngine::ManagedBridge::Members {
+namespace ManagedBridge::Members {
     typedef void *(UNITY_METHOD *__UnityManagedConstructorFunc)(const void *constructorPtr, void **parameters, int paramCount);
 
     __UnityManagedConstructorFunc _constructor = nullptr;
@@ -33,7 +33,7 @@ namespace UnityEngine::ManagedBridge::Members {
 #pragma endregion
 }
 
-using namespace UnityEngine::ManagedBridge::Members;
+using namespace ManagedBridge::Members;
 
 extern "C" {
     [[maybe_unused]] UNITY_EXPORT void SetManagedConstructorMethod(__UnityManagedConstructorFunc func) { _constructor = func; }

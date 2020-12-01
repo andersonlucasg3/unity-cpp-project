@@ -4,9 +4,9 @@
 
 #include <cstdint>
 
-using namespace UnityEngine::ManagedBridge;
+using namespace ManagedBridge;
 
-namespace UnityEngine::ManagedBridge::Members {
+namespace ManagedBridge::Members {
     class ManagedMember : public Managed {
     private:
         MemberType _type;

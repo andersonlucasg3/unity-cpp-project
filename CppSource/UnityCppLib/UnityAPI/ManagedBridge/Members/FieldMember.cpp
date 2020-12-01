@@ -2,7 +2,7 @@
 #include "MemberType.h"
 #include "UnityAPI/ManagedBridge/ManagedInstance.h"
 
-namespace UnityEngine::ManagedBridge::Members {
+namespace ManagedBridge::Members {
     const FieldMember FieldMember::null = FieldMember();
 
     FieldMember::FieldMember() : ManagedMember(ManagedPointer::null, MemberType::property) {

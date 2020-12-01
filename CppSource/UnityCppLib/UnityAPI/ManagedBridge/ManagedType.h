@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     struct ManagedPointer;
     struct ManagedAssemblyInfo;
 

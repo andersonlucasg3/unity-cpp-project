@@ -45,7 +45,7 @@ namespace UnityCpp.NativeBridge
         private delegate void SetManagedGetTypePtrDelegate(GetTypePtrDelegate del);
         private static SetManagedGetTypePtrDelegate _setManagedGetTypePtr;
 
-        private delegate IntPtr GetTypeConstructorPtrDelegate(IntPtr typePtr, IntPtr[] parameterTypes, int paramCount);
+        private delegate IntPtr GetTypeConstructorPtrDelegate(IntPtr typePtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] IntPtr[] parameterTypes, int paramCount);
         private delegate void SetManagedGetTypeConstructorPtrDelegate(GetTypeConstructorPtrDelegate del);
         private static SetManagedGetTypeConstructorPtrDelegate _setManagedGetConstructorPtr;
 
@@ -53,7 +53,7 @@ namespace UnityCpp.NativeBridge
         private delegate void SetManagedGetTypeMemberPtrDelegate(GetTypeMemberPtrDelegate del);
         private static SetManagedGetTypeMemberPtrDelegate _setManagedGetMemberPtr;
 
-        private delegate IntPtr ConstructorDelegate(IntPtr constructorPtr, IntPtr[] parameters, int paramCount);
+        private delegate IntPtr ConstructorDelegate(IntPtr constructorPtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] IntPtr[] parameters, int paramCount);
         private delegate void SetManagedConstructorDelegate(ConstructorDelegate del);
         private static SetManagedConstructorDelegate _setManagedConstructor;
         

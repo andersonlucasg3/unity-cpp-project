@@ -1,10 +1,8 @@
 #include "Object.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
-#include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
-#include "UnityAPI/ManagedBridge/ManagedType.h"
 
 using namespace std;
-using namespace UnityEngine::ManagedBridge;
+using namespace ManagedBridge;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _objectAssemblyInfo("UnityEngine.Object", "UnityEngine.dll");

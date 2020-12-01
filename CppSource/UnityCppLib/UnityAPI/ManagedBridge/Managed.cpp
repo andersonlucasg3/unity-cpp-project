@@ -1,7 +1,7 @@
 #include "Managed.h"
 #include "UnityAPI/UnityAPIExtern.h"
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     typedef void (UNITY_METHOD *__UnitySendMessageFunc)(const char *gameObjectName, const char *methodName, const char *message);
     typedef void (UNITY_METHOD *__UnityManagedDestructorFunc)(const void *instancePtr);
 
@@ -51,7 +51,7 @@ namespace UnityEngine::ManagedBridge {
 #pragma endregion
 }
 
-using namespace UnityEngine::ManagedBridge;
+using namespace ManagedBridge;
 
 extern "C" {
 [[maybe_unused]] UNITY_EXPORT void SetUnitySendMessageMethod(__UnitySendMessageFunc func) { Managed::UnitySendMessage = func; }

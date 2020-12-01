@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     typedef void (*UnitySendMessageMethod)(const char *gameObjectName, const char *methodName, const char *message);
 
     struct ManagedPointer;

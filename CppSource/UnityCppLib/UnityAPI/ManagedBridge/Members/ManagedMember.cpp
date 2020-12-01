@@ -8,7 +8,7 @@
 
 using namespace std;
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     typedef void (UNITY_METHOD *GetValueFunc)(const void *instancePtr, const void *memberPtr, MemberType type, void **value);
     typedef void (UNITY_METHOD *SetValueFunc)(const void *instancePtr, const void *memberPtr, MemberType type, void *value);
 
@@ -52,14 +52,18 @@ namespace UnityEngine::ManagedBridge {
     [[maybe_unused]] TValue ManagedMember::get(ManagedInstance instance) const {
         GetValueFunc func = _getSetMap[typeid(TValue)].getValue;
         TValue value;
-        func(instance.toPointer().toManaged(), this->toPointer().toManaged(), _type, (void **)&value);
+        const void *instancePtr = instance.toPointer().toManaged();
+        const void *memberPtr = this->toPointer().toManaged();
+        func(instancePtr, memberPtr, _type, (void **)&value);
         return value;
     }
 
     template<typename TValue>
     [[maybe_unused]] void ManagedMember::set(ManagedInstance instance, TValue value) const {
         SetValueFunc func = _getSetMap[typeid(TValue)].setValue;
-        func(instance.toPointer().toManaged(), this->toPointer().toManaged(), _type, &value);
+        const void *instancePtr = instance.toPointer().toManaged();
+        const void *memberPtr = this->toPointer().toManaged();
+        func(instancePtr, memberPtr, _type, &value);
     }
 
 #pragma endregion

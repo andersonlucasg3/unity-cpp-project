@@ -4,7 +4,11 @@
 
 using namespace std;
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
+    ManagedAssemblyInfo::ManagedAssemblyInfo(const char *type) {
+        _fullName = type;
+    }
+
     ManagedAssemblyInfo::ManagedAssemblyInfo(const char *type, const char *assembly) {
         string str(type);
         const char *namePtr = str.append(", ").append(assembly).c_str();

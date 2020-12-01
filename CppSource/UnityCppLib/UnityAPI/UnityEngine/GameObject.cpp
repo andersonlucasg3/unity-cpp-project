@@ -1,7 +1,8 @@
 #include "GameObject.h"
 #include "Transform.h"
-#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 #include "Debug.h"
+#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
+#include "UnityAPI/NetFramework/System.h"
 
 #include <type_traits>
 
@@ -89,9 +90,13 @@ namespace UnityEngine {
 
     void GameObject::InitializeManagedBridge() {
         _gameObjectType = ManagedType(_gameObjectAssembly);
-        _defaultConstructor = _gameObjectType.getConstructor(0);
-        _secondConstructor = _gameObjectType.getConstructor(1);
-        _thirdConstructor = _gameObjectType.getConstructor(2);
+
+        _defaultConstructor = _gameObjectType.getConstructor(nullptr, 0);
+
+        ManagedType secondConstructorParams[] = { System::stringType };
+        _secondConstructor = _gameObjectType.getConstructor(secondConstructorParams, 1);
+
+//        _thirdConstructor = _gameObjectType.getConstructor(2);
 
         _activeInHierarchyProperty = _gameObjectType.getProperty("activeInHierarchy");
         _activeSelfProperty = _gameObjectType.getProperty("activeSelf");

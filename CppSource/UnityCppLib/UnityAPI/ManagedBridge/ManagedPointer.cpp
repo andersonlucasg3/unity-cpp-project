@@ -1,6 +1,6 @@
 #include "ManagedPointer.h"
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     const ManagedPointer ManagedPointer::null = ManagedPointer((void *)nullptr);
 
     ManagedPointer::ManagedPointer() {
