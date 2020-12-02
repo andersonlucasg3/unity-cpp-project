@@ -1,15 +1,13 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
-#include "UnityAPI/UnityAPIExtern.h"
 
 namespace UnityEngine {
-    const ManagedAssemblyInfo _transformAssemblyInfo("UnityEngine.Transform", "UnityEngine.dll");
+    const ManagedAssemblyInfo _transformAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.TransformBridge");
 
-    ManagedType _transformType = ManagedType::null;
-
-    PropertyMember _childCountProperty = PropertyMember::null;
-    PropertyMember _parentProperty = PropertyMember::null;
+    ManagedType Transform::_transformType = ManagedType::null;
+    PropertyMember Transform::_childCountProperty = PropertyMember::null;
+    PropertyMember Transform::_parentProperty = PropertyMember::null;
 
     Transform::Transform(ManagedInstance instance, const GameObject *gameObject) : Component(instance, gameObject) {
         // nothing yet
@@ -22,19 +20,17 @@ namespace UnityEngine {
     }
 
     Transform * Transform::parent() {
-        if (_parent != nullptr) {
-            ManagedPointer pointer = _parentProperty.get<ManagedPointer>(_instance);
-            ManagedPointer currentPointer = _parent->_instance.toPointer();
-            if (currentPointer != pointer) {
-                delete _parent;
-                if (pointer != nullptr) {
-                    _parent = new Transform(ManagedInstance(pointer));
-                } else {
-                    _parent = nullptr;
-                }
+        ManagedPointer pointer = _parentProperty.get<ManagedPointer>(_instance);
+        ManagedPointer currentPointer = _parent->_instance.toPointer();
+        if (currentPointer != pointer) {
+            delete _parent;
+            if (pointer != nullptr) {
+                _parent = new Transform(ManagedInstance(pointer));
             } else {
-                Managed::destroy(pointer);
+                _parent = nullptr;
             }
+        } else {
+            Managed::destroy(pointer);
         }
         return _parent;
     }

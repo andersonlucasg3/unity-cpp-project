@@ -9,7 +9,7 @@
 using namespace std;
 
 namespace UnityEngine {
-    const ManagedAssemblyInfo _gameObjectAssembly("UnityEngine.GameObject", "UnityEngine.dll");
+    const ManagedAssemblyInfo _gameObjectAssembly("UnityCpp.NativeBridge.UnityBridges.GameObjectBridge");
 
     ManagedType GameObject::_gameObjectType = ManagedType::null;
     ConstructorMember GameObject::_defaultConstructor = ConstructorMember::null;

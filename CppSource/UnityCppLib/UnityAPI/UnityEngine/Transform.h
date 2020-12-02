@@ -11,6 +11,10 @@ namespace UnityEngine {
         friend class GameObject;
 
     private:
+        static ManagedType _transformType;
+        static PropertyMember _childCountProperty;
+        static PropertyMember _parentProperty;
+
         Transform *_parent = nullptr;
 
     protected:

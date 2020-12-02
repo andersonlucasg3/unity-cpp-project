@@ -63,7 +63,13 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.cpp
         UnityCppLib/UnityAPI/ManagedBridge/Members/FieldMember.h
         UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.cpp
-        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.h UnityCppLib/UnityAPI/UnityEngine/UnityEngine.h UnityCppLib/UnityAPI/UnityEngine/UnityEngine.cpp UnityCppLib/UnityAPI/NetFramework/System.h UnityCppLib/UnityAPI/NetFramework/System.cpp UnityCppLib/UnityAPI/Helpers/StringsHelper.cpp UnityCppLib/UnityAPI/Helpers/StringsHelper.h)
+        UnityCppLib/UnityAPI/ManagedBridge/Members/PropertyMember.h
+        UnityCppLib/UnityAPI/UnityEngine/UnityEngine.h
+        UnityCppLib/UnityAPI/UnityEngine/UnityEngine.cpp
+        UnityCppLib/UnityAPI/NetFramework/System.h
+        UnityCppLib/UnityAPI/NetFramework/System.cpp
+        UnityCppLib/UnityAPI/Helpers/StringsHelper.cpp
+        UnityCppLib/UnityAPI/Helpers/StringsHelper.h)
 
 target_sources(
         UnityCppLib
