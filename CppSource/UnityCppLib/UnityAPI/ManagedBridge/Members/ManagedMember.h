@@ -18,7 +18,9 @@ namespace ManagedBridge::Members {
         template<typename TValue>
         [[maybe_unused,nodiscard]] TValue get(ManagedInstance instance) const;
         template<typename TValue>
-        [[maybe_unused]] void set(ManagedInstance instance, TValue value) const;
+        [[maybe_unused]] void setValue(ManagedInstance instance, TValue value) const;
+        template<typename TValue>
+        [[maybe_unused]] void setPointer(ManagedInstance instance, TValue *value) const;
 
         template<>
         ManagedPointer get(ManagedInstance instance) const {
@@ -26,8 +28,8 @@ namespace ManagedBridge::Members {
         }
 
         template<>
-        void set(ManagedInstance instance, ManagedPointer ptr) const {
-            set<void *>(instance, (void *)ptr.toManaged());
+        void setValue(ManagedInstance instance, ManagedPointer ptr) const {
+            setPointer<void>(instance, (void *)ptr.toManaged());
         }
     };
 }

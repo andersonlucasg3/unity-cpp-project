@@ -59,16 +59,12 @@ namespace UnityCpp.NativeBridge
             return AllocObjectPtr(instance);
         }
         
-        #endregion
-
-        #region Constructor & Destructor
-        
         internal static void DestructorMethod(IntPtr intPtr)
         {
             GCHandle handle = (GCHandle) intPtr;
             handle.Free();
         }
-
+        
         #endregion
 
         #region Getters & Setters
@@ -175,7 +171,7 @@ namespace UnityCpp.NativeBridge
             Type type = ConvertPtrTo<Type>(typePtr);
             memberInfo = type.GetProperty(name);
             if (memberInfo != null) return true;
-            Debug.Log($"Unmanaged code trying to get {memberInfo} of type {type} that does not exists.");
+            Debug.Log($"Unmanaged code trying to get member {name} of type {type} that does not exists.");
             return false;
         }
 

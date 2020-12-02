@@ -1,7 +1,11 @@
 #include "Object.h"
+#include "UnityAPI/Helpers/StringsHelper.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 
+#include <cstring>
+
 using namespace std;
+using namespace Helpers;
 using namespace ManagedBridge;
 
 namespace UnityEngine {
@@ -28,12 +32,16 @@ namespace UnityEngine {
         return (HideFlags) _hideFlagsProperty.get<int>(_instance);
     }
 
+    void Object::setHideFlags(HideFlags flags) const {
+        _hideFlagsProperty.setValue<int>(_instance, flags);
+    }
+
     const char * Object::name() const {
         return _nameProperty.get<char *>(_instance);
     }
 
     void Object::setName(const char *name) const {
-        _nameProperty.set(_instance, (char *)name);
+        _nameProperty.setPointer(_instance, stringInstance(name));
     }
 
     const ManagedType Object::type() {
@@ -44,6 +52,6 @@ namespace UnityEngine {
         _objectType = ManagedType(_objectAssemblyInfo);
 
         _nameProperty = _objectType.getProperty("name");
-        _hideFlagsProperty = _objectType.getProperty("hasFlags");
+        _hideFlagsProperty = _objectType.getProperty("hideFlags");
     }
 }

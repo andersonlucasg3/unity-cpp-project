@@ -40,7 +40,7 @@ namespace UnityEngine {
     }
 
     void Transform::setParent(Transform *parent) {
-        _parentProperty.set(_instance, parent->_instance.toPointer());
+        _parentProperty.setValue(_instance, parent->_instance.toPointer());
         _parent = parent;
     }
 

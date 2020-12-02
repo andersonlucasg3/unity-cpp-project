@@ -27,6 +27,7 @@ namespace UnityEngine {
         [[maybe_unused]] void setName(const char *name) const;
 
         [[nodiscard,maybe_unused]] HideFlags hideFlags() const;
+        [[maybe_unused]] void setHideFlags(HideFlags flags) const;
 
         static const ManagedType type();
         static void InitializeManagedBridge();
