@@ -1,3 +1,7 @@
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+#define UNITY_WINDOWS
+#endif
+
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -20,10 +24,10 @@ namespace UnityCpp.Loader
 
         [DllImport(nativeLoaderName, EntryPoint = nativeGetErrorFuncName)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-#if UNITY_EDITOR_OSX
-        private static extern string _GetError();
-#else
+#if UNITY_WINDOWS
         private static extern int _GetError();
+#else
+        private static extern string _GetError();
 #endif
         
         public static IntPtr Load(string fileName) => LoadLibrary(fileName);
@@ -48,7 +52,7 @@ namespace UnityCpp.Loader
         private static IntPtr LoadLibrary(string fileName)
         {
             IntPtr handle = _LoadLibrary(fileName);
-#if UNITY_EDITOR_WIN
+#if UNITY_WINDOWS
             if (handle != IntPtr.Zero) return handle;
             int error = Marshal.GetLastWin32Error();
             Debug.Log($"Could not load assembly {fileName}\nError code: {error}");
@@ -72,7 +76,7 @@ namespace UnityCpp.Loader
                 return true;
             }
 
-#if UNITY_EDITOR_WIN
+#if UNITY_WINDOWS
             int error = _GetError();
             Debug.Log($"Failed to free module.\nError code: {error}");
 #else
@@ -91,7 +95,7 @@ namespace UnityCpp.Loader
             }
 
             IntPtr methodPtr = _GetProcAddress(module, methodName);
-#if UNITY_EDITOR_WIN
+#if UNITY_WINDOWS
             if (methodPtr != IntPtr.Zero) return methodPtr;
             int error = _GetError();
             Debug.Log($"Could not load method symbol {methodName}.\nError code: {error}");
