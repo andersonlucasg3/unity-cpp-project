@@ -1,37 +1,47 @@
 #include "Component.h"
 #include "GameObject.h"
-#include "UnityAPI/ManagedBridge/Managed.h"
-#include "UnityAPI/ManagedBridge/ManagedMember.h"
+#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 
-using namespace UnityEngine::ManagedBridge;
+using namespace ManagedBridge;
 
 namespace UnityEngine {
-    Component::Component(intptr_t *instance) : Object(instance) { }
+    const ManagedAssemblyInfo _componentAssemblyInfo("UnityEngine.Component", "UnityEngine.dll");
 
-    Component::Component(const GameObject *gameObject, intptr_t *instance) : Object(instance) {
+    ManagedType _componentType = ManagedType::null;
+
+    PropertyMember _gameObjectProperty = PropertyMember::null;
+    PropertyMember _gameObjectTransformProperty = PropertyMember::null;
+
+    Component::Component(ManagedType type) : Object(type) {
+        _gameObject = new GameObject(_gameObjectProperty.get<ManagedPointer>(_instance));
+    }
+
+    Component::Component(ManagedInstance instance) : Object(instance) {
+        _gameObject = new GameObject(_gameObjectProperty.get<ManagedPointer>(_instance));
+    }
+
+    Component::Component(ManagedInstance instance, const GameObject *gameObject) : Object(instance) {
         _gameObject = gameObject;
     }
 
-    Component::~Component() {
-        Managed::destroy(_tagProperty);
-    }
+    Component::~Component() = default;
 
-    void Component::InitializeMembers() {
-        Object::InitializeMembers();
-        _tagProperty = _managed->getMember("tag", property);
-        _gameObjectProperty = _managed->getMember("gameObject", property);
-
-        if (!_gameObject) {
-            intptr_t *gameObjectPtr = _gameObjectProperty->getObject();
-            _gameObject = new GameObject(gameObjectPtr);
-        }
-    }
-
-    Transform * Component::transform() const {
+    const Transform *Component::transform() const {
         return _gameObject->transform();
     }
 
     const GameObject *Component::gameObject() const {
         return _gameObject;
+    }
+
+    const ManagedType Component::type() {
+        return _componentType;
+    }
+
+    void Component::InitializeManagedBridge() {
+        _componentType = ManagedType(_componentAssemblyInfo);
+
+        _gameObjectProperty = _componentType.getProperty("gameObject");
+        _gameObjectTransformProperty = _componentType.getProperty("transform");
     }
 }

@@ -1,51 +1,57 @@
 #include "Transform.h"
 #include "GameObject.h"
-#include "UnityAPI/ManagedBridge/Managed.h"
-#include "UnityAPI/ManagedBridge/ManagedMember.h"
+#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
+#include "UnityAPI/UnityAPIExtern.h"
 
 namespace UnityEngine {
-    Transform::Transform(intptr_t *instance) : Component(instance) {
-        InitializeMembers();
+    const ManagedAssemblyInfo _transformAssemblyInfo("UnityEngine.Transform", "UnityEngine.dll");
+
+    ManagedType _transformType = ManagedType::null;
+
+    PropertyMember _childCountProperty = PropertyMember::null;
+    PropertyMember _parentProperty = PropertyMember::null;
+
+    Transform::Transform(ManagedInstance instance, const GameObject *gameObject) : Component(instance, gameObject) {
+        // nothing yet
     }
 
-    Transform::Transform(const GameObject *gameObject, intptr_t *instance) : Component(gameObject, instance) {
-        InitializeMembers();
-    }
-
-    Transform::~Transform() {
-        Managed::destroy(_childCountProperty);
-        Managed::destroy(_parentProperty);
-    }
-
-    void Transform::InitializeMembers() {
-        Component::InitializeMembers();
-        _childCountProperty = _managed->getMember("childCount", property);
-        _parentProperty = _managed->getMember("parent", property);
-
-        intptr_t *parentPtr = _parentProperty->getObject();
-        if (parentPtr) {
-            _parent = new Transform(parentPtr);
-        }
-    }
+    Transform::~Transform() = default;
 
     int Transform::childCount() const {
-        return _childCountProperty->getInt();
+        return _childCountProperty.get<int>(_instance);
     }
 
     Transform * Transform::parent() {
         if (_parent != nullptr) {
-            delete _parent;
-            _parent = nullptr;
-        }
-        intptr_t *parentPtr = _parentProperty->getObject();
-        if (parentPtr) {
-            _parent = new Transform(parentPtr);
+            ManagedPointer pointer = _parentProperty.get<ManagedPointer>(_instance);
+            ManagedPointer currentPointer = _parent->_instance.toPointer();
+            if (currentPointer != pointer) {
+                delete _parent;
+                if (pointer != nullptr) {
+                    _parent = new Transform(ManagedInstance(pointer));
+                } else {
+                    _parent = nullptr;
+                }
+            } else {
+                Managed::destroy(pointer);
+            }
         }
         return _parent;
     }
 
     void Transform::setParent(Transform *parent) {
-        _parentProperty->setObject(parent->_managed);
+        _parentProperty.setValue(_instance, parent->_instance.toPointer());
         _parent = parent;
+    }
+
+    const ManagedType Transform::type() {
+        return _transformType;
+    }
+
+    void Transform::InitializeManagedBridge() {
+        _transformType = ManagedType(_transformAssemblyInfo);
+
+        _childCountProperty = _transformType.getProperty("childCount");
+        _parentProperty = _transformType.getProperty("parent");
     }
 }

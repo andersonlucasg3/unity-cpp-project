@@ -8,19 +8,19 @@ namespace UnityEngine {
 
     class Component : public Object {
     private:
-        ManagedMember *_gameObjectProperty{};
-        ManagedMember *_tagProperty{};
-
-        const GameObject *_gameObject{};
+        const GameObject *_gameObject = nullptr;
 
     protected:
-        Component(intptr_t *instance);
-        Component(const GameObject *gameObject, intptr_t *instance);
+        explicit Component(ManagedType type);
+        explicit Component(ManagedInstance instance);
+        explicit Component(ManagedInstance instance, const GameObject *gameObject = nullptr);
         ~Component();
-        void InitializeMembers() override;
 
     public:
-        [[nodiscard,maybe_unused]] Transform *transform() const;
+        [[nodiscard,maybe_unused]] const Transform *transform() const;
         [[nodiscard,maybe_unused]] const GameObject *gameObject() const;
+
+        static const ManagedType type();
+        static void InitializeManagedBridge();
     };
 }

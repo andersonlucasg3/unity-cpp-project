@@ -4,7 +4,7 @@ Just a POC demonstrating how we could have all Unity API in Cpp, even without th
 
 There is a [NativeEntryPoint](Assets/UnityCpp/NativeEntryPoint.cs) class in the managed code (Unity C#).
 
-In the [NativeInitialized](CppSource/UnityCppLib/UnityAPI/UnityAPIExtern.cpp) method we do little tests.
+In the [InitializeNative](CppSource/UnityCppLib/UnityAPI/UnityAPIExtern.cpp) method we do little tests.
 
 Kisses everybody.
 
@@ -22,5 +22,7 @@ There may be a way to fix that, but that's a problem for another time.
 - [X] Reload the binary when it has been rebuilt;
 
 ### Updates
+- Updated the Managed API to allow loading type information from .Net API so we can instantiate any managed symbol from the C++.
+
 - Now the Cpp assembly is loaded when the game starts playing and unloaded when the game stops playing.
   So the problem with the rebuild of the native library is solved allowing to better integrate the native code.

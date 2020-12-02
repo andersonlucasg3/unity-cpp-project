@@ -1,8 +1,9 @@
 #pragma once
 
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge::Members {
     enum MemberType {
-        field = 0,
+        constructor = 0,
+        field,
         property,
         method
     };

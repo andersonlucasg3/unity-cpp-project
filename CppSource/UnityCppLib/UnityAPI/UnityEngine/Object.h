@@ -1,36 +1,35 @@
 #pragma once
 
+#include "HideFlags.h"
+#include "UnityAPI/ManagedBridge/ManagedPointer.h"
+#include "UnityAPI/ManagedBridge/ManagedInstance.h"
+#include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
+#include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
+#include "UnityAPI/ManagedBridge/ManagedType.h"
+
 #include <cstdint>
 
-#include "HideFlags.h"
-
-namespace UnityEngine::ManagedBridge {
-    class Managed;
-    class ManagedMember;
-}
-
-using namespace UnityEngine::ManagedBridge;
-
 namespace UnityEngine {
+    using namespace ManagedBridge;
+    using namespace ManagedBridge::Members;
+
     class Object {
-    private:
-        ManagedMember *_nameProperty{};
-        ManagedMember *_hideFlagsProperty{};
-
     protected:
-        Managed *_managed{};
+        ManagedType _type = ManagedType::null;
+        ManagedInstance _instance = ManagedInstance::null;
 
-        Object();
-        explicit Object(intptr_t *instance);
+        explicit Object(ManagedType type);
+        explicit Object(ManagedInstance instance);
         ~Object();
-
-        void createManagedInstance(const char *className);
-        virtual void InitializeMembers();
 
     public:
         [[nodiscard,maybe_unused]] const char *name() const;
         [[maybe_unused]] void setName(const char *name) const;
 
         [[nodiscard,maybe_unused]] HideFlags hideFlags() const;
+        [[maybe_unused]] void setHideFlags(HideFlags flags) const;
+
+        static const ManagedType type();
+        static void InitializeManagedBridge();
     };
 }

@@ -1,46 +1,67 @@
 #include "GameObject.h"
 #include "Transform.h"
-#include "UnityAPI/UnityAPIExtern.h"
-#include "UnityAPI/ManagedBridge/Managed.h"
-#include "UnityAPI/ManagedBridge/ManagedMember.h"
 #include "Debug.h"
+#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
+#include "UnityAPI/NetFramework/System.h"
 
 #include <type_traits>
-#include <iostream>
 
 using namespace std;
 
 namespace UnityEngine {
-    const char * const _gameObjectClassName = "UnityEngine.GameObject, UnityEngine.dll";
+    const ManagedAssemblyInfo _gameObjectAssembly("UnityEngine.GameObject", "UnityEngine.dll");
 
-    GameObject::GameObject() : Object() {
-        createManagedInstance(_gameObjectClassName);
+    ManagedType GameObject::_gameObjectType = ManagedType::null;
+    ConstructorMember GameObject::_defaultConstructor = ConstructorMember::null;
+    ConstructorMember GameObject::_secondConstructor = ConstructorMember::null;
+    ConstructorMember GameObject::_thirdConstructor = ConstructorMember::null;
+    PropertyMember GameObject::_activeInHierarchyProperty = PropertyMember::null;
+    PropertyMember GameObject::_activeSelfProperty = PropertyMember::null;
+    PropertyMember GameObject::_isStaticProperty = PropertyMember::null;
+    PropertyMember GameObject::_layerProperty = PropertyMember::null;
+    PropertyMember GameObject::_tagProperty = PropertyMember::null;
+    PropertyMember GameObject::_transformProperty = PropertyMember::null;
+
+    ManagedInstance createTransform(ManagedInstance instance, PropertyMember transform) {
+        ManagedPointer pointer = transform.get<ManagedPointer>(instance);
+        return ManagedInstance(pointer);
     }
 
-    GameObject::GameObject(intptr_t *instance) : Object(instance) {}
+    GameObject::GameObject() : Object(_gameObjectType) {
+        _instance = _defaultConstructor.constructor(nullptr, 0);
+        _transform = new Transform(createTransform(_instance, _transformProperty), this);
+    }
+
+    GameObject::GameObject(const char *name) : Object(_gameObjectType) {
+        void **parameters = new void *[] { (void *)name };
+        _instance = _secondConstructor.constructor(parameters, 1);
+        delete[] parameters;
+        _transform = new Transform(createTransform(_instance, _transformProperty), this);
+    }
+
+    GameObject::GameObject(const char *name, ManagedType components[], int componentCount) : Object(_gameObjectType) {
+        void ** componentsPtr = new void *[componentCount];
+        ManagedPointer ptr = ManagedPointer::null;
+        for (int index = 0; index < componentCount; ++index) {
+            ptr = components[index].toPointer();
+            componentsPtr[index] = (void *)ptr.toManaged();
+        }
+        void **parametersPtr = new void *[] { (void *)name, (void *)components };
+        _instance = _thirdConstructor.constructor(parametersPtr, 2);
+        delete[] componentsPtr;
+        delete[] parametersPtr;
+
+        _transform = new Transform(createTransform(_instance, _transformProperty), this);
+    }
+
+    GameObject::GameObject(ManagedInstance instance) : Object(instance) {
+        _instance = instance;
+
+        _transform = new Transform(createTransform(_instance, _transformProperty), this);
+    }
 
     GameObject::~GameObject() {
-        Managed::destroy(_activeInHierarchyProperty);
-        Managed::destroy(_activeSelfProperty);
-        Managed::destroy(_isStaticProperty);
-        Managed::destroy(_layerProperty);
-        Managed::destroy(_tagProperty);
-        Managed::destroy(_transformProperty);
-
         delete _transform;
-    }
-
-    void GameObject::InitializeMembers() {
-        Object::InitializeMembers();
-        _activeInHierarchyProperty = _managed->getMember("activeInHierarchy", property);
-        _activeSelfProperty = _managed->getMember("activeSelf", property);
-        _isStaticProperty = _managed->getMember("isStatic", property);
-        _layerProperty = _managed->getMember("layer", property);
-        _tagProperty = _managed->getMember("tag", property);
-        _transformProperty = _managed->getMember("transform", property);
-
-        intptr_t *transformPtr = _transformProperty->getObject();
-        _transform = new Transform(this, transformPtr);
     }
 
     Transform *GameObject::transform() const {
@@ -61,5 +82,27 @@ namespace UnityEngine {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
         component = getComponent<TComponent>();
         return component;
+    }
+
+    const ManagedType GameObject::type() {
+        return _gameObjectType;
+    }
+
+    void GameObject::InitializeManagedBridge() {
+        _gameObjectType = ManagedType(_gameObjectAssembly);
+
+        _defaultConstructor = _gameObjectType.getConstructor(nullptr, 0);
+
+        ManagedType secondConstructorParams[] = { System::stringType };
+        _secondConstructor = _gameObjectType.getConstructor(secondConstructorParams, 1);
+
+//        _thirdConstructor = _gameObjectType.getConstructor(2);
+
+        _activeInHierarchyProperty = _gameObjectType.getProperty("activeInHierarchy");
+        _activeSelfProperty = _gameObjectType.getProperty("activeSelf");
+        _isStaticProperty = _gameObjectType.getProperty("isStatic");
+        _layerProperty = _gameObjectType.getProperty("layer");
+        _tagProperty = _gameObjectType.getProperty("tag");
+        _transformProperty = _gameObjectType.getProperty("transform");
     }
 }

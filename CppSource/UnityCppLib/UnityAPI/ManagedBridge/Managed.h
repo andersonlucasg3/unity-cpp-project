@@ -1,33 +1,38 @@
 #pragma once
 
+#include "UnityAPI/ManagedBridge/Members/MemberType.h"
+#include "ManagedPointer.h"
+
 #include <cstdint>
 
-#include "MemberType.h"
-
-namespace UnityEngine::ManagedBridge {
+namespace ManagedBridge {
     typedef void (*UnitySendMessageMethod)(const char *gameObjectName, const char *methodName, const char *message);
 
-    class ManagedMember;
+    struct ManagedPointer;
+
+    namespace Members {
+        class ManagedMember;
+    }
 
     class Managed {
-        friend class ManagedMember;
-
     private:
-        intptr_t *_instance;
+        ManagedPointer _ptr = ManagedPointer::null;
+
+    protected:
+        Managed(ManagedPointer ptr);
 
     public:
         static UnitySendMessageMethod UnitySendMessage;
 
-        Managed();
-        explicit Managed(intptr_t *instance);
-        ~Managed();
+        ManagedPointer toPointer() const;
 
-        void construct(const char *typeName);
+        static void destroy(Managed *managed);
+        static void destroy(const Managed &managed);
+        static void destroy(ManagedPointer pointer);
 
-        ManagedMember *getMember(const char *memberName, MemberType type);
-        static void destroy(ManagedMember *member);
-        static void destroy(ManagedMember *member, bool freeMemberPtr);
+        bool operator==(Managed other);
+        bool operator!=(Managed other);
+        bool operator==(void *ptr);
+        bool operator!=(void *ptr);
     };
-
-
 }
