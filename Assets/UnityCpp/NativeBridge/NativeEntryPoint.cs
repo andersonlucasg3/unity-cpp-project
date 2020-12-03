@@ -11,7 +11,7 @@ namespace UnityCpp
         
         private void Awake()
         {
-            string assemblyPath =  Application.dataPath + NativeConstants.nativeCodeAssemblyPath;
+            string assemblyPath =  NativeConstants.GetAssemblyPath();
             Debug.Log($"Searching for native library in {assemblyPath}");
 
             _nativeAssemblyHandle = NativeAssembly.Load(assemblyPath);

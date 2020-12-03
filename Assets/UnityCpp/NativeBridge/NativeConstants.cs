@@ -2,15 +2,17 @@
 #define UNITY_WINDOWS
 #endif
 
+using UnityEngine;
+
 namespace UnityCpp
 {
     internal static class NativeConstants
     {
 #if UNITY_WINDOWS
 #if UNITY_EDITOR
-        internal const string nativeCodeAssemblyPath = "/Plugins/NativeComponents/UnityCppLib";
+        internal const string nativeCodeAssemblyPath = "/Plugins/NativeComponents/UnityCppLib.dll";
 #else
-        internal const string nativeCodeAssemblyPath = "/Plugins/UnityCppLib";
+        internal const string nativeCodeAssemblyPath = "/Plugins/x86_64/UnityCppLib.dll";
 #endif
 #else
 #if UNITY_EDITOR
@@ -24,5 +26,10 @@ namespace UnityCpp
         internal const string nativeLoadLibraryFuncName = "__LoadLibrary";
         internal const string nativeFreeLibraryFuncName = "__FreeLibrary";
         internal const string nativeGetProcAddressFuncName = "__GetProcAddress";
+
+        public static string GetAssemblyPath()
+        { 
+            return Application.dataPath + nativeCodeAssemblyPath;
+        }
     }
 }
