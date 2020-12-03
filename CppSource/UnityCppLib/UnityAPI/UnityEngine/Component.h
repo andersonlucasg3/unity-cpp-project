@@ -8,12 +8,14 @@ namespace UnityEngine {
 
     class Component : public Object {
     private:
+        static ManagedType _componentType;
+
         const GameObject *_gameObject = nullptr;
+        const Transform *_transform = nullptr;
 
     protected:
-        explicit Component(ManagedType type);
-        explicit Component(ManagedInstance instance);
-        explicit Component(ManagedInstance instance, const GameObject *gameObject = nullptr);
+        explicit Component(ManagedType type, const GameObject *gameObject);
+        explicit Component(ManagedInstance instance, const GameObject *gameObject);
         ~Component();
 
     public:

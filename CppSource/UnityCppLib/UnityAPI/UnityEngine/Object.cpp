@@ -9,7 +9,7 @@ using namespace Helpers;
 using namespace ManagedBridge;
 
 namespace UnityEngine {
-    const ManagedAssemblyInfo _objectAssemblyInfo("UnityEngine.Object", "UnityEngine.dll");
+    const ManagedAssemblyInfo _objectAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.ObjectBridge");
 
     ManagedType _objectType = ManagedType::null;
 

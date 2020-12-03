@@ -25,7 +25,7 @@ namespace UnityEngine {
 
         Transform *_transform = nullptr;
 
-        GameObject(ManagedInstance instance);
+        explicit GameObject(ManagedInstance instance);
 
     public:
         explicit GameObject();

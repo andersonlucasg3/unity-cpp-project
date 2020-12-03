@@ -11,12 +11,13 @@ namespace UnityCpp
         
         private void Awake()
         {
-            const string assemblyName =  NativeConstants.nativeCodeAssemblyPath;
+            string assemblyPath =  NativeConstants.GetAssemblyPath();
+            Debug.Log($"Searching for native library in {assemblyPath}");
 
-            _nativeAssemblyHandle = NativeAssembly.Load(assemblyName);
+            _nativeAssemblyHandle = NativeAssembly.Load(assemblyPath);
             if (_nativeAssemblyHandle == IntPtr.Zero)
             {
-                Debug.Log($"Failed to load native assembly {assemblyName}");
+                Debug.Log($"Failed to load native assembly {assemblyPath}");
                 return;
             }
             
