@@ -2,13 +2,15 @@
 #include "Transform.h"
 #include "Debug.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
+#include "UnityAPI/ManagedBridge/UnmanagedValue.h"
 #include "UnityAPI/NetFramework/System.h"
-#include "UnityAPI/Helpers/StringsHelper.h"
+#include "UnityAPI/Helpers/Helpers.h"
 
 #include <type_traits>
 
 using namespace std;
 using namespace Helpers;
+using namespace ManagedBridge;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _gameObjectAssembly("UnityCpp.NativeBridge.UnityBridges.GameObjectBridge");
@@ -38,23 +40,19 @@ namespace UnityEngine {
     }
 
     GameObject::GameObject(string_c name) : Object() {
-        void **parameters = new void *[] { (void *)name };
+        UnmanagedValue parameters[] = { name };
         _instance = _secondConstructor.constructor(parameters, 1);
-        delete[] parameters;
         _transform = new Transform(createTransform(_instance, _transformProperty), this);
     }
 
     GameObject::GameObject(string_c name, ManagedType components[], int componentCount) : Object() {
-        void ** componentsPtr = new void *[componentCount];
-        ManagedPointer ptr = ManagedPointer::null;
+        UnmanagedValue *componentsParameter = (UnmanagedValue *)malloc(sizeof(UnmanagedValue) * componentCount);
         for (int index = 0; index < componentCount; ++index) {
-            ptr = components[index].toPointer();
-            componentsPtr[index] = (void *)ptr.toManaged();
+            componentsParameter[index] = components[index].toPointer().toManaged();
         }
-        void **parametersPtr = new void *[] { (void *)name, (void *)components };
-        _instance = _thirdConstructor.constructor(parametersPtr, 2);
-        delete[] componentsPtr;
-        delete[] parametersPtr;
+        UnmanagedValue parameters[] = { name, componentsParameter };
+        _instance = _thirdConstructor.constructor(parameters, 2);
+        free(componentsParameter);
 
         _transform = new Transform(createTransform(_instance, _transformProperty), this);
     }
@@ -135,7 +133,7 @@ namespace UnityEngine {
 
         _defaultConstructor = _gameObjectType.getConstructor(nullptr, 0);
 
-        ManagedType secondConstructorParams[] = { System::stringType };
+        ManagedType secondConstructorParams[] = { System::managedStringType };
         _secondConstructor = _gameObjectType.getConstructor(secondConstructorParams, 1);
 
 //        _thirdConstructor = _gameObjectType.getConstructor(2);

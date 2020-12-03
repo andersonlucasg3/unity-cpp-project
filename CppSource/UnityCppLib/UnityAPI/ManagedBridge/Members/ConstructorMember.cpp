@@ -1,10 +1,11 @@
 #include "ConstructorMember.h"
 #include "UnityAPI/ManagedBridge/ManagedType.h"
 #include "UnityAPI/ManagedBridge/ManagedInstance.h"
+#include "UnityAPI/ManagedBridge/UnmanagedValue.h"
 #include "UnityAPI/UnityAPIExtern.h"
 
 namespace ManagedBridge::Members {
-    typedef void *(UNITY_METHOD *__UnityManagedConstructorFunc)(const void *constructorPtr, void **parameters, int paramCount);
+    typedef void *(UNITY_METHOD *__UnityManagedConstructorFunc)(pointer_c constructorPtr, UnmanagedValue parameters[], int paramCount);
 
     __UnityManagedConstructorFunc _constructor = nullptr;
 
@@ -19,14 +20,9 @@ namespace ManagedBridge::Members {
         // nothing yet
     }
 
-    ManagedInstance ConstructorMember::constructor(void *parameters[], int paramCount) const {
-        void **paramPtr = new void *[paramCount];
-        for (int index = 0; index < paramCount; ++index) {
-            paramPtr[index] = (void *)(const void *)parameters[index];
-        }
-        ManagedPointer instancePtr(_constructor(toPointer().toManaged(), paramPtr, paramCount));
+    ManagedInstance ConstructorMember::constructor(UnmanagedValue parameters[], int paramCount) const {
+        ManagedPointer instancePtr(_constructor(toPointer().toManaged(), parameters, paramCount));
         ManagedInstance instance(instancePtr);
-        delete[] paramPtr;
         return instance;
     }
 

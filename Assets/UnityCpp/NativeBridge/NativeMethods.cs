@@ -209,7 +209,7 @@ namespace UnityCpp.NativeBridge
         }
 
         [MonoPInvokeCallback(typeof(UnityConstructorDelegate))]
-        private static unsafe IntPtr Constructor(IntPtr constructorPtr, UnmanagedValue[] parameters, int paramCount)
+        private static IntPtr Constructor(IntPtr constructorPtr, UnmanagedValue[] parameters, int paramCount)
         {
             ConstructorInfo info = ConvertPtrTo<ConstructorInfo>(constructorPtr);
             object[] objects = new object[paramCount];

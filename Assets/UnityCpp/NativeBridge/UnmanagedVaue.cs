@@ -63,7 +63,7 @@ namespace UnityCpp.NativeBridge
                     return doubleBuffer[0];
                 
                 case Type.stringType:
-                    return Marshal.PtrToStringUni(value);
+                    return Marshal.PtrToStringAnsi(value);
                 
                 case Type.intPtrType:
                     return value;

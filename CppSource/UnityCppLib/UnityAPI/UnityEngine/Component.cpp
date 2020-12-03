@@ -1,7 +1,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
-#include "UnityAPI/Helpers/StringsHelper.h"
+#include "UnityAPI/Helpers/Helpers.h"
 
 using namespace ManagedBridge;
 using namespace Helpers;

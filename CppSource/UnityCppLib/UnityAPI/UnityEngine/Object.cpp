@@ -1,5 +1,5 @@
 #include "Object.h"
-#include "UnityAPI/Helpers/StringsHelper.h"
+#include "UnityAPI/Helpers/Helpers.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 
 using namespace std;

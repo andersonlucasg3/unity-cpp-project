@@ -20,7 +20,7 @@ namespace ManagedBridge {
         floatType,
         doubleType,
         stringType,
-        intPtrType
+        pointerType
     };
 
     struct [[maybe_unused]] UnmanagedValue {
@@ -44,5 +44,6 @@ namespace ManagedBridge {
         [[maybe_unused]] UnmanagedValue(string_m value);
         [[maybe_unused]] UnmanagedValue(pointer_c value);
         [[maybe_unused]] UnmanagedValue(pointer_m value);
+        ~UnmanagedValue();
     } __attribute__((aligned(16)));
 }

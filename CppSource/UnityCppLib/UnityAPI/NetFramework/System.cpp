@@ -4,9 +4,9 @@
 namespace System {
     ManagedAssemblyInfo _systemStringAssemblyInfo("System.String");
 
-    ManagedType stringType = ManagedType::null;
+    ManagedType managedStringType = ManagedType::null;
 
     void InitializeManagedBridge() {
-        stringType = ManagedType(_systemStringAssemblyInfo);
+        managedStringType = ManagedType(_systemStringAssemblyInfo);
     }
 }

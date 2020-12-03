@@ -17,7 +17,7 @@ namespace System {
     typedef const void *pointer_c;
     typedef void *pointer_m;
 
-    extern ManagedType stringType;
+    extern ManagedType managedStringType;
 
     void InitializeManagedBridge();
 }
