@@ -19,7 +19,7 @@ namespace UnityCpp.NativeBridge.UnityBridges
             set => unityComponent.tag = value;
         }
         
-        public ComponentBridge(Component component) : base(component) => this.unityComponent = component;
+        public ComponentBridge(Component component) : base(component) => unityComponent = component;
 
         public static implicit operator ComponentBridge(Component component) => new ComponentBridge(component);
         
@@ -32,7 +32,7 @@ namespace UnityCpp.NativeBridge.UnityBridges
         [UsedImplicitly]
         public bool TryGetComponent(Type componentType, out ComponentBridge component)
         {
-            if (this.unityComponent.TryGetComponent(componentType, out Component comp))
+            if (unityComponent.TryGetComponent(componentType, out Component comp))
             {
                 component = comp;
                 return true;

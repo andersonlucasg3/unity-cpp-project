@@ -8,9 +8,9 @@
 using namespace std;
 
 namespace ManagedBridge {
-    typedef void *(UNITY_METHOD *__UnityManagedGetTypePtrFunc)(const char *typeName);
-    typedef void *(UNITY_METHOD *__UnityManagedGetConstructorPtrFunc)(const void *typePtr, const void *parameterTypes[], int paramCount);
-    typedef void *(UNITY_METHOD *__UnityManagedGetMemberPtrFunc)(const void *typePtr, const char *memberName, MemberType type);
+    typedef void *(UNITY_METHOD *__UnityManagedGetTypePtrFunc)(string_c typeName);
+    typedef void *(UNITY_METHOD *__UnityManagedGetConstructorPtrFunc)(pointer_c typePtr, pointer_c parameterTypes[], int paramCount);
+    typedef void *(UNITY_METHOD *__UnityManagedGetMemberPtrFunc)(pointer_c typePtr, string_c memberName, MemberType type);
 
     __UnityManagedGetTypePtrFunc _getTypePtr = nullptr;
     __UnityManagedGetConstructorPtrFunc _getConstructorPtr = nullptr;
@@ -29,7 +29,7 @@ namespace ManagedBridge {
     }
 
     ManagedPointer getTypePtr(const ManagedAssemblyInfo& info) {
-        const char *name = info.name();
+        string_c name = info.name();
         void *ptr = _getTypePtr(name);
         return ManagedPointer(ptr);
     }
@@ -40,7 +40,7 @@ namespace ManagedBridge {
 
     ConstructorMember ManagedType::getConstructor(ManagedType parameterTypes[], int paramCount) const {
         ManagedPointer ptr = this->toPointer();
-        const void **paramTypesPtr = new const void *[paramCount];
+        pointer_c *paramTypesPtr = new pointer_c [paramCount];
         for (int index = 0; index < paramCount; ++index) {
             paramTypesPtr[index] = parameterTypes[index].toPointer().toManaged();
         }
@@ -49,13 +49,13 @@ namespace ManagedBridge {
         return ConstructorMember(constructorPtr);
     }
 
-    FieldMember ManagedType::getField(const char *fieldName) const {
+    [[maybe_unused]] FieldMember ManagedType::getField(string_c fieldName) const {
         ManagedPointer ptr = this->toPointer();
         ManagedPointer fieldPtr(_getMemberPtr(ptr.toManaged(), fieldName, MemberType::field));
         return FieldMember(fieldPtr);
     }
 
-    PropertyMember ManagedType::getProperty(const char *memberName) const {
+    PropertyMember ManagedType::getProperty(string_c memberName) const {
         ManagedPointer ptr = this->toPointer();
         ManagedPointer propertyPtr(_getMemberPtr(ptr.toManaged(), memberName, MemberType::property));
         return PropertyMember(propertyPtr);

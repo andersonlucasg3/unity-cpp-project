@@ -2,8 +2,8 @@
 #include "UnityAPI/UnityAPIExtern.h"
 
 namespace ManagedBridge {
-    typedef void (UNITY_METHOD *__UnitySendMessageFunc)(const char *gameObjectName, const char *methodName, const char *message);
-    typedef void (UNITY_METHOD *__UnityManagedDestructorFunc)(const void *instancePtr);
+    typedef void (UNITY_METHOD *__UnitySendMessageFunc)(string_c gameObjectName, string_c methodName, string_c message);
+    typedef void (UNITY_METHOD *__UnityManagedDestructorFunc)(pointer_c instancePtr);
 
     __UnityManagedDestructorFunc UnityManagedDestructor = nullptr;
 
@@ -32,11 +32,11 @@ namespace ManagedBridge {
         return _ptr;
     }
 
-    bool Managed::operator==(void *ptr) {
+    bool Managed::operator==(pointer_m ptr) {
         return _ptr == ptr;
     }
 
-    bool Managed::operator!=(void *ptr) {
+    bool Managed::operator!=(pointer_m ptr) {
         return _ptr != ptr;
     }
 

@@ -35,7 +35,7 @@ namespace UnityCpp.NativeBridge.UnityBridges
         public GameObjectBridge() : base(new GameObject()) => unityGameObject = (GameObject) unityObject;
         public GameObjectBridge(string name) : base(new GameObject(name)) => unityGameObject = (GameObject) unityObject;
         public GameObjectBridge(string name, Type[] components) : base(new GameObject(name, components)) => unityGameObject = (GameObject) unityObject;
-        private GameObjectBridge(GameObject gameObject) : base(gameObject) { }
+        private GameObjectBridge(GameObject gameObject) : base(gameObject) => unityGameObject = gameObject;
 
         public static implicit operator GameObjectBridge(GameObject gameObject) => new GameObjectBridge(gameObject);
 
@@ -44,7 +44,5 @@ namespace UnityCpp.NativeBridge.UnityBridges
 
         [UsedImplicitly]
         public ComponentBridge GetComponent(Type componentType) => unityGameObject.GetComponent(componentType);
-
-        public GameObject toUnity() => unityGameObject;
     }
 }

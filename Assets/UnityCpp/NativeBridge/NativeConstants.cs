@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace UnityCpp
+namespace UnityCpp.NativeBridge
 {
     internal static class NativeConstants
     {

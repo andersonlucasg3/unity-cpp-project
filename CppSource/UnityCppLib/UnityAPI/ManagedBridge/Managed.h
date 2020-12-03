@@ -1,12 +1,15 @@
 #pragma once
 
-#include "UnityAPI/ManagedBridge/Members/MemberType.h"
 #include "ManagedPointer.h"
+#include "UnityAPI/ManagedBridge/Members/MemberType.h"
+#include "UnityAPI/NetFramework/System.h"
 
 #include <cstdint>
 
+using namespace System;
+
 namespace ManagedBridge {
-    typedef void (*UnitySendMessageMethod)(const char *gameObjectName, const char *methodName, const char *message);
+    typedef void (*UnitySendMessageMethod)(string_c gameObjectName, string_c methodName, string_c message);
 
     struct ManagedPointer;
 
@@ -32,7 +35,7 @@ namespace ManagedBridge {
 
         bool operator==(Managed other);
         bool operator!=(Managed other);
-        bool operator==(void *ptr);
-        bool operator!=(void *ptr);
+        bool operator==(pointer_m ptr);
+        bool operator!=(pointer_m ptr);
     };
 }

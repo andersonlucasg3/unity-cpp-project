@@ -24,12 +24,12 @@ namespace ManagedBridge::Members {
 
         template<>
         ManagedPointer get(ManagedInstance instance) const {
-            return ManagedPointer(get<void *>(instance));
+            return ManagedPointer(get<pointer_m>(instance));
         }
 
         template<>
         void setValue(ManagedInstance instance, ManagedPointer ptr) const {
-            setPointer<void>(instance, (void *)ptr.toManaged());
+            setPointer<void>(instance, (pointer_m)ptr.toManaged());
         }
     };
 }

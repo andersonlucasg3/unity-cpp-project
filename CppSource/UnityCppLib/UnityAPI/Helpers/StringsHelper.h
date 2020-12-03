@@ -1,6 +1,10 @@
 #pragma once
 
+#include "UnityAPI/NetFramework/System.h"
+
+using namespace System;
+
 namespace Helpers {
-    char *stringInstance(const char *src);
-    void freeStringInstance(char *ptr);
+    string_m stringInstance(string_c src);
+    void freeStringInstance(string_m ptr);
 }
