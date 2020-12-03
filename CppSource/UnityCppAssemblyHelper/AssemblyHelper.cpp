@@ -1,16 +1,22 @@
 #if defined(__APPLE__) || defined(__MACH__)
+
 #define __MACOS 1
+#define METHOD_EXPORT
+
 #include <dlfcn.h>
+
 #else
+
+#define METHOD_EXPORT __declspec(dllexport)
+
 #include <Windows.h>
+
 #endif
 
 #include <cstdint>
 #include <string>
 
 using namespace std;
-
-#define METHOD_EXPORT __declspec(dllexport)
 
 extern "C" {
     METHOD_EXPORT intptr_t *__LoadLibrary(const char *assemblyName) {

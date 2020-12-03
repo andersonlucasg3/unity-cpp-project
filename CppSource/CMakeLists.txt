@@ -84,5 +84,6 @@ target_include_directories(
 )
 
 set(CMAKE_CXX_FLAGS "-fdeclspec")
+set(CMAKE_C_FLAGS "-wignored-attributes")
 
 set(LIBRARY_OUTPUT_PATH ../../Assets/Plugins/NativeComponents)
