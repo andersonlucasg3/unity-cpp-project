@@ -10,15 +10,15 @@ namespace UnityCpp
     {
 #if UNITY_WINDOWS
 #if UNITY_EDITOR
-        internal const string nativeCodeAssemblyPath = "/Plugins/NativeComponents/UnityCppLib.dll";
+        private const string nativeCodeAssemblyPath = "/Plugins/NativeComponents/UnityCppLib.dll";
 #else
-        internal const string nativeCodeAssemblyPath = "/Plugins/x86_64/UnityCppLib.dll";
+        private const string nativeCodeAssemblyPath = "/Plugins/x86_64/UnityCppLib.dll";
 #endif
 #else
 #if UNITY_EDITOR
-        internal const string nativeCodeAssemblyPath = "/Plugins/NativeComponents/libUnityCppLib.dylib";
+        private const string nativeCodeAssemblyPath = "/Plugins/NativeComponents/libUnityCppLib.dylib";
 #else
-        internal const string nativeCodeAssemblyPath = "/Plugins/libUnityCppLib.dylib";
+        private const string nativeCodeAssemblyPath = "/Plugins/libUnityCppLib.dylib";
 #endif
 #endif
         internal const string nativeLoaderName = "UnityCppAssemblyHelper";
