@@ -69,7 +69,7 @@ add_library(
         UnityCppLib/UnityAPI/NetFramework/System.h
         UnityCppLib/UnityAPI/NetFramework/System.cpp
         UnityCppLib/UnityAPI/Helpers/StringsHelper.cpp
-        UnityCppLib/UnityAPI/Helpers/StringsHelper.h)
+        UnityCppLib/UnityAPI/Helpers/StringsHelper.h UnityCppLib/UnityAPI/UnityEngine/Vector3.cpp UnityCppLib/UnityAPI/UnityEngine/Vector3.h UnityCppLib/UnityAPI/UnityEngine/Quaternion.cpp UnityCppLib/UnityAPI/UnityEngine/Quaternion.h)
 
 target_sources(
         UnityCppLib
