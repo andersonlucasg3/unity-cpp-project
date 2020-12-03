@@ -54,7 +54,7 @@ namespace UnityCpp.NativeBridge
         private delegate void SetManagedGetTypeMemberPtrDelegate([MarshalAs(UnmanagedType.FunctionPtr)] UnityGetTypeMemberPtrDelegate del);
         private static SetManagedGetTypeMemberPtrDelegate _setManagedGetMemberPtr;
 
-        private delegate IntPtr UnityConstructorDelegate(IntPtr constructorPtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] IntPtr[] parameters, int paramCount);
+        private delegate IntPtr UnityConstructorDelegate(IntPtr constructorPtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] UnmanagedValue[] parameters, int paramCount);
         private delegate void SetManagedConstructorDelegate([MarshalAs(UnmanagedType.FunctionPtr)] UnityConstructorDelegate del);
         private static SetManagedConstructorDelegate _setManagedConstructor;
         
@@ -102,9 +102,6 @@ namespace UnityCpp.NativeBridge
             
             _setUnitySendMessage = NativeAssembly.GetMethod<SetSendMessageDelegate>(assemblyHandle, "SetUnitySendMessageMethod");
             _setUnitySendMessage.Invoke(UnitySendMessageMethod);
-
-            _setManagedDestructor = NativeAssembly.GetMethod<SetDestructorDelegate>(assemblyHandle, "SetManagedDestructorMethod");
-            _setManagedDestructor.Invoke(DestructorMethod);
         }
 
         private static void SetTypeMethods(IntPtr assemblyHandle)
@@ -120,6 +117,9 @@ namespace UnityCpp.NativeBridge
 
             _setManagedConstructor = NativeAssembly.GetMethod<SetManagedConstructorDelegate>(assemblyHandle, "SetManagedConstructorMethod");
             _setManagedConstructor.Invoke(Constructor);
+            
+            _setManagedDestructor = NativeAssembly.GetMethod<SetDestructorDelegate>(assemblyHandle, "SetManagedDestructorMethod");
+            _setManagedDestructor.Invoke(Destructor);
         }
 
         private static void SetGetSetMethods(IntPtr assemblyHandle)
@@ -209,13 +209,13 @@ namespace UnityCpp.NativeBridge
         }
 
         [MonoPInvokeCallback(typeof(UnityConstructorDelegate))]
-        private static IntPtr Constructor(IntPtr constructorPtr, IntPtr[] parameters, int paramCount)
+        private static unsafe IntPtr Constructor(IntPtr constructorPtr, UnmanagedValue[] parameters, int paramCount)
         {
             ConstructorInfo info = ConvertPtrTo<ConstructorInfo>(constructorPtr);
             object[] objects = new object[paramCount];
             for (int index = 0; index < paramCount; index++)
             {
-                objects[index] = ConvertPtrTo<object>(parameters[index]);
+                objects[index] = parameters[index].ToManaged();
             }
 
             object instance = info.Invoke(objects);
@@ -223,7 +223,7 @@ namespace UnityCpp.NativeBridge
         }
 
         [MonoPInvokeCallback(typeof(UnityDestructorDelegate))]
-        private static void DestructorMethod(IntPtr intPtr)
+        private static void Destructor(IntPtr intPtr)
         {
             GCHandle handle = (GCHandle) intPtr;
             handle.Free();

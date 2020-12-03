@@ -75,8 +75,7 @@ namespace ManagedBridge {
     template<typename TType>
     GetSetValue getTypedFunc() {
         type_index index = typeid(TType);
-        if (index == typeid(string_c)) return _stringFunc;
-        if (index == typeid(string_m)) return _stringFunc;
+        if (index == typeid(string_c) || index == typeid(string_m)) return _stringFunc;
         if (index == typeid(bool)) return _boolFunc;
         if (index == typeid(int)) return _intFunc;
         if (index == typeid(uint)) return _uintFunc;
@@ -84,8 +83,7 @@ namespace ManagedBridge {
         if (index == typeid(ulong)) return _ulongFunc;
         if (index == typeid(float)) return _floatFunc;
         if (index == typeid(double)) return _doubleFunc;
-        if (index == typeid(pointer_m)) return _pointerFunc;
-        if (index == typeid(pointer_c)) return _pointerFunc;
+        if (index == typeid(pointer_m) || index == typeid(pointer_c)) return _pointerFunc;
         if (index == typeid(ManagedPointer)) return _pointerFunc;
         return GetSetValue();
     }

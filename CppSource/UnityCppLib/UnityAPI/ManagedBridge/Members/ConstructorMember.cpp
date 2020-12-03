@@ -24,7 +24,7 @@ namespace ManagedBridge::Members {
         for (int index = 0; index < paramCount; ++index) {
             paramPtr[index] = (void *)(const void *)parameters[index];
         }
-        ManagedPointer instancePtr(_constructor(this->toPointer().toManaged(), paramPtr, paramCount));
+        ManagedPointer instancePtr(_constructor(toPointer().toManaged(), paramPtr, paramCount));
         ManagedInstance instance(instancePtr);
         delete[] paramPtr;
         return instance;
