@@ -17,6 +17,6 @@ namespace ManagedBridge::Members {
 
     public:
         void get(ManagedInstance instance, UnmanagedValue *value) const;
-        void setValue(ManagedInstance instance, const UnmanagedValue& value) const;
+        void setValue(ManagedInstance instance, UnmanagedValue *value) const;
     };
 }

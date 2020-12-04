@@ -63,8 +63,8 @@ namespace UnityCpp.NativeBridge
 
         #region Getters & Setters
 
-        private delegate void GetValueDelegate(IntPtr intPtr, IntPtr memberPtr, MemberType type, ref UnmanagedValue value);
-        private delegate void SetValueDelegate(IntPtr intPtr, IntPtr memberPtr, MemberType type, UnmanagedValue value);
+        private delegate void GetValueDelegate(IntPtr intPtr, IntPtr memberPtr, MemberType type, [MarshalAs(UnmanagedType.LPStruct)] ref UnmanagedValue value);
+        private delegate void SetValueDelegate(IntPtr intPtr, IntPtr memberPtr, MemberType type, [MarshalAs(UnmanagedType.LPStruct)] ref UnmanagedValue value);
         
         private delegate void SetManagedGetSetValueDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate set);
         private static SetManagedGetSetValueDelegate _setManagedGetSetValue;
@@ -210,7 +210,7 @@ namespace UnityCpp.NativeBridge
             }
         }
         
-        private static void SetMemberValue(IntPtr intPtr, IntPtr memberPtr, MemberType type, UnmanagedValue value)
+        private static void SetMemberValue(IntPtr intPtr, IntPtr memberPtr, MemberType type, ref UnmanagedValue value)
         {
             object objectInstance;
             switch (type)

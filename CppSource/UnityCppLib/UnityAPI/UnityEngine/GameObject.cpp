@@ -41,7 +41,7 @@ namespace UnityEngine {
     }
 
     GameObject::GameObject(string_c name) : Object() {
-        UnmanagedValue parameters[] = { name };
+        UnmanagedValue parameters[] = { UnmanagedValue(name) };
         _instance = _secondConstructor.constructor(parameters, 1);
         _transform = new Transform(createTransform(_instance, _transformProperty), this);
     }
@@ -49,9 +49,9 @@ namespace UnityEngine {
     GameObject::GameObject(string_c name, ManagedType components[], int componentCount) : Object() {
         UnmanagedValue *componentsParameter = (UnmanagedValue *)malloc(sizeof(UnmanagedValue) * componentCount);
         for (int index = 0; index < componentCount; ++index) {
-            componentsParameter[index] = components[index].toPointer().toManaged();
+            componentsParameter[index] = UnmanagedValue(components[index].toPointer().toManaged());
         }
-        UnmanagedValue parameters[] = { name, componentsParameter };
+        UnmanagedValue parameters[] = { UnmanagedValue(name), UnmanagedValue(componentsParameter) };
         _instance = _thirdConstructor.constructor(parameters, 2);
         free(componentsParameter);
 
@@ -93,7 +93,8 @@ namespace UnityEngine {
     }
 
     void GameObject::setIsStatic(bool isStatic) const {
-        _isStaticProperty.setValue(_instance, isStatic);
+        UnmanagedValue value(isStatic);
+        _isStaticProperty.setValue(_instance, &value);
     }
 
     int GameObject::layer() const {
@@ -103,7 +104,8 @@ namespace UnityEngine {
     }
 
     void GameObject::setLayer(int layer) const {
-        _layerProperty.setValue(_instance, layer);
+        UnmanagedValue value(layer);
+        _layerProperty.setValue(_instance, &value);
     }
 
     string_c  GameObject::tag() const {
@@ -113,7 +115,8 @@ namespace UnityEngine {
     }
 
     void GameObject::setTag(string_c tag) const {
-        _tagProperty.setValue(_instance, tag);
+        UnmanagedValue value(tag);
+        _tagProperty.setValue(_instance, &value);
     }
 
     Transform *GameObject::transform() const {

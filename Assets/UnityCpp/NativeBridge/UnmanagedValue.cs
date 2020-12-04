@@ -36,12 +36,8 @@ namespace UnityCpp.NativeBridge
             switch (_type)
             {
                 case Type.boolType:
-                    byteBuffer[0] = (byte)input;
-                    Marshal.Copy(byteBuffer, 0, _value, 1);
-                    break;
-                
                 case Type.byteType:
-                    byteBuffer[0] = (byte) input;
+                    byteBuffer[0] = (byte)input;
                     Marshal.Copy(byteBuffer, 0, _value, 1);
                     break;
                 
@@ -138,20 +134,20 @@ namespace UnityCpp.NativeBridge
         }
 
         [UsedImplicitly]
-        public enum Type : int
+        public enum Type
         {
-            [UsedImplicitly] boolType = 0,
-            [UsedImplicitly] byteType,
-            [UsedImplicitly] shortType,
-            [UsedImplicitly] ushortType,
-            [UsedImplicitly] intType,
-            [UsedImplicitly] uintType,
-            [UsedImplicitly] longType,
-            [UsedImplicitly] ulongType,
-            [UsedImplicitly] floatType,
-            [UsedImplicitly] doubleType,
-            [UsedImplicitly] stringType,
-            [UsedImplicitly] pointerType
+            boolType = 0,
+            byteType,
+            shortType,
+            ushortType,
+            intType,
+            uintType,
+            longType,
+            ulongType,
+            floatType,
+            doubleType,
+            stringType,
+            pointerType
         }
     }
 }

@@ -41,7 +41,8 @@ namespace UnityEngine {
 
     void Transform::setParent(Transform *parent) {
         ManagedPointer parentPointer = parent->_instance.toPointer();
-        _parentProperty.setValue(_instance, parentPointer.toManaged());
+        UnmanagedValue value(parentPointer.toManaged());
+        _parentProperty.setValue(_instance, &value);
         _parent = parent;
     }
 

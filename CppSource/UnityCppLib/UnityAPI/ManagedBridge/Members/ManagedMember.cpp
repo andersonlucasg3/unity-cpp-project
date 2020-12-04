@@ -5,7 +5,7 @@ using namespace std;
 
 namespace ManagedBridge {
     typedef void (UNITY_METHOD *GetValueFunc)(pointer_c instancePtr, pointer_c memberPtr, MemberType type, UnmanagedValue *value);
-    typedef void (UNITY_METHOD *SetValueFunc)(pointer_c instancePtr, pointer_c memberPtr, MemberType type, UnmanagedValue value);
+    typedef void (UNITY_METHOD *SetValueFunc)(pointer_c instancePtr, pointer_c memberPtr, MemberType type, UnmanagedValue *value);
 
     struct GetSetValue {
     public:
@@ -29,7 +29,7 @@ namespace ManagedBridge {
         func(instancePtr, memberPtr, _type, value);
     }
 
-    [[maybe_unused]] void ManagedMember::setValue(ManagedInstance instance, const UnmanagedValue& value) const {
+    [[maybe_unused]] void ManagedMember::setValue(ManagedInstance instance, UnmanagedValue *value) const {
         SetValueFunc func = _getSetValueFunc.setValue;
         pointer_c instancePtr = instance.toPointer().toManaged();
         pointer_c memberPtr = toPointer().toManaged();

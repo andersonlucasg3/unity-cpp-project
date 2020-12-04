@@ -30,7 +30,8 @@ namespace UnityEngine {
     }
 
     void Object::setHideFlags(HideFlags flags) const {
-        _hideFlagsProperty.setValue(_instance, flags);
+        UnmanagedValue value(flags);
+        _hideFlagsProperty.setValue(_instance, &value);
     }
 
     string_c Object::name() const {
@@ -40,7 +41,8 @@ namespace UnityEngine {
     }
 
     void Object::setName(string_c name) const {
-        _nameProperty.setValue(_instance, name);
+        UnmanagedValue value(name);
+        _nameProperty.setValue(_instance, &value);
     }
 
     ManagedType Object::type() {

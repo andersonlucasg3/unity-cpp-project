@@ -4,6 +4,8 @@
 using namespace Helpers;
 
 namespace ManagedBridge {
+    const int stringBufferSize = 1024 * 100;
+
     template<typename TValue>
     pointer_m createValue(TValue value) {
         TValue *alloc = (TValue *)malloc(sizeof(TValue));
@@ -17,7 +19,23 @@ namespace ManagedBridge {
         return *value;
     }
 
-    UnmanagedValue::UnmanagedValue(UnmanagedType type) : ptr(nullptr), type(type) { }
+    UnmanagedValue::UnmanagedValue(UnmanagedType type) : type(type) {
+        switch (type) {
+            case boolType: ptr = createValue(false); break;
+            case byteType: ptr = createValue(byte(0)); break;
+            case shortType: ptr = createValue(short(0)); break;
+            case ushortType: ptr = createValue(ushort(0)); break;
+            case intType: ptr = createValue(int(0)); break;
+            case uintType: ptr = createValue(uint(0)); break;
+            case longType: ptr = createValue(long(0)); break;
+            case ulongType: ptr = createValue(ulong(0)); break;
+            case floatType: ptr = createValue(float(0)); break;
+            case doubleType: ptr = createValue(double(0)); break;
+
+            case stringType:
+            case pointerType: ptr = nullptr; break;
+        }
+    }
 
     UnmanagedValue::UnmanagedValue(pointer_m ptr, UnmanagedType type) : ptr(ptr), type(type) { }
 

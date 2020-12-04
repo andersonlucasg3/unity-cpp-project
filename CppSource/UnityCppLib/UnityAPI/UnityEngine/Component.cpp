@@ -36,7 +36,8 @@ namespace UnityEngine {
     }
 
     void Component::setTag(string_c tag) const {
-        _tagProperty.setValue(_instance, tag);
+        UnmanagedValue value(tag);
+        _tagProperty.setValue(_instance, &value);
     }
 
     ManagedType Component::type() {
