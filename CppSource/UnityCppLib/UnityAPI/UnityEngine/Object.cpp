@@ -1,8 +1,6 @@
 #include "Object.h"
-#include "UnityAPI/Helpers/StringsHelper.h"
+#include "UnityAPI/Helpers/Helpers.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
-
-#include <cstring>
 
 using namespace std;
 using namespace Helpers;
@@ -11,14 +9,11 @@ using namespace ManagedBridge;
 namespace UnityEngine {
     const ManagedAssemblyInfo _objectAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.ObjectBridge");
 
-    ManagedType _objectType = ManagedType::null;
+    ManagedType Object::_objectType = ManagedType::null;
+    PropertyMember Object::_nameProperty = PropertyMember::null;
+    PropertyMember Object::_hideFlagsProperty = PropertyMember::null;
 
-    PropertyMember _nameProperty = PropertyMember::null;
-    PropertyMember _hideFlagsProperty = PropertyMember::null;
-
-    Object::Object(ManagedType type) {
-        _type = type;
-    }
+    Object::Object() = default;
 
     Object::Object(ManagedInstance instance) {
         _instance = instance;
@@ -29,22 +24,28 @@ namespace UnityEngine {
     }
 
     HideFlags Object::hideFlags() const {
-        return (HideFlags) _hideFlagsProperty.get<int>(_instance);
+        UnmanagedValue value(UnmanagedType::intType);
+        _hideFlagsProperty.get(_instance, &value);
+        return (HideFlags)(int)value;
     }
 
     void Object::setHideFlags(HideFlags flags) const {
-        _hideFlagsProperty.setValue<int>(_instance, flags);
+        UnmanagedValue value(flags);
+        _hideFlagsProperty.setValue(_instance, &value);
     }
 
-    const char * Object::name() const {
-        return _nameProperty.get<char *>(_instance);
+    string_c Object::name() const {
+        UnmanagedValue value(UnmanagedType::stringType);
+        _nameProperty.get(_instance, &value);
+        return value;
     }
 
-    void Object::setName(const char *name) const {
-        _nameProperty.setPointer(_instance, stringInstance(name));
+    void Object::setName(string_c name) const {
+        UnmanagedValue value(name);
+        _nameProperty.setValue(_instance, &value);
     }
 
-    const ManagedType Object::type() {
+    ManagedType Object::type() {
         return _objectType;
     }
 

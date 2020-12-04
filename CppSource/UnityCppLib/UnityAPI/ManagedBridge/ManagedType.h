@@ -1,8 +1,11 @@
 #pragma once
 
 #include "Managed.h"
+#include "UnityAPI/NetFramework/System.h"
 
 #include <cstdint>
+
+using namespace System;
 
 namespace ManagedBridge {
     struct ManagedPointer;
@@ -24,8 +27,8 @@ namespace ManagedBridge {
         explicit ManagedType(ManagedPointer ptr);
         explicit ManagedType(const ManagedAssemblyInfo& assembly);
 
-        ConstructorMember getConstructor(ManagedType parameterTypes[], int paramCount) const;
-        FieldMember getField(const char *fieldName) const;
-        PropertyMember getProperty(const char *propertyName) const;
+        [[maybe_unused]] ConstructorMember getConstructor(ManagedType parameterTypes[], int paramCount) const;
+        [[maybe_unused]] FieldMember getField(string_c fieldName) const;
+        [[maybe_unused]] PropertyMember getProperty(string_c propertyName) const;
     };
 }

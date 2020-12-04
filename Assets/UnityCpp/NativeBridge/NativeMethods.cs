@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using AOT;
 using UnityCpp.Loader;
 using UnityEngine;
+using Object = System.Object;
 
 namespace UnityCpp.NativeBridge
 {
@@ -54,7 +55,7 @@ namespace UnityCpp.NativeBridge
         private delegate void SetManagedGetTypeMemberPtrDelegate([MarshalAs(UnmanagedType.FunctionPtr)] UnityGetTypeMemberPtrDelegate del);
         private static SetManagedGetTypeMemberPtrDelegate _setManagedGetMemberPtr;
 
-        private delegate IntPtr UnityConstructorDelegate(IntPtr constructorPtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] IntPtr[] parameters, int paramCount);
+        private delegate IntPtr UnityConstructorDelegate(IntPtr constructorPtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] UnmanagedValue[] parameters, int paramCount);
         private delegate void SetManagedConstructorDelegate([MarshalAs(UnmanagedType.FunctionPtr)] UnityConstructorDelegate del);
         private static SetManagedConstructorDelegate _setManagedConstructor;
         
@@ -62,26 +63,11 @@ namespace UnityCpp.NativeBridge
 
         #region Getters & Setters
 
-        private delegate void GetValueDelegate<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, out TValue value);
-        private delegate void SetValueDelegate<in TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, TValue value);
+        private delegate void GetValueDelegate(IntPtr intPtr, IntPtr memberPtr, MemberType type, [MarshalAs(UnmanagedType.LPStruct)] ref UnmanagedValue value);
+        private delegate void SetValueDelegate(IntPtr intPtr, IntPtr memberPtr, MemberType type, [MarshalAs(UnmanagedType.LPStruct)] ref UnmanagedValue value);
         
-        private delegate void SetManagedGetSetStringDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate<string> get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate<string> set);
-        private static SetManagedGetSetStringDelegate _setManagedManagedGetSetString;
-
-        private delegate void SetManagedGetSetIntDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate<int> get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate<int> set);
-        private static SetManagedGetSetIntDelegate _setManagedManagedGetSetInt;
-
-        private delegate void SetManagedGetSetLongDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate<long> get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate<long> set);
-        private static SetManagedGetSetLongDelegate _setManagedManagedGetSetLong;
-
-        private delegate void SetManagedGetSetFloatDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate<float> get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate<float> set);
-        private static SetManagedGetSetFloatDelegate _setManagedManagedGetSetFloat;
-
-        private delegate void SetManagedGetSetDoubleDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate<double> get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate<double> set);
-        private static SetManagedGetSetDoubleDelegate _setManagedManagedGetSetDouble;
-
-        private delegate void SetManagedGetSetObjectDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate<IntPtr> get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate<IntPtr> set);
-        private static SetManagedGetSetObjectDelegate _setManagedManagedGetSetObject;
+        private delegate void SetManagedGetSetValueDelegate([MarshalAs(UnmanagedType.FunctionPtr)] GetValueDelegate get, [MarshalAs(UnmanagedType.FunctionPtr)] SetValueDelegate set);
+        private static SetManagedGetSetValueDelegate _setManagedGetSetValue;
 
         #endregion
 
@@ -92,9 +78,6 @@ namespace UnityCpp.NativeBridge
             
             _setUnitySendMessage = NativeAssembly.GetMethod<SetSendMessageDelegate>(assemblyHandle, "SetUnitySendMessageMethod");
             _setUnitySendMessage.Invoke(UnitySendMessageMethod);
-
-            _setManagedDestructor = NativeAssembly.GetMethod<SetDestructorDelegate>(assemblyHandle, "SetManagedDestructorMethod");
-            _setManagedDestructor.Invoke(DestructorMethod);
         }
 
         private static void SetTypeMethods(IntPtr assemblyHandle)
@@ -110,27 +93,15 @@ namespace UnityCpp.NativeBridge
 
             _setManagedConstructor = NativeAssembly.GetMethod<SetManagedConstructorDelegate>(assemblyHandle, "SetManagedConstructorMethod");
             _setManagedConstructor.Invoke(Constructor);
+            
+            _setManagedDestructor = NativeAssembly.GetMethod<SetDestructorDelegate>(assemblyHandle, "SetManagedDestructorMethod");
+            _setManagedDestructor.Invoke(Destructor);
         }
 
         private static void SetGetSetMethods(IntPtr assemblyHandle)
         {
-            _setManagedManagedGetSetString = NativeAssembly.GetMethod<SetManagedGetSetStringDelegate>(assemblyHandle, "SetManagedGetSetStringMethod");
-            _setManagedManagedGetSetString.Invoke(GetValueString, SetValueString);
-
-            _setManagedManagedGetSetInt = NativeAssembly.GetMethod<SetManagedGetSetIntDelegate>(assemblyHandle, "SetManagedGetSetIntMethod");
-            _setManagedManagedGetSetInt.Invoke(GetValueInt, SetValueInt);
-
-            _setManagedManagedGetSetLong = NativeAssembly.GetMethod<SetManagedGetSetLongDelegate>(assemblyHandle, "SetManagedGetSetLongMethod");
-            _setManagedManagedGetSetLong.Invoke(GetValueLong, SetValueLong);
-
-            _setManagedManagedGetSetFloat = NativeAssembly.GetMethod<SetManagedGetSetFloatDelegate>(assemblyHandle, "SetManagedGetSetFloatMethod");
-            _setManagedManagedGetSetFloat.Invoke(GetValueFloat, SetValueFloat);
-
-            _setManagedManagedGetSetDouble = NativeAssembly.GetMethod<SetManagedGetSetDoubleDelegate>(assemblyHandle, "SetManagedGetSetDoubleMethod");
-            _setManagedManagedGetSetDouble.Invoke(GetValueDouble, SetValueDouble);
-
-            _setManagedManagedGetSetObject = NativeAssembly.GetMethod<SetManagedGetSetObjectDelegate>(assemblyHandle, "SetManagedGetSetObjectMethod");
-            _setManagedManagedGetSetObject.Invoke(GetValuePointer, SetValuePointer);
+            _setManagedGetSetValue = NativeAssembly.GetMethod<SetManagedGetSetValueDelegate>(assemblyHandle, "SetManagedGetSetValueMethod");
+            _setManagedGetSetValue.Invoke(GetMemberValue, SetMemberValue);
         }
         
         public static void Initialize(IntPtr assemblyHandle)
@@ -190,13 +161,13 @@ namespace UnityCpp.NativeBridge
         }
 
         [MonoPInvokeCallback(typeof(UnityConstructorDelegate))]
-        private static IntPtr Constructor(IntPtr constructorPtr, IntPtr[] parameters, int paramCount)
+        private static IntPtr Constructor(IntPtr constructorPtr, UnmanagedValue[] parameters, int paramCount)
         {
             ConstructorInfo info = ConvertPtrTo<ConstructorInfo>(constructorPtr);
             object[] objects = new object[paramCount];
             for (int index = 0; index < paramCount; index++)
             {
-                objects[index] = ConvertPtrTo<object>(parameters[index]);
+                objects[index] = parameters[index].ToManaged();
             }
 
             object instance = info.Invoke(objects);
@@ -204,7 +175,7 @@ namespace UnityCpp.NativeBridge
         }
 
         [MonoPInvokeCallback(typeof(UnityDestructorDelegate))]
-        private static void DestructorMethod(IntPtr intPtr)
+        private static void Destructor(IntPtr intPtr)
         {
             GCHandle handle = (GCHandle) intPtr;
             handle.Free();
@@ -212,44 +183,23 @@ namespace UnityCpp.NativeBridge
         
         #endregion
 
-        #region Getters
+        #region Getter & Setter
 
-        [MonoPInvokeCallback(typeof(GetValueDelegate<string>))]
-        private static void GetValueString(IntPtr instancePtr, IntPtr memberPtr, MemberType type, out string value) => GetMemberValue(instancePtr, memberPtr, type, out value);
-        [MonoPInvokeCallback(typeof(GetValueDelegate<int>))]
-        private static void GetValueInt(IntPtr instancePtr, IntPtr memberPtr, MemberType type, out int value) => GetMemberValue(instancePtr, memberPtr, type, out value);
-        [MonoPInvokeCallback(typeof(GetValueDelegate<long>))]
-        private static void GetValueLong(IntPtr instancePtr, IntPtr memberPtr, MemberType type, out long value) => GetMemberValue(instancePtr, memberPtr, type, out value);
-        [MonoPInvokeCallback(typeof(GetValueDelegate<float>))]
-        private static void GetValueFloat(IntPtr instancePtr, IntPtr memberPtr, MemberType type, out float value) => GetMemberValue(instancePtr, memberPtr, type, out value);
-        [MonoPInvokeCallback(typeof(GetValueDelegate<double>))]
-        private static void GetValueDouble(IntPtr instancePtr, IntPtr memberPtr, MemberType type, out double value) => GetMemberValue(instancePtr, memberPtr, type, out value);
-        [MonoPInvokeCallback(typeof(GetValueDelegate<IntPtr>))]
-        private static void GetValuePointer(IntPtr instancePtr, IntPtr memberPtr, MemberType type, out IntPtr value) => GetMemberValue(instancePtr, memberPtr, type, out value);
-        
-        private static void GetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, out TValue value)
+        private static void GetMemberValue(IntPtr intPtr, IntPtr memberPtr, MemberType type, ref UnmanagedValue value)
         {
             object objectInstance;
+            object valueInstance;
             switch (type)
             {
                 case MemberType.field:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
-                    object valueInstance = fieldInfo.GetValue(objectInstance);
-                    if (typeof(TValue) != typeof(IntPtr))
-                    {
-                        value = (TValue) valueInstance;
-                        return;
-                    }
-                    value = (TValue) (object) AllocObjectPtr(valueInstance);
-                    return;
+                    valueInstance = fieldInfo.GetValue(objectInstance);
+                    value.FromManaged(valueInstance);
+                    break;
                 case MemberType.property:
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
-                    if (typeof(TValue) != typeof(IntPtr))
-                    {
-                        value = (TValue) propertyInfo.GetValue(objectInstance);
-                        return;
-                    }
-                    value = (TValue) (object) AllocObjectPtr(propertyInfo.GetValue(objectInstance));
+                    valueInstance = propertyInfo.GetValue(objectInstance);
+                    value.FromManaged(valueInstance);
                     return;
                 case MemberType.method:
                     throw new MissingMethodException();
@@ -260,24 +210,7 @@ namespace UnityCpp.NativeBridge
             }
         }
         
-        #endregion
-
-        #region Setters
-
-        [MonoPInvokeCallback(typeof(SetValueDelegate<string>))]
-        private static void SetValueString(IntPtr instancePtr, IntPtr memberPtr, MemberType type, string value) => SetMemberValue(instancePtr, memberPtr, type, value);
-        [MonoPInvokeCallback(typeof(SetValueDelegate<int>))]
-        private static void SetValueInt(IntPtr instancePtr, IntPtr memberPtr, MemberType type, int value) => SetMemberValue(instancePtr, memberPtr, type, value);
-        [MonoPInvokeCallback(typeof(SetValueDelegate<long>))]
-        private static void SetValueLong(IntPtr instancePtr, IntPtr memberPtr, MemberType type, long value) => SetMemberValue(instancePtr, memberPtr, type, value);
-        [MonoPInvokeCallback(typeof(SetValueDelegate<float>))]
-        private static void SetValueFloat(IntPtr instancePtr, IntPtr memberPtr, MemberType type, float value) => SetMemberValue(instancePtr, memberPtr, type, value);
-        [MonoPInvokeCallback(typeof(SetValueDelegate<double>))]
-        private static void SetValueDouble(IntPtr instancePtr, IntPtr memberPtr, MemberType type, double value) => SetMemberValue(instancePtr, memberPtr, type, value);
-        [MonoPInvokeCallback(typeof(SetValueDelegate<IntPtr>))]
-        private static void SetValuePointer(IntPtr instancePtr, IntPtr memberPtr, MemberType type, IntPtr value) => SetMemberValue(instancePtr, memberPtr, type, value);
-        
-        private static void SetMemberValue<TValue>(IntPtr intPtr, IntPtr memberPtr, MemberType type, TValue value)
+        private static void SetMemberValue(IntPtr intPtr, IntPtr memberPtr, MemberType type, ref UnmanagedValue value)
         {
             object objectInstance;
             switch (type)
@@ -285,22 +218,14 @@ namespace UnityCpp.NativeBridge
                 case MemberType.field:
                 {
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out FieldInfo fieldInfo);
-                    switch (value)
-                    {
-                        case IntPtr valuePtr: fieldInfo.SetValue(objectInstance, ConvertPtrTo<object>(valuePtr)); break;
-                        default: fieldInfo.SetValue(objectInstance, value); break;
-                    }
+                    fieldInfo.SetValue(objectInstance, value.ToManaged());
                 }
                     break;
 
                 case MemberType.property:
                 {
                     GetObjectAndInfo(intPtr, memberPtr, out objectInstance, out PropertyInfo propertyInfo);
-                    switch (value)
-                    {
-                        case IntPtr valuePtr: propertyInfo.SetValue(objectInstance, ConvertPtrTo<object>(valuePtr)); break;
-                        default: propertyInfo.SetValue(objectInstance, value); break;
-                    }
+                    propertyInfo.SetValue(objectInstance, value.ToManaged());
                 }
                     break;
                 case MemberType.method:

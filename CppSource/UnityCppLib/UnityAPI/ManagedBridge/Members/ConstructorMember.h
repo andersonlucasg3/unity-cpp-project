@@ -4,6 +4,7 @@
 
 namespace ManagedBridge {
     class ManagedType;
+    struct UnmanagedValue;
 }
 
 namespace ManagedBridge::Members {
@@ -19,6 +20,6 @@ namespace ManagedBridge::Members {
     public:
         static const ConstructorMember null;
 
-        ManagedInstance constructor(void *parameters[], int paramCount) const;
+        ManagedInstance constructor(UnmanagedValue parameters[], int paramCount) const;
     };
 }

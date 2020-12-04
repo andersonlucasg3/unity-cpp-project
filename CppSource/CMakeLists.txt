@@ -68,8 +68,8 @@ add_library(
         UnityCppLib/UnityAPI/UnityEngine/UnityEngine.cpp
         UnityCppLib/UnityAPI/NetFramework/System.h
         UnityCppLib/UnityAPI/NetFramework/System.cpp
-        UnityCppLib/UnityAPI/Helpers/StringsHelper.cpp
-        UnityCppLib/UnityAPI/Helpers/StringsHelper.h)
+        UnityCppLib/UnityAPI/Helpers/Helpers.cpp
+        UnityCppLib/UnityAPI/Helpers/Helpers.h UnityCppLib/UnityAPI/UnityEngine/Vector3.cpp UnityCppLib/UnityAPI/UnityEngine/Vector3.h UnityCppLib/UnityAPI/UnityEngine/Quaternion.cpp UnityCppLib/UnityAPI/UnityEngine/Quaternion.h UnityCppLib/UnityAPI/ManagedBridge/UnmanagedValue.cpp UnityCppLib/UnityAPI/ManagedBridge/UnmanagedValue.h)
 
 target_sources(
         UnityCppLib
@@ -83,6 +83,9 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib
 )
 
-set(CMAKE_CXX_FLAGS "-fdeclspec")
+if (APPLE)
+    set(CMAKE_CXX_FLAGS "-fdeclspec")
+endif ()
+set(CMAKE_C_FLAGS "-wignored-attributes")
 
 set(LIBRARY_OUTPUT_PATH ../../Assets/Plugins/NativeComponents)

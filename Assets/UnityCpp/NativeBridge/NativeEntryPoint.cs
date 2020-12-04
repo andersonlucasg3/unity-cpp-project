@@ -1,9 +1,8 @@
 using System;
 using UnityCpp.Loader;
-using UnityCpp.NativeBridge;
 using UnityEngine;
 
-namespace UnityCpp
+namespace UnityCpp.NativeBridge
 {
     public class NativeEntryPoint : MonoBehaviour
     {

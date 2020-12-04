@@ -2,20 +2,27 @@
 #include "Transform.h"
 #include "Debug.h"
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
+#include "UnityAPI/ManagedBridge/UnmanagedValue.h"
 #include "UnityAPI/NetFramework/System.h"
+#include "UnityAPI/Helpers/Helpers.h"
 
 #include <type_traits>
 
 using namespace std;
+using namespace Helpers;
+using namespace ManagedBridge;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _gameObjectAssembly("UnityCpp.NativeBridge.UnityBridges.GameObjectBridge");
 
     ManagedType GameObject::_gameObjectType = ManagedType::null;
+
     ConstructorMember GameObject::_defaultConstructor = ConstructorMember::null;
     ConstructorMember GameObject::_secondConstructor = ConstructorMember::null;
     ConstructorMember GameObject::_thirdConstructor = ConstructorMember::null;
+
     PropertyMember GameObject::_activeInHierarchyProperty = PropertyMember::null;
+    PropertyMember GameObject::_sceneCullingMaskProperty = PropertyMember::null;
     PropertyMember GameObject::_activeSelfProperty = PropertyMember::null;
     PropertyMember GameObject::_isStaticProperty = PropertyMember::null;
     PropertyMember GameObject::_layerProperty = PropertyMember::null;
@@ -23,33 +30,30 @@ namespace UnityEngine {
     PropertyMember GameObject::_transformProperty = PropertyMember::null;
 
     ManagedInstance createTransform(ManagedInstance instance, PropertyMember transform) {
-        ManagedPointer pointer = transform.get<ManagedPointer>(instance);
-        return ManagedInstance(pointer);
+        UnmanagedValue value(UnmanagedType::pointerType);
+        transform.get(instance, &value);
+        return ManagedInstance(ManagedPointer(value));
     }
 
-    GameObject::GameObject() : Object(_gameObjectType) {
+    GameObject::GameObject() : Object() {
         _instance = _defaultConstructor.constructor(nullptr, 0);
         _transform = new Transform(createTransform(_instance, _transformProperty), this);
     }
 
-    GameObject::GameObject(const char *name) : Object(_gameObjectType) {
-        void **parameters = new void *[] { (void *)name };
+    GameObject::GameObject(string_c name) : Object() {
+        UnmanagedValue parameters[] = { UnmanagedValue(name) };
         _instance = _secondConstructor.constructor(parameters, 1);
-        delete[] parameters;
         _transform = new Transform(createTransform(_instance, _transformProperty), this);
     }
 
-    GameObject::GameObject(const char *name, ManagedType components[], int componentCount) : Object(_gameObjectType) {
-        void ** componentsPtr = new void *[componentCount];
-        ManagedPointer ptr = ManagedPointer::null;
+    GameObject::GameObject(string_c name, ManagedType components[], int componentCount) : Object() {
+        UnmanagedValue *componentsParameter = (UnmanagedValue *)malloc(sizeof(UnmanagedValue) * componentCount);
         for (int index = 0; index < componentCount; ++index) {
-            ptr = components[index].toPointer();
-            componentsPtr[index] = (void *)ptr.toManaged();
+            componentsParameter[index] = UnmanagedValue(components[index].toPointer().toManaged());
         }
-        void **parametersPtr = new void *[] { (void *)name, (void *)components };
-        _instance = _thirdConstructor.constructor(parametersPtr, 2);
-        delete[] componentsPtr;
-        delete[] parametersPtr;
+        UnmanagedValue parameters[] = { UnmanagedValue(name), UnmanagedValue(componentsParameter) };
+        _instance = _thirdConstructor.constructor(parameters, 2);
+        free(componentsParameter);
 
         _transform = new Transform(createTransform(_instance, _transformProperty), this);
     }
@@ -62,6 +66,57 @@ namespace UnityEngine {
 
     GameObject::~GameObject() {
         delete _transform;
+    }
+
+    bool GameObject::activeSelf() const {
+        UnmanagedValue value(UnmanagedType::boolType);
+        _activeSelfProperty.get(_instance, &value);
+        return value;
+    }
+
+    bool GameObject::activeInHierarchy() const {
+        UnmanagedValue value(UnmanagedType::boolType);
+        _activeInHierarchyProperty.get(_instance, &value);
+        return value;
+    }
+
+    ulong GameObject::sceneCullingMask() const {
+        UnmanagedValue value(UnmanagedType::ulongType);
+        _sceneCullingMaskProperty.get(_instance, &value);
+        return value;
+    }
+
+    bool GameObject::isStatic() const {
+        UnmanagedValue value(UnmanagedType::boolType);
+        _isStaticProperty.get(_instance, &value);
+        return value;
+    }
+
+    void GameObject::setIsStatic(bool isStatic) const {
+        UnmanagedValue value(isStatic);
+        _isStaticProperty.setValue(_instance, &value);
+    }
+
+    int GameObject::layer() const {
+        UnmanagedValue value(UnmanagedType::intType);
+        _layerProperty.get(_instance, &value);
+        return value;
+    }
+
+    void GameObject::setLayer(int layer) const {
+        UnmanagedValue value(layer);
+        _layerProperty.setValue(_instance, &value);
+    }
+
+    string_c  GameObject::tag() const {
+        UnmanagedValue value(UnmanagedType::stringType);
+        _tagProperty.get(_instance, &value);
+        return value;
+    }
+
+    void GameObject::setTag(string_c tag) const {
+        UnmanagedValue value(tag);
+        _tagProperty.setValue(_instance, &value);
     }
 
     Transform *GameObject::transform() const {
@@ -93,12 +148,13 @@ namespace UnityEngine {
 
         _defaultConstructor = _gameObjectType.getConstructor(nullptr, 0);
 
-        ManagedType secondConstructorParams[] = { System::stringType };
+        ManagedType secondConstructorParams[] = { System::managedStringType };
         _secondConstructor = _gameObjectType.getConstructor(secondConstructorParams, 1);
 
 //        _thirdConstructor = _gameObjectType.getConstructor(2);
 
         _activeInHierarchyProperty = _gameObjectType.getProperty("activeInHierarchy");
+        _sceneCullingMaskProperty = _gameObjectType.getProperty("sceneCullingMask");
         _activeSelfProperty = _gameObjectType.getProperty("activeSelf");
         _isStaticProperty = _gameObjectType.getProperty("isStatic");
         _layerProperty = _gameObjectType.getProperty("layer");

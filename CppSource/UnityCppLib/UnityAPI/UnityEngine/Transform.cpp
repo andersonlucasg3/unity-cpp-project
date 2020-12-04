@@ -16,11 +16,15 @@ namespace UnityEngine {
     Transform::~Transform() = default;
 
     int Transform::childCount() const {
-        return _childCountProperty.get<int>(_instance);
+        UnmanagedValue value(UnmanagedType::intType);
+        _childCountProperty.get(_instance, &value);
+        return value;
     }
 
     Transform * Transform::parent() {
-        ManagedPointer pointer = _parentProperty.get<ManagedPointer>(_instance);
+        UnmanagedValue value(UnmanagedType::pointerType);
+        _parentProperty.get(_instance, &value);
+        ManagedPointer pointer(value);
         ManagedPointer currentPointer = _parent->_instance.toPointer();
         if (currentPointer != pointer) {
             delete _parent;
@@ -36,11 +40,13 @@ namespace UnityEngine {
     }
 
     void Transform::setParent(Transform *parent) {
-        _parentProperty.setValue(_instance, parent->_instance.toPointer());
+        ManagedPointer parentPointer = parent->_instance.toPointer();
+        UnmanagedValue value(parentPointer.toManaged());
+        _parentProperty.setValue(_instance, &value);
         _parent = parent;
     }
 
-    const ManagedType Transform::type() {
+    ManagedType Transform::type() {
         return _transformType;
     }
 

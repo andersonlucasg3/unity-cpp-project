@@ -16,8 +16,7 @@ extern "C" {
 
         UnityEngine::InitializeManagedBridge();
 
-        GameObject *gameObject = new GameObject();
-        gameObject->setName("Transform test");
+        GameObject *gameObject = new GameObject("Transform test");
 
         GameObject *otherGameObject = new GameObject();
         gameObject->setName("Transform test child");

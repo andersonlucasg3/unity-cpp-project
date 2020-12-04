@@ -6,8 +6,11 @@
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
 #include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
 #include "UnityAPI/ManagedBridge/ManagedType.h"
+#include "UnityAPI/NetFramework/System.h"
 
 #include <cstdint>
+
+using namespace System;
 
 namespace UnityEngine {
     using namespace ManagedBridge;
@@ -15,21 +18,24 @@ namespace UnityEngine {
 
     class Object {
     protected:
-        ManagedType _type = ManagedType::null;
+        static ManagedType _objectType;
+        static PropertyMember _nameProperty;
+        static PropertyMember _hideFlagsProperty;
+
         ManagedInstance _instance = ManagedInstance::null;
 
-        explicit Object(ManagedType type);
+        explicit Object();
         explicit Object(ManagedInstance instance);
         ~Object();
 
     public:
-        [[nodiscard,maybe_unused]] const char *name() const;
-        [[maybe_unused]] void setName(const char *name) const;
+        [[nodiscard,maybe_unused]] string_c name() const;
+        [[maybe_unused]] void setName(string_c name) const;
 
         [[nodiscard,maybe_unused]] HideFlags hideFlags() const;
         [[maybe_unused]] void setHideFlags(HideFlags flags) const;
 
-        static const ManagedType type();
+        static ManagedType type();
         static void InitializeManagedBridge();
     };
 }

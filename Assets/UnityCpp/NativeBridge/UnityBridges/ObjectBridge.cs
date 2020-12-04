@@ -25,6 +25,7 @@ namespace UnityCpp.NativeBridge.UnityBridges
 
         public static implicit operator ObjectBridge(Object obj) => new ObjectBridge(obj);
 
+        [UsedImplicitly]
         public int GetInstanceID() => unityObject.GetInstanceID();
     }
 }
