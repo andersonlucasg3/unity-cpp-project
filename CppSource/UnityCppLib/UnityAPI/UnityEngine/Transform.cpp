@@ -16,13 +16,13 @@ namespace UnityEngine {
     Transform::~Transform() = default;
 
     int Transform::childCount() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::intType);
         _childCountProperty.get(_instance, &value);
         return value;
     }
 
     Transform * Transform::parent() {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::pointerType);
         _parentProperty.get(_instance, &value);
         ManagedPointer pointer(value);
         ManagedPointer currentPointer = _parent->_instance.toPointer();

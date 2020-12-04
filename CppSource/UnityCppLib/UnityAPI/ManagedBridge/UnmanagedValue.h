@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UnityAPI/NetFramework/System.h"
+#include "UnityAPI/UnityAPIExtern.h"
 
 #include <iostream>
 
@@ -23,13 +24,13 @@ namespace ManagedBridge {
         pointerType
     };
 
-    struct __attribute__((aligned(16))) UnmanagedValue {
+    struct UnmanagedValue {
     private:
         pointer_m ptr;
         UnmanagedType type;
 
     public:
-        [[maybe_unused]] UnmanagedValue();
+        [[maybe_unused]] explicit UnmanagedValue(UnmanagedType type);
         [[maybe_unused]] UnmanagedValue(pointer_m ptr, UnmanagedType type);
         [[maybe_unused]] UnmanagedValue(bool value);
         [[maybe_unused]] UnmanagedValue(byte value);
@@ -61,5 +62,5 @@ namespace ManagedBridge {
         operator string_m() const;
         operator pointer_c() const;
         operator pointer_m() const;
-    };
+    } STRUCT_ALIGN;
 }

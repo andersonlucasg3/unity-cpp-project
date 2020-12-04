@@ -17,7 +17,7 @@ namespace ManagedBridge {
         return *value;
     }
 
-    UnmanagedValue::UnmanagedValue() : ptr(nullptr), type(::pointerType) { }
+    UnmanagedValue::UnmanagedValue(UnmanagedType type) : ptr(nullptr), type(type) { }
 
     UnmanagedValue::UnmanagedValue(pointer_m ptr, UnmanagedType type) : ptr(ptr), type(type) { }
 
@@ -92,12 +92,7 @@ namespace ManagedBridge {
     }
 
     UnmanagedValue::~UnmanagedValue() {
-        if (type == ::pointerType) return;
-
-        if (type == ::stringType) {
-            freeStringInstance((string_m)ptr);
-            return;
-        }
+        if (type == ::pointerType || type == ::stringType) return;
 
         if (type >= ::boolType) free(ptr);
     }

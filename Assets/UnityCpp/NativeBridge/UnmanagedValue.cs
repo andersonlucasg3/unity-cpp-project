@@ -78,7 +78,7 @@ namespace UnityCpp.NativeBridge
                     break;
                 
                 case Type.pointerType:
-                    _value = (IntPtr) input;
+                    _value = (IntPtr) GCHandle.Alloc(input);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -125,10 +125,16 @@ namespace UnityCpp.NativeBridge
                     return Marshal.PtrToStringAnsi(_value);
 
                 case Type.pointerType:
-                    return _value;
+                    return ConvertPtrTo<object>(_value);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+        
+        private static TOutput ConvertPtrTo<TOutput>(IntPtr intPtr)
+        {
+            GCHandle handle = (GCHandle) intPtr;
+            return (TOutput) handle.Target;
         }
 
         [UsedImplicitly]

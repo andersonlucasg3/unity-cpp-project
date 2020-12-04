@@ -16,6 +16,10 @@
 #define UNITY_METHOD
 #endif
 
+#ifndef STRUCT_ALIGN
+#define STRUCT_ALIGN __attribute__((aligned(16)))
+#endif
+
 #else
 
 #ifndef UNITY_EXPORT
@@ -28,6 +32,10 @@
 
 #ifndef UNITY_METHOD
 #define UNITY_METHOD __cdecl
+#endif
+
+#ifndef STRUCT_ALIGN
+#define STRUCT_ALIGN
 #endif
 
 #endif

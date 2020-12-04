@@ -83,7 +83,9 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/UnityCppLib
 )
 
-set(CMAKE_CXX_FLAGS "-fdeclspec")
+if (APPLE)
+    set(CMAKE_CXX_FLAGS "-fdeclspec")
+endif ()
 set(CMAKE_C_FLAGS "-wignored-attributes")
 
 set(LIBRARY_OUTPUT_PATH ../../Assets/Plugins/NativeComponents)

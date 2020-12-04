@@ -30,7 +30,7 @@ namespace UnityEngine {
     PropertyMember GameObject::_transformProperty = PropertyMember::null;
 
     ManagedInstance createTransform(ManagedInstance instance, PropertyMember transform) {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::pointerType);
         transform.get(instance, &value);
         return ManagedInstance(ManagedPointer(value));
     }
@@ -69,25 +69,25 @@ namespace UnityEngine {
     }
 
     bool GameObject::activeSelf() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::boolType);
         _activeSelfProperty.get(_instance, &value);
         return value;
     }
 
     bool GameObject::activeInHierarchy() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::boolType);
         _activeInHierarchyProperty.get(_instance, &value);
         return value;
     }
 
     ulong GameObject::sceneCullingMask() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::ulongType);
         _sceneCullingMaskProperty.get(_instance, &value);
         return value;
     }
 
     bool GameObject::isStatic() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::boolType);
         _isStaticProperty.get(_instance, &value);
         return value;
     }
@@ -97,7 +97,7 @@ namespace UnityEngine {
     }
 
     int GameObject::layer() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::intType);
         _layerProperty.get(_instance, &value);
         return value;
     }
@@ -107,7 +107,7 @@ namespace UnityEngine {
     }
 
     string_c  GameObject::tag() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::stringType);
         _tagProperty.get(_instance, &value);
         return value;
     }

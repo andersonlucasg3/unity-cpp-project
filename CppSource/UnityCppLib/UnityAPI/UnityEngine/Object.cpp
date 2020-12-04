@@ -24,7 +24,7 @@ namespace UnityEngine {
     }
 
     HideFlags Object::hideFlags() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::intType);
         _hideFlagsProperty.get(_instance, &value);
         return (HideFlags)(int)value;
     }
@@ -34,7 +34,7 @@ namespace UnityEngine {
     }
 
     string_c Object::name() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::stringType);
         _nameProperty.get(_instance, &value);
         return value;
     }

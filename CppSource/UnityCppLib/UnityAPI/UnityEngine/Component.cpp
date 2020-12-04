@@ -30,7 +30,7 @@ namespace UnityEngine {
     }
 
     string_c Component::tag() const {
-        UnmanagedValue value;
+        UnmanagedValue value(UnmanagedType::stringType);
         _tagProperty.get(_instance, &value);
         return value;
     }

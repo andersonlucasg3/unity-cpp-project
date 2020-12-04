@@ -14,7 +14,7 @@ namespace ManagedBridge {
 
         GetSetValue() = default;
         GetSetValue(GetValueFunc getValue, SetValueFunc setValue) : getValue(getValue), setValue(setValue) { }
-    } __attribute__((aligned(16)));
+    } STRUCT_ALIGN;
 
     GetSetValue _getSetValueFunc;
 
