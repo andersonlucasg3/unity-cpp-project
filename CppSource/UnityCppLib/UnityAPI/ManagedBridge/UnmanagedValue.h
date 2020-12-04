@@ -23,12 +23,13 @@ namespace ManagedBridge {
         pointerType
     };
 
-    struct [[maybe_unused]] UnmanagedValue {
+    struct __attribute__((aligned(16))) UnmanagedValue {
     private:
         pointer_m ptr;
         UnmanagedType type;
 
     public:
+        [[maybe_unused]] UnmanagedValue();
         [[maybe_unused]] UnmanagedValue(pointer_m ptr, UnmanagedType type);
         [[maybe_unused]] UnmanagedValue(bool value);
         [[maybe_unused]] UnmanagedValue(byte value);
@@ -45,5 +46,20 @@ namespace ManagedBridge {
         [[maybe_unused]] UnmanagedValue(pointer_c value);
         [[maybe_unused]] UnmanagedValue(pointer_m value);
         ~UnmanagedValue();
-    } __attribute__((aligned(16)));
+
+        operator bool() const;
+        operator byte() const;
+        operator short() const;
+        operator ushort() const;
+        operator int() const;
+        operator uint() const;
+        operator long() const;
+        operator ulong() const;
+        operator float() const;
+        operator double() const;
+        operator string_c() const;
+        operator string_m() const;
+        operator pointer_c() const;
+        operator pointer_m() const;
+    };
 }

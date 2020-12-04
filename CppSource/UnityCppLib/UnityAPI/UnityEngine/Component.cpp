@@ -29,16 +29,17 @@ namespace UnityEngine {
         return _gameObject;
     }
 
-    const char *Component::tag() const {
-        return _tagProperty.get<const char *>(_instance);
+    string_c Component::tag() const {
+        UnmanagedValue value;
+        _tagProperty.get(_instance, &value);
+        return value;
     }
 
-    void Component::setTag(const char *tag) const {
-        char *str = stringInstance(tag);
-        _tagProperty.setValue<char *>(_instance, str);
+    void Component::setTag(string_c tag) const {
+        _tagProperty.setValue(_instance, tag);
     }
 
-    const ManagedType Component::type() {
+    ManagedType Component::type() {
         return _componentType;
     }
 

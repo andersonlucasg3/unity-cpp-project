@@ -7,9 +7,17 @@ namespace ManagedBridge {
     template<typename TValue>
     pointer_m createValue(TValue value) {
         TValue *alloc = (TValue *)malloc(sizeof(TValue));
-        alloc[0] = value;
+        (*alloc) = value;
         return alloc;
     }
+
+    template<typename TValue>
+    TValue getValue(pointer_m pointer) {
+        TValue *value = (TValue *)pointer;
+        return *value;
+    }
+
+    UnmanagedValue::UnmanagedValue() : ptr(nullptr), type(::pointerType) { }
 
     UnmanagedValue::UnmanagedValue(pointer_m ptr, UnmanagedType type) : ptr(ptr), type(type) { }
 
@@ -92,5 +100,60 @@ namespace ManagedBridge {
         }
 
         if (type >= ::boolType) free(ptr);
+    }
+
+    UnmanagedValue::operator bool() const {
+        return getValue<bool>(ptr);
+    }
+
+    UnmanagedValue::operator byte() const {
+        return getValue<byte>(ptr);
+    }
+
+    UnmanagedValue::operator short() const {
+        return getValue<short>(ptr);
+    }
+
+    UnmanagedValue::operator ushort() const {
+        return getValue<ushort>(ptr);
+    }
+
+    UnmanagedValue::operator int() const {
+        return getValue<int>(ptr);
+    }
+
+    UnmanagedValue::operator uint() const {
+        return getValue<uint>(ptr);
+    }
+
+    UnmanagedValue::operator long() const {
+        return getValue<long>(ptr);
+    }
+    UnmanagedValue::operator ulong() const {
+        return getValue<ulong>(ptr);
+    }
+
+    UnmanagedValue::operator float() const {
+        return getValue<float>(ptr);
+    }
+
+    UnmanagedValue::operator double() const {
+        return getValue<double>(ptr);
+    }
+
+    UnmanagedValue::operator string_c() const {
+        return (string_c)ptr;
+    }
+
+    UnmanagedValue::operator string_m() const {
+        return (string_m)ptr;
+    }
+
+    UnmanagedValue::operator pointer_c() const {
+        return ptr;
+    }
+
+    UnmanagedValue::operator pointer_m() const {
+        return ptr;
     }
 }

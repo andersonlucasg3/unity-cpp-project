@@ -23,10 +23,10 @@ namespace UnityEngine {
     public:
         [[nodiscard,maybe_unused]] const Transform *transform() const;
         [[nodiscard,maybe_unused]] const GameObject *gameObject() const;
-        [[nodiscard,maybe_unused]] const char *tag() const;
-        [[maybe_unused]] void setTag(const char *tag) const;
+        [[nodiscard,maybe_unused]] string_c tag() const;
+        [[maybe_unused]] void setTag(string_c tag) const;
 
-        static const ManagedType type();
+        static ManagedType type();
         static void InitializeManagedBridge();
     };
 }

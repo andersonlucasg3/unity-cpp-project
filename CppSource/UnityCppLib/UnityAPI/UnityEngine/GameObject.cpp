@@ -30,8 +30,9 @@ namespace UnityEngine {
     PropertyMember GameObject::_transformProperty = PropertyMember::null;
 
     ManagedInstance createTransform(ManagedInstance instance, PropertyMember transform) {
-        ManagedPointer pointer = transform.get<ManagedPointer>(instance);
-        return ManagedInstance(pointer);
+        UnmanagedValue value;
+        transform.get(instance, &value);
+        return ManagedInstance(ManagedPointer(value));
     }
 
     GameObject::GameObject() : Object() {
@@ -68,19 +69,27 @@ namespace UnityEngine {
     }
 
     bool GameObject::activeSelf() const {
-        return _activeSelfProperty.get<bool>(_instance);
+        UnmanagedValue value;
+        _activeSelfProperty.get(_instance, &value);
+        return value;
     }
 
     bool GameObject::activeInHierarchy() const {
-        return _activeInHierarchyProperty.get<bool>(_instance);
+        UnmanagedValue value;
+        _activeInHierarchyProperty.get(_instance, &value);
+        return value;
     }
 
     ulong GameObject::sceneCullingMask() const {
-        return _sceneCullingMaskProperty.get<ulong>(_instance);
+        UnmanagedValue value;
+        _sceneCullingMaskProperty.get(_instance, &value);
+        return value;
     }
 
     bool GameObject::isStatic() const {
-        return _isStaticProperty.get<bool>(_instance);
+        UnmanagedValue value;
+        _isStaticProperty.get(_instance, &value);
+        return value;
     }
 
     void GameObject::setIsStatic(bool isStatic) const {
@@ -88,7 +97,9 @@ namespace UnityEngine {
     }
 
     int GameObject::layer() const {
-        return _layerProperty.get<int>(_instance);
+        UnmanagedValue value;
+        _layerProperty.get(_instance, &value);
+        return value;
     }
 
     void GameObject::setLayer(int layer) const {
@@ -96,12 +107,13 @@ namespace UnityEngine {
     }
 
     string_c  GameObject::tag() const {
-        return _tagProperty.get<string_c>(_instance);
+        UnmanagedValue value;
+        _tagProperty.get(_instance, &value);
+        return value;
     }
 
     void GameObject::setTag(string_c tag) const {
-        string_m str = stringInstance(tag);
-        _tagProperty.setValue(_instance, str);
+        _tagProperty.setValue(_instance, tag);
     }
 
     Transform *GameObject::transform() const {

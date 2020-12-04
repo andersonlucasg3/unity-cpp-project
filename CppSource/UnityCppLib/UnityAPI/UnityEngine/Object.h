@@ -35,7 +35,7 @@ namespace UnityEngine {
         [[nodiscard,maybe_unused]] HideFlags hideFlags() const;
         [[maybe_unused]] void setHideFlags(HideFlags flags) const;
 
-        static const ManagedType type();
+        static ManagedType type();
         static void InitializeManagedBridge();
     };
 }

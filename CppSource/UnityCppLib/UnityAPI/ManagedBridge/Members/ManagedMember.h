@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UnityAPI/ManagedBridge/ManagedInstance.h"
+#include "UnityAPI/ManagedBridge/UnmanagedValue.h"
 
 #include <cstdint>
 
@@ -15,21 +16,7 @@ namespace ManagedBridge::Members {
         ManagedMember(ManagedPointer ptr, MemberType type);
 
     public:
-        template<typename TValue>
-        [[maybe_unused,nodiscard]] TValue get(ManagedInstance instance) const;
-        template<typename TValue>
-        [[maybe_unused]] void setValue(ManagedInstance instance, TValue value) const;
-        template<typename TValue>
-        [[maybe_unused]] void setPointer(ManagedInstance instance, TValue *value) const;
-
-        template<>
-        ManagedPointer get(ManagedInstance instance) const {
-            return ManagedPointer(get<pointer_m>(instance));
-        }
-
-        template<>
-        void setValue(ManagedInstance instance, ManagedPointer ptr) const {
-            setPointer<void>(instance, (pointer_m)ptr.toManaged());
-        }
+        void get(ManagedInstance instance, UnmanagedValue *value) const;
+        void setValue(ManagedInstance instance, const UnmanagedValue& value) const;
     };
 }

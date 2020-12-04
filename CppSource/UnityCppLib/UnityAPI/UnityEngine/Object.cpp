@@ -24,23 +24,26 @@ namespace UnityEngine {
     }
 
     HideFlags Object::hideFlags() const {
-        return (HideFlags) _hideFlagsProperty.get<int>(_instance);
+        UnmanagedValue value;
+        _hideFlagsProperty.get(_instance, &value);
+        return (HideFlags)(int)value;
     }
 
     void Object::setHideFlags(HideFlags flags) const {
-        _hideFlagsProperty.setValue<int>(_instance, flags);
+        _hideFlagsProperty.setValue(_instance, flags);
     }
 
     string_c Object::name() const {
-        return _nameProperty.get<string_c>(_instance);
+        UnmanagedValue value;
+        _nameProperty.get(_instance, &value);
+        return value;
     }
 
     void Object::setName(string_c name) const {
-        string_m str = stringInstance(name);
-        _nameProperty.setValue(_instance, str);
+        _nameProperty.setValue(_instance, name);
     }
 
-    const ManagedType Object::type() {
+    ManagedType Object::type() {
         return _objectType;
     }
 
