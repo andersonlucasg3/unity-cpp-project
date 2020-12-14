@@ -18,6 +18,7 @@ namespace System {
     typedef void *pointer_m;
 
     extern ManagedType managedStringType;
+    extern ManagedType managedArrayType;
 
     void InitializeManagedBridge();
 }

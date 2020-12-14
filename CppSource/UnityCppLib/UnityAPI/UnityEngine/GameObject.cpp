@@ -29,6 +29,10 @@ namespace UnityEngine {
     PropertyMember GameObject::_tagProperty = PropertyMember::null;
     PropertyMember GameObject::_transformProperty = PropertyMember::null;
 
+    MethodMember GameObject::_addComponentMethod = MethodMember::null;
+    MethodMember GameObject::_getComponentMethod = MethodMember::null;
+    MethodMember GameObject::_tryGetComponentMethod = MethodMember::null;
+
     ManagedInstance createTransform(ManagedInstance instance, PropertyMember transform) {
         UnmanagedValue value(UnmanagedType::pointerType);
         transform.get(instance, &value);
@@ -125,18 +129,26 @@ namespace UnityEngine {
 
     template<class TComponent> TComponent *GameObject::addComponent() const {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        return nullptr; // TODO: make this happen
+        UnmanagedValue output(::pointerType);
+        UnmanagedValue parameters[] = { TComponent::type() };
+        _addComponentMethod.callMethod(_instance, parameters, 1, &output);
+        return TComponent(ManagedPointer(output));
     }
 
     template<class TComponent> TComponent *GameObject::getComponent() const {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        return nullptr; // TODO: make this happen
+        UnmanagedValue output(::pointerType);
+        UnmanagedValue parameters[] = { TComponent::type() };
+        _getComponentMethod.callMethod(_instance, parameters, 1, &output);
+        return TComponent(ManagedPointer(output));
     }
 
-    template<class TComponent> bool GameObject::tryGetComponent(const TComponent &component) {
+    template<class TComponent> bool GameObject::tryGetComponent(TComponent **component) {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        component = getComponent<TComponent>();
-        return component;
+        UnmanagedValue output(::pointerType);
+        UnmanagedValue parameters[] = { TComponent::type(), &output };
+        _tryGetComponentMethod.callMethod(_instance, parameters, nullptr);
+        (*component) = new TComponent(ManagedPointer(output));
     }
 
     const ManagedType GameObject::type() {
@@ -151,7 +163,8 @@ namespace UnityEngine {
         ManagedType secondConstructorParams[] = { System::managedStringType };
         _secondConstructor = _gameObjectType.getConstructor(secondConstructorParams, 1);
 
-//        _thirdConstructor = _gameObjectType.getConstructor(2);
+        ManagedType thirdConstructorParams[] = { System::managedStringType, System::managedArrayType };
+        _thirdConstructor = _gameObjectType.getConstructor(thirdConstructorParams, 2);
 
         _activeInHierarchyProperty = _gameObjectType.getProperty("activeInHierarchy");
         _sceneCullingMaskProperty = _gameObjectType.getProperty("sceneCullingMask");
@@ -160,5 +173,9 @@ namespace UnityEngine {
         _layerProperty = _gameObjectType.getProperty("layer");
         _tagProperty = _gameObjectType.getProperty("tag");
         _transformProperty = _gameObjectType.getProperty("transform");
+
+        _addComponentMethod = _gameObjectType.getMethod("AddComponent");
+        _getComponentMethod = _gameObjectType.getMethod("GetComponent");
+        _tryGetComponentMethod = _gameObjectType.getMethod("TryGetComponent");
     }
 }

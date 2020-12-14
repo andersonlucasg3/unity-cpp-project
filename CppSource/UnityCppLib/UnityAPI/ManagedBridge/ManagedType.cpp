@@ -4,6 +4,7 @@
 #include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
 #include "UnityAPI/ManagedBridge/Members/FieldMember.h"
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
+#include "UnityAPI/ManagedBridge/Members/MethodMember.h"
 
 using namespace std;
 
@@ -49,7 +50,7 @@ namespace ManagedBridge {
         return ConstructorMember(constructorPtr);
     }
 
-    [[maybe_unused]] FieldMember ManagedType::getField(string_c fieldName) const {
+    FieldMember ManagedType::getField(string_c fieldName) const {
         ManagedPointer ptr = this->toPointer();
         ManagedPointer fieldPtr(_getMemberPtr(ptr.toManaged(), fieldName, MemberType::field));
         return FieldMember(fieldPtr);
@@ -59,6 +60,12 @@ namespace ManagedBridge {
         ManagedPointer ptr = this->toPointer();
         ManagedPointer propertyPtr(_getMemberPtr(ptr.toManaged(), memberName, MemberType::property));
         return PropertyMember(propertyPtr);
+    }
+
+    MethodMember ManagedType::getMethod(string_c methodName) const {
+        ManagedPointer ptr = this->toPointer();
+        ManagedPointer methodPtr(_getMemberPtr(ptr.toManaged(), methodName, MemberType::method));
+        return MethodMember(methodPtr);
     }
 
 #pragma endregion

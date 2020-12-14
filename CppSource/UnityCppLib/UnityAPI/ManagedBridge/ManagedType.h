@@ -15,6 +15,7 @@ namespace ManagedBridge {
         class ConstructorMember;
         class FieldMember;
         class PropertyMember;
+        class MethodMember;
     }
 
     using namespace Members;
@@ -27,8 +28,9 @@ namespace ManagedBridge {
         explicit ManagedType(ManagedPointer ptr);
         explicit ManagedType(const ManagedAssemblyInfo& assembly);
 
-        [[maybe_unused]] ConstructorMember getConstructor(ManagedType parameterTypes[], int paramCount) const;
-        [[maybe_unused]] FieldMember getField(string_c fieldName) const;
-        [[maybe_unused]] PropertyMember getProperty(string_c propertyName) const;
+        ConstructorMember getConstructor(ManagedType parameterTypes[], int paramCount) const;
+        FieldMember getField(string_c fieldName) const;
+        PropertyMember getProperty(string_c propertyName) const;
+        MethodMember getMethod(string_c methodName) const;
     };
 }

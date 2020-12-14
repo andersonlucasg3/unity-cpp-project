@@ -71,6 +71,14 @@ namespace UnityCpp.NativeBridge
 
         #endregion
 
+        #region Method calls
+
+        private delegate void CallMethodDelegate(IntPtr instancePtr, IntPtr methodPtr, [MarshalAs(UnmanagedType.LPStruct, SizeParamIndex = 3)] UnmanagedValue[] value, int paramCount, ref UnmanagedValue output);
+        private delegate void SetManagedCallMethodDelegate([MarshalAs(UnmanagedType.FunctionPtr)] CallMethodDelegate call);
+        private static SetManagedCallMethodDelegate _setManagedCallMethod;
+
+        #endregion
+
         private static void SetEssentialsMethods(IntPtr assemblyHandle)
         {
             _setDebugLog = NativeAssembly.GetMethod<SetUnityDebugLogDelegate>(assemblyHandle, "SetUnityDebugLogMethod");
@@ -103,12 +111,19 @@ namespace UnityCpp.NativeBridge
             _setManagedGetSetValue = NativeAssembly.GetMethod<SetManagedGetSetValueDelegate>(assemblyHandle, "SetManagedGetSetValueMethod");
             _setManagedGetSetValue.Invoke(GetMemberValue, SetMemberValue);
         }
+
+        private static void SetCallMethodMethods(IntPtr assemblyHandle)
+        {
+            _setManagedCallMethod = NativeAssembly.GetMethod<SetManagedCallMethodDelegate>(assemblyHandle, "SetManagedCallMethodMethod");
+            _setManagedCallMethod.Invoke(CallMethod);
+        }
         
         public static void Initialize(IntPtr assemblyHandle)
         {
             SetEssentialsMethods(assemblyHandle);
             SetTypeMethods(assemblyHandle);
             SetGetSetMethods(assemblyHandle);
+            SetCallMethodMethods(assemblyHandle);
             
             _initializeNative = NativeAssembly.GetMethod<NativeVoidMethod>(assemblyHandle, "InitializeNative");
             _initializeNative.Invoke();
@@ -234,6 +249,26 @@ namespace UnityCpp.NativeBridge
                     throw new MissingMemberException();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+
+        #endregion
+
+        #region Methods call
+
+        private static void CallMethod(IntPtr instancePtr, IntPtr methodPtr, UnmanagedValue[] parameters, int paramCount, ref UnmanagedValue output)
+        {
+            GetObjectAndInfo(instancePtr, methodPtr, out object objectInstance, out MethodInfo info);
+            object[] objects = new object[paramCount];
+            for (int index = 0; index < paramCount; index++)
+            {
+                objects[index] = parameters[index].ToManaged();
+            }
+
+            object ret = info.Invoke(objectInstance, objects);
+            if (ret != null)
+            {
+                output.FromManaged(ret);
             }
         }
 

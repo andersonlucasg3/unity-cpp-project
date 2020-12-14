@@ -3,6 +3,7 @@
 #include "Object.h"
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
 #include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
+#include "UnityAPI/ManagedBridge/Members/MethodMember.h"
 #include "UnityAPI/NetFramework/System.h"
 
 using namespace System;
@@ -29,6 +30,10 @@ namespace UnityEngine {
         static PropertyMember _tagProperty;
         static PropertyMember _transformProperty;
 
+        static MethodMember _addComponentMethod;
+        static MethodMember _getComponentMethod;
+        static MethodMember _tryGetComponentMethod;
+
         Transform *_transform = nullptr;
 
         explicit GameObject(ManagedInstance instance);
@@ -52,7 +57,7 @@ namespace UnityEngine {
 
         template<class TComponent> [[nodiscard,maybe_unused]] TComponent *addComponent() const;
         template<class TComponent> [[nodiscard,maybe_unused]] TComponent *getComponent() const;
-        template<class TComponent> [[nodiscard,maybe_unused]] bool tryGetComponent(const TComponent &component);
+        template<class TComponent> [[nodiscard,maybe_unused]] bool tryGetComponent(TComponent **component);
 
         static const ManagedType type();
         static void InitializeManagedBridge();
