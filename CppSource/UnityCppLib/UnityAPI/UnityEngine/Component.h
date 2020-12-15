@@ -8,7 +8,9 @@ namespace UnityEngine {
 
     class Component : public Object {
     private:
+        static ManagedType _componentBridgeType;
         static ManagedType _componentType;
+
         static PropertyMember _transformProperty;
         static PropertyMember _gameObjectProperty;
         static PropertyMember _tagProperty;
@@ -27,6 +29,7 @@ namespace UnityEngine {
         [[maybe_unused]] void setTag(string_c tag) const;
 
         static ManagedType type();
+        static ManagedType unityType();
         static void InitializeManagedBridge();
     };
 }

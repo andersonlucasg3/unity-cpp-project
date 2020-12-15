@@ -18,7 +18,9 @@ namespace UnityEngine {
 
     class Object {
     protected:
+        static ManagedType _objectBridgeType;
         static ManagedType _objectType;
+
         static PropertyMember _nameProperty;
         static PropertyMember _hideFlagsProperty;
 
@@ -36,6 +38,7 @@ namespace UnityEngine {
         [[maybe_unused]] void setHideFlags(HideFlags flags) const;
 
         static ManagedType type();
+        static ManagedType unityType();
         static void InitializeManagedBridge();
     };
 }

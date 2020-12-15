@@ -44,5 +44,17 @@ namespace UnityCpp.NativeBridge.UnityBridges
 
         [UsedImplicitly]
         public ComponentBridge GetComponent(Type componentType) => unityGameObject.GetComponent(componentType);
+
+        [UsedImplicitly]
+        public bool TryGetComponent(Type component, out ComponentBridge output)
+        {
+            if (unityGameObject.TryGetComponent(component, out Component outComponent))
+            {
+                output = outComponent;
+                return true;
+            }
+            output = null;
+            return false;
+        }
     }
 }

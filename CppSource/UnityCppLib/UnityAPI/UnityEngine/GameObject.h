@@ -3,6 +3,7 @@
 #include "Object.h"
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
 #include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
+#include "UnityAPI/ManagedBridge/Members/MethodMember.h"
 #include "UnityAPI/NetFramework/System.h"
 
 using namespace System;
@@ -15,6 +16,7 @@ namespace UnityEngine {
         friend class Component;
 
     private:
+        static ManagedType _gameObjectBridgeType;
         static ManagedType _gameObjectType;
 
         static ConstructorMember _defaultConstructor;
@@ -29,6 +31,10 @@ namespace UnityEngine {
         static PropertyMember _tagProperty;
         static PropertyMember _transformProperty;
 
+        static MethodMember _addComponentMethod;
+        static MethodMember _getComponentMethod;
+        static MethodMember _tryGetComponentMethod;
+
         Transform *_transform = nullptr;
 
         explicit GameObject(ManagedInstance instance);
@@ -39,20 +45,20 @@ namespace UnityEngine {
         explicit GameObject(string_c name, ManagedType components[], int componentCount);
         ~GameObject();
 
-        [[nodiscard,maybe_unused]] bool activeSelf() const;
-        [[nodiscard,maybe_unused]] bool activeInHierarchy() const;
-        [[nodiscard,maybe_unused]] unsigned long sceneCullingMask() const;
-        [[nodiscard,maybe_unused]] bool isStatic() const;
-        [[maybe_unused]] void setIsStatic(bool isStatic) const;
-        [[nodiscard,maybe_unused]] int layer() const;
-        [[maybe_unused]] void setLayer(int layer) const;
-        [[nodiscard,maybe_unused]] string_c tag() const;
-        [[maybe_unused]] void setTag(string_c tag) const;
-        [[nodiscard,maybe_unused]] Transform *transform() const;
+        bool activeSelf() const;
+        bool activeInHierarchy() const;
+        unsigned long sceneCullingMask() const;
+        bool isStatic() const;
+        void setIsStatic(bool isStatic) const;
+        int layer() const;
+        void setLayer(int layer) const;
+        string_c tag() const;
+        void setTag(string_c tag) const;
+        Transform *transform() const;
 
-        template<class TComponent> [[nodiscard,maybe_unused]] TComponent *addComponent() const;
-        template<class TComponent> [[nodiscard,maybe_unused]] TComponent *getComponent() const;
-        template<class TComponent> [[nodiscard,maybe_unused]] bool tryGetComponent(const TComponent &component);
+        template<class TComponent> TComponent *addComponent() const;
+        template<class TComponent> TComponent *getComponent() const;
+        template<class TComponent> bool tryGetComponent(TComponent **component);
 
         static const ManagedType type();
         static void InitializeManagedBridge();
