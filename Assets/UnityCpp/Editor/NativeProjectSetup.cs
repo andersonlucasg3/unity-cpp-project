@@ -18,9 +18,9 @@ namespace UnityCpp.Editor
 
         private static readonly Dictionary<string, string> _directoriesToCopy = new Dictionary<string, string>
         {
-            { "CppSource", "/" },
-            { $"{_csharpUnityCppPath}/Loader", _csharpUnityCppPath },
-            { $"{_csharpUnityCppPath}/NativeBridge", _csharpUnityCppPath }
+            { "CppSource", "CppSource" },
+            { $"{_csharpUnityCppPath}/Loader", $"{_csharpUnityCppPath}/Loader" },
+            { $"{_csharpUnityCppPath}/NativeBridge", $"{_csharpUnityCppPath}/NativeBridge" }
         };
         
         [MenuItem(_setupProjectMenuItem)]
@@ -103,8 +103,15 @@ namespace UnityCpp.Editor
                     Directory.CreateDirectory(pair.Value);
                 }
 
+                string projectPath = Directory.GetParent(Application.dataPath).ToString();
+
                 string fromFullPath = Path.Combine(extractedPath, pair.Key);
-                string toFullPath = Path.Combine(Directory.GetParent(Application.dataPath).ToString(), pair.Value);
+                string toFullPath = Path.Combine(projectPath, pair.Value);
+
+                if (Directory.Exists(toFullPath))
+                {
+                    Directory.Delete(toFullPath);
+                }
                 Directory.Move(fromFullPath, toFullPath);
             }
         }
