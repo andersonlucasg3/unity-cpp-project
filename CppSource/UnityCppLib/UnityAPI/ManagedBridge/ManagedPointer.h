@@ -1,23 +1,27 @@
 #pragma once
 
+#include "UnityAPI/NetFramework/System.h"
+
 #include <cstdint>
+
+using namespace System;
 
 namespace ManagedBridge {
     struct ManagedPointer {
     private:
-        const void *_managedRef;
+        pointer_c _managedRef;
 
     public:
         static const ManagedPointer null;
 
         ManagedPointer();
-        explicit ManagedPointer(const void *pointer);
+        explicit ManagedPointer(pointer_c pointer);
 
-        const void *toManaged() const;
+        pointer_c toManaged() const;
 
         bool operator==(ManagedPointer other);
         bool operator!=(ManagedPointer other);
-        bool operator==(void *pointer);
-        bool operator!=(void *pointer);
+        bool operator==(pointer_m pointer);
+        bool operator!=(pointer_m pointer);
     };
 }

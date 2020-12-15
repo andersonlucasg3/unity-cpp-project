@@ -1,20 +1,17 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Debug.h"
-#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
-#include "UnityAPI/ManagedBridge/UnmanagedValue.h"
-#include "UnityAPI/NetFramework/System.h"
-#include "UnityAPI/Helpers/Helpers.h"
 
 #include <type_traits>
 
 using namespace std;
-using namespace Helpers;
 using namespace ManagedBridge;
 
 namespace UnityEngine {
-    const ManagedAssemblyInfo _gameObjectAssembly("UnityCpp.NativeBridge.UnityBridges.GameObjectBridge");
+    const ManagedAssemblyInfo _gameObjectBridgeAssembly("UnityCpp.NativeBridge.UnityBridges.GameObjectBridge");
+    const ManagedAssemblyInfo _gameObjectAssembly("UnityEngine.GameObject", "UnityEngine.dll");
 
+    ManagedType GameObject::_gameObjectBridgeType = ManagedType::null;
     ManagedType GameObject::_gameObjectType = ManagedType::null;
 
     ConstructorMember GameObject::_defaultConstructor = ConstructorMember::null;
@@ -28,6 +25,10 @@ namespace UnityEngine {
     PropertyMember GameObject::_layerProperty = PropertyMember::null;
     PropertyMember GameObject::_tagProperty = PropertyMember::null;
     PropertyMember GameObject::_transformProperty = PropertyMember::null;
+
+    MethodMember GameObject::_addComponentMethod = MethodMember::null;
+    MethodMember GameObject::_getComponentMethod = MethodMember::null;
+    MethodMember GameObject::_tryGetComponentMethod = MethodMember::null;
 
     ManagedInstance createTransform(ManagedInstance instance, PropertyMember transform) {
         UnmanagedValue value(UnmanagedType::pointerType);
@@ -125,40 +126,59 @@ namespace UnityEngine {
 
     template<class TComponent> TComponent *GameObject::addComponent() const {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        return nullptr; // TODO: make this happen
+        UnmanagedValue output(::pointerType);
+        UnmanagedValue parameters[] = { TComponent::type() };
+        _addComponentMethod.callMethod(_instance, parameters, 1, &output);
+        return TComponent(ManagedPointer(output), this);
     }
 
     template<class TComponent> TComponent *GameObject::getComponent() const {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        return nullptr; // TODO: make this happen
+        UnmanagedValue output(::pointerType);
+        UnmanagedValue parameters[] = { TComponent::type() };
+        _getComponentMethod.callMethod(_instance, parameters, 1, &output);
+        return TComponent(ManagedPointer(output), this);
     }
 
-    template<class TComponent> bool GameObject::tryGetComponent(const TComponent &component) {
+    template<class TComponent> bool GameObject::tryGetComponent(TComponent **component) {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
-        component = getComponent<TComponent>();
-        return component;
+        UnmanagedValue output(::pointerType);
+        UnmanagedValue parameters[] = { UnmanagedValue(TComponent::unityType().toPointer().toManaged()) };
+        bool ret = _tryGetComponentMethod.callMethodOut(_instance, parameters, 2, &output);
+        if (ret) {
+            (*component) = new TComponent(ManagedPointer(output), this);
+        }
+        return ret;
     }
 
     const ManagedType GameObject::type() {
-        return _gameObjectType;
+        return _gameObjectBridgeType;
     }
 
     void GameObject::InitializeManagedBridge() {
+        _gameObjectBridgeType = ManagedType(_gameObjectBridgeAssembly);
         _gameObjectType = ManagedType(_gameObjectAssembly);
 
-        _defaultConstructor = _gameObjectType.getConstructor(nullptr, 0);
+        _defaultConstructor = _gameObjectBridgeType.getConstructor(nullptr, 0);
 
         ManagedType secondConstructorParams[] = { System::managedStringType };
-        _secondConstructor = _gameObjectType.getConstructor(secondConstructorParams, 1);
+        _secondConstructor = _gameObjectBridgeType.getConstructor(secondConstructorParams, 1);
 
-//        _thirdConstructor = _gameObjectType.getConstructor(2);
+        ManagedType thirdConstructorParams[] = { System::managedStringType, System::managedArrayType };
+        _thirdConstructor = _gameObjectBridgeType.getConstructor(thirdConstructorParams, 2);
 
-        _activeInHierarchyProperty = _gameObjectType.getProperty("activeInHierarchy");
-        _sceneCullingMaskProperty = _gameObjectType.getProperty("sceneCullingMask");
-        _activeSelfProperty = _gameObjectType.getProperty("activeSelf");
-        _isStaticProperty = _gameObjectType.getProperty("isStatic");
-        _layerProperty = _gameObjectType.getProperty("layer");
-        _tagProperty = _gameObjectType.getProperty("tag");
-        _transformProperty = _gameObjectType.getProperty("transform");
+        _activeInHierarchyProperty = _gameObjectBridgeType.getProperty("activeInHierarchy");
+        _sceneCullingMaskProperty = _gameObjectBridgeType.getProperty("sceneCullingMask");
+        _activeSelfProperty = _gameObjectBridgeType.getProperty("activeSelf");
+        _isStaticProperty = _gameObjectBridgeType.getProperty("isStatic");
+        _layerProperty = _gameObjectBridgeType.getProperty("layer");
+        _tagProperty = _gameObjectBridgeType.getProperty("tag");
+        _transformProperty = _gameObjectBridgeType.getProperty("transform");
+
+        _addComponentMethod = _gameObjectBridgeType.getMethod("AddComponent");
+        _getComponentMethod = _gameObjectBridgeType.getMethod("GetComponent");
+        _tryGetComponentMethod = _gameObjectBridgeType.getMethod("TryGetComponent");
     }
+
+    template bool GameObject::tryGetComponent(Transform **component);
 }

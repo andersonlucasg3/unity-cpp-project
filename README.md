@@ -22,6 +22,8 @@ There may be a way to fix that, but that's a problem for another time.
 - [X] Reload the binary when it has been rebuilt;
 
 ### Updates
+- Now methods are supported;
+
 - Updated the Managed API to allow loading type information from .Net API so we can instantiate any managed symbol from the C++.
 
 - Now the Cpp assembly is loaded when the game starts playing and unloaded when the game stops playing.

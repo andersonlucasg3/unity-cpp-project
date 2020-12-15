@@ -11,7 +11,9 @@ namespace UnityEngine {
         friend class GameObject;
 
     private:
+        static ManagedType _transformBridgeType;
         static ManagedType _transformType;
+
         static PropertyMember _childCountProperty;
         static PropertyMember _parentProperty;
 
@@ -27,6 +29,7 @@ namespace UnityEngine {
         [[maybe_unused]] void setParent(Transform *parent);
 
         static ManagedType type();
+        static ManagedType unityType();
         static void InitializeManagedBridge();
     };
 }
