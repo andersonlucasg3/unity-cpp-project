@@ -1,15 +1,15 @@
 #include "Object.h"
-#include "UnityAPI/Helpers/Helpers.h"
-#include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 
 using namespace std;
-using namespace Helpers;
 using namespace ManagedBridge;
 
 namespace UnityEngine {
-    const ManagedAssemblyInfo _objectAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.ObjectBridge");
+    const ManagedAssemblyInfo _objectBridgeAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.ObjectBridge");
+    const ManagedAssemblyInfo _objectAssemblyInfo("UnityEngine.Object", "UnityEngine.dll");
 
+    ManagedType Object::_objectBridgeType = ManagedType::null;
     ManagedType Object::_objectType = ManagedType::null;
+
     PropertyMember Object::_nameProperty = PropertyMember::null;
     PropertyMember Object::_hideFlagsProperty = PropertyMember::null;
 
@@ -46,13 +46,18 @@ namespace UnityEngine {
     }
 
     ManagedType Object::type() {
+        return _objectBridgeType;
+    }
+
+    ManagedType Object::unityType() {
         return _objectType;
     }
 
     void Object::InitializeManagedBridge() {
+        _objectBridgeType = ManagedType(_objectBridgeAssemblyInfo);
         _objectType = ManagedType(_objectAssemblyInfo);
 
-        _nameProperty = _objectType.getProperty("name");
-        _hideFlagsProperty = _objectType.getProperty("hideFlags");
+        _nameProperty = _objectBridgeType.getProperty("name");
+        _hideFlagsProperty = _objectBridgeType.getProperty("hideFlags");
     }
 }

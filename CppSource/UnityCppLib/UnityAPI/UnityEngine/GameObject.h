@@ -16,6 +16,7 @@ namespace UnityEngine {
         friend class Component;
 
     private:
+        static ManagedType _gameObjectBridgeType;
         static ManagedType _gameObjectType;
 
         static ConstructorMember _defaultConstructor;

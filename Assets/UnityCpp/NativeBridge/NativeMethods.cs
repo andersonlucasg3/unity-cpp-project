@@ -73,14 +73,12 @@ namespace UnityCpp.NativeBridge
 
         #region Method calls
 
-        private delegate void CallMethodDelegate(IntPtr instancePtr, IntPtr methodPtr, [MarshalAs(UnmanagedType.LPStruct, SizeParamIndex = 3)] UnmanagedValue[] value, int paramCount, ref UnmanagedValue output);
+        private delegate void CallMethodDelegate(IntPtr instancePtr, IntPtr methodPtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] UnmanagedValue[] value, int paramCount, ref UnmanagedValue output);
         private delegate void SetManagedCallMethodDelegate([MarshalAs(UnmanagedType.FunctionPtr)] CallMethodDelegate call);
         private static SetManagedCallMethodDelegate _setManagedCallMethod;
 
-        private delegate void CallMethodOutDelegate(IntPtr instancePtr, IntPtr methodPtr, [MarshalAs(UnmanagedType.LPStruct, SizeParamIndex = 3)] UnmanagedValue[] value, int paramCount);
-
+        private delegate bool CallMethodOutDelegate(IntPtr instancePtr, IntPtr methodPtr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 3)] UnmanagedValue[] value, int paramCount, ref UnmanagedValue output);
         private delegate void SetManagedCallMethodOutDelegate([MarshalAs(UnmanagedType.FunctionPtr)] CallMethodOutDelegate call);
-
         private static SetManagedCallMethodOutDelegate _setManagedCallMethodOut;
 
         #endregion
@@ -123,7 +121,7 @@ namespace UnityCpp.NativeBridge
             _setManagedCallMethod = NativeAssembly.GetMethod<SetManagedCallMethodDelegate>(assemblyHandle, "SetManagedCallMethodMethod");
             _setManagedCallMethod.Invoke(CallMethod);
 
-            _setManagedCallMethodOut = NativeAssembly.GetMethod<SetManagedCallMethodOutDelegate>(assemblyHandle, "SetManagedCallMethodOut");
+            _setManagedCallMethodOut = NativeAssembly.GetMethod<SetManagedCallMethodOutDelegate>(assemblyHandle, "SetManagedCallMethodOutMethod");
             _setManagedCallMethodOut.Invoke(CallMethodOut);
         }
         
@@ -281,7 +279,7 @@ namespace UnityCpp.NativeBridge
             }
         }
 
-        private static void CallMethodOut(IntPtr instancePtr, IntPtr methodPtr, UnmanagedValue[] parameters, int paramCount)
+        private static bool CallMethodOut(IntPtr instancePtr, IntPtr methodPtr, UnmanagedValue[] parameters, int paramCount, ref UnmanagedValue output)
         {
             GetObjectAndInfo(instancePtr, methodPtr, out object objectInstance, out MethodInfo info);
             object[] objects = new object[paramCount];
@@ -290,9 +288,11 @@ namespace UnityCpp.NativeBridge
                 objects[index] = parameters[index].ToManaged();
             }
 
-            if (!(bool) info.Invoke(objectInstance, objects)) return;
-            object outParam = objects[paramCount];
-            parameters[paramCount - 1].FromManaged(outParam);
+            bool ret = (bool) info.Invoke(objectInstance, objects);
+            if (!ret) return false;
+            object outParam = objects[paramCount - 1];
+            output.FromManaged(outParam);
+            return true;
         }
 
         #endregion
