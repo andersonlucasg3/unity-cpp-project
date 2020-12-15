@@ -98,11 +98,6 @@ namespace UnityCpp.Editor
 
             foreach (KeyValuePair<string, string> pair in _directoriesToCopy)
             {
-                if (!Directory.Exists(pair.Value))
-                {
-                    Directory.CreateDirectory(pair.Value);
-                }
-
                 string projectPath = Directory.GetParent(Application.dataPath).ToString();
 
                 string fromFullPath = Path.Combine(extractedPath, pair.Key);
@@ -110,8 +105,9 @@ namespace UnityCpp.Editor
 
                 if (Directory.Exists(toFullPath))
                 {
-                    Directory.Delete(toFullPath);
+                    Directory.Delete(toFullPath, true);
                 }
+                
                 Directory.Move(fromFullPath, toFullPath);
             }
         }
