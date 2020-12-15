@@ -77,6 +77,12 @@ namespace UnityCpp.NativeBridge
         private delegate void SetManagedCallMethodDelegate([MarshalAs(UnmanagedType.FunctionPtr)] CallMethodDelegate call);
         private static SetManagedCallMethodDelegate _setManagedCallMethod;
 
+        private delegate void CallMethodOutDelegate(IntPtr instancePtr, IntPtr methodPtr, [MarshalAs(UnmanagedType.LPStruct, SizeParamIndex = 3)] UnmanagedValue[] value, int paramCount);
+
+        private delegate void SetManagedCallMethodOutDelegate([MarshalAs(UnmanagedType.FunctionPtr)] CallMethodOutDelegate call);
+
+        private static SetManagedCallMethodOutDelegate _setManagedCallMethodOut;
+
         #endregion
 
         private static void SetEssentialsMethods(IntPtr assemblyHandle)
@@ -116,6 +122,9 @@ namespace UnityCpp.NativeBridge
         {
             _setManagedCallMethod = NativeAssembly.GetMethod<SetManagedCallMethodDelegate>(assemblyHandle, "SetManagedCallMethodMethod");
             _setManagedCallMethod.Invoke(CallMethod);
+
+            _setManagedCallMethodOut = NativeAssembly.GetMethod<SetManagedCallMethodOutDelegate>(assemblyHandle, "SetManagedCallMethodOut");
+            _setManagedCallMethodOut.Invoke(CallMethodOut);
         }
         
         public static void Initialize(IntPtr assemblyHandle)
@@ -270,6 +279,20 @@ namespace UnityCpp.NativeBridge
             {
                 output.FromManaged(ret);
             }
+        }
+
+        private static void CallMethodOut(IntPtr instancePtr, IntPtr methodPtr, UnmanagedValue[] parameters, int paramCount)
+        {
+            GetObjectAndInfo(instancePtr, methodPtr, out object objectInstance, out MethodInfo info);
+            object[] objects = new object[paramCount];
+            for (int index = 0; index < paramCount - 1; index++)
+            {
+                objects[index] = parameters[index].ToManaged();
+            }
+
+            if (!(bool) info.Invoke(objectInstance, objects)) return;
+            object outParam = objects[paramCount];
+            parameters[paramCount - 1].FromManaged(outParam);
         }
 
         #endregion
