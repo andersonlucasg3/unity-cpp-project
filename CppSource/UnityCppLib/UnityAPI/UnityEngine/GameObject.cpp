@@ -129,7 +129,7 @@ namespace UnityEngine {
         UnmanagedValue output(::pointerType);
         UnmanagedValue parameters[] = { TComponent::type() };
         _addComponentMethod.callMethod(_instance, parameters, 1, &output);
-        return TComponent(ManagedPointer(output));
+        return TComponent(ManagedPointer(output), this);
     }
 
     template<class TComponent> TComponent *GameObject::getComponent() const {
@@ -137,7 +137,7 @@ namespace UnityEngine {
         UnmanagedValue output(::pointerType);
         UnmanagedValue parameters[] = { TComponent::type() };
         _getComponentMethod.callMethod(_instance, parameters, 1, &output);
-        return TComponent(ManagedPointer(output));
+        return TComponent(ManagedPointer(output), this);
     }
 
     template<class TComponent> bool GameObject::tryGetComponent(TComponent **component) {
