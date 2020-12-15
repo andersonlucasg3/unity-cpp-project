@@ -44,20 +44,20 @@ namespace UnityEngine {
         explicit GameObject(string_c name, ManagedType components[], int componentCount);
         ~GameObject();
 
-        [[nodiscard,maybe_unused]] bool activeSelf() const;
-        [[nodiscard,maybe_unused]] bool activeInHierarchy() const;
-        [[nodiscard,maybe_unused]] unsigned long sceneCullingMask() const;
-        [[nodiscard,maybe_unused]] bool isStatic() const;
-        [[maybe_unused]] void setIsStatic(bool isStatic) const;
-        [[nodiscard,maybe_unused]] int layer() const;
-        [[maybe_unused]] void setLayer(int layer) const;
-        [[nodiscard,maybe_unused]] string_c tag() const;
-        [[maybe_unused]] void setTag(string_c tag) const;
-        [[nodiscard,maybe_unused]] Transform *transform() const;
+        bool activeSelf() const;
+        bool activeInHierarchy() const;
+        unsigned long sceneCullingMask() const;
+        bool isStatic() const;
+        void setIsStatic(bool isStatic) const;
+        int layer() const;
+        void setLayer(int layer) const;
+        string_c tag() const;
+        void setTag(string_c tag) const;
+        Transform *transform() const;
 
-        template<class TComponent> [[nodiscard,maybe_unused]] TComponent *addComponent() const;
-        template<class TComponent> [[nodiscard,maybe_unused]] TComponent *getComponent() const;
-        template<class TComponent> [[nodiscard,maybe_unused]] bool tryGetComponent(TComponent **component);
+        template<class TComponent> TComponent *addComponent() const;
+        template<class TComponent> TComponent *getComponent() const;
+        template<class TComponent> bool tryGetComponent(TComponent **component);
 
         static const ManagedType type();
         static void InitializeManagedBridge();

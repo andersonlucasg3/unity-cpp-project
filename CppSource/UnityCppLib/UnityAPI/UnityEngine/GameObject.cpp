@@ -4,12 +4,10 @@
 #include "UnityAPI/ManagedBridge/ManagedAssemblyInfo.h"
 #include "UnityAPI/ManagedBridge/UnmanagedValue.h"
 #include "UnityAPI/NetFramework/System.h"
-#include "UnityAPI/Helpers/Helpers.h"
 
 #include <type_traits>
 
 using namespace std;
-using namespace Helpers;
 using namespace ManagedBridge;
 
 namespace UnityEngine {
@@ -145,9 +143,10 @@ namespace UnityEngine {
 
     template<class TComponent> bool GameObject::tryGetComponent(TComponent **component) {
         static_assert(is_base_of<Component, TComponent>(), "TComponent must inherit from Component");
+        UnmanagedValue type(TComponent::type().toPointer().toManaged());
         UnmanagedValue output(::pointerType);
-        UnmanagedValue parameters[] = { TComponent::type(), &output };
-        _tryGetComponentMethod.callMethod(_instance, parameters, nullptr);
+        UnmanagedValue *parameters[] = { &type, &output };
+        _tryGetComponentMethod.callMethodOut(_instance, parameters, 2);
         (*component) = new TComponent(ManagedPointer(output));
     }
 

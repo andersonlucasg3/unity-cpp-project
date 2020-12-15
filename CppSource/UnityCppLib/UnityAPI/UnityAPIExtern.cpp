@@ -5,7 +5,7 @@
 #include "Components/Factory/ComponentFactory.h"
 
 using namespace CppSource::Components;
-using namespace CppSource::Components::Factory;\
+using namespace CppSource::Components::Factory;
 using namespace UnityEngine;
 
 extern "C" {
@@ -15,5 +15,11 @@ extern "C" {
         REGISTER_ALL_COMPONENTS_CALL
 
         UnityEngine::InitializeManagedBridge();
+
+        GameObject *obj = new GameObject();
+        Transform *t;
+        if (obj->tryGetComponent(&t)) {
+            t->setName("Transform got");
+        }
     }
 }

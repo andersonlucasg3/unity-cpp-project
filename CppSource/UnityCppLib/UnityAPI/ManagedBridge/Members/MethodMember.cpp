@@ -2,7 +2,7 @@
 
 namespace ManagedBridge::Members {
     typedef void (UNITY_METHOD *CallMethodFunc)(pointer_c instancePtr, pointer_c memberPtr, UnmanagedValue parameters[], int paramCount, UnmanagedValue *output);
-    typedef void (UNITY_METHOD *CallMethodOutFunc)(pointer_c instancePtr, pointer_c memberPtr, UnmanagedValue parameters[], int paramCount);
+    typedef void (UNITY_METHOD *CallMethodOutFunc)(pointer_c instancePtr, pointer_c memberPtr, UnmanagedValue *parameters[], int paramCount);
 
     CallMethodFunc _callMethodFunc;
     CallMethodOutFunc _callMethodOutFunc;
@@ -23,7 +23,7 @@ namespace ManagedBridge::Members {
         _callMethodFunc(instancePtr.toManaged(), methodPtr.toManaged(), parameters, paramCount, output);
     }
 
-    void MethodMember::callMethodOut(ManagedInstance instance, UnmanagedValue parameters[], int paramCount) {
+    void MethodMember::callMethodOut(ManagedInstance instance, UnmanagedValue *parameters[], int paramCount) {
         ManagedPointer instancePtr = instance.toPointer();
         ManagedPointer methodPtr = this->toPointer();
         _callMethodOutFunc(instancePtr.toManaged(), methodPtr.toManaged(), parameters, paramCount);
