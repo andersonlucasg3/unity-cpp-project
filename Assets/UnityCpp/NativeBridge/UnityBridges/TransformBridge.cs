@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using TMPro;
 using UnityEngine;
 
 namespace UnityCpp.NativeBridge.UnityBridges
