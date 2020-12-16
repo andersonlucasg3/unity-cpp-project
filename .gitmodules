@@ -1,0 +1,3 @@
+[submodule "Assets/UnityCppPackage"]
+	path = Assets/UnityCppPackage
+	url = https://github.com/andersonlucasg3/unity-cpp-project-package
