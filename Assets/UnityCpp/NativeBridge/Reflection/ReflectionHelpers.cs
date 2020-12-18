@@ -34,6 +34,11 @@ namespace UnityCpp.NativeBridge.Reflection
             return (IntPtr) GCHandle.Alloc(objectInstance);
         }
 
+        public static void DeallocPtr(IntPtr instancePtr)
+        {
+            ((GCHandle) instancePtr).Free();
+        }
+
         public static TOutput ConvertPtrTo<TOutput>(IntPtr intPtr)
         {
             GCHandle handle = (GCHandle) intPtr;

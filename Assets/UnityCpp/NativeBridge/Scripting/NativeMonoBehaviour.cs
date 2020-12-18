@@ -33,6 +33,7 @@ namespace UnityCpp.NativeBridge.Scripting
         private void OnDestroy()
         {
             NativeMethods.monoBehaviourOnDestroy.Invoke(_nativeInstance);
+            ReflectionHelpers.DeallocPtr(_nativeInstance);
         }
 
         private void Start()
