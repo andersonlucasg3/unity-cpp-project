@@ -6,8 +6,7 @@ namespace UnityCpp.NativeBridge.UnityBridges
 {
     public class GameObjectBridge : ObjectBridge
     {
-        [UsedImplicitly]
-        public readonly GameObject unityGameObject;
+        [UsedImplicitly] public readonly GameObject unityGameObject;
 
         [UsedImplicitly] public TransformBridge transform => unityGameObject.transform;
         [UsedImplicitly] public bool activeSelf => unityGameObject.activeSelf;
