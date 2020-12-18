@@ -10,7 +10,7 @@ typedef MonoBehaviour *(*ClassConstructor)(ManagedInstance instance, const GameO
 
 class Registry {
 private:
-    static map<string_c, ClassConstructor> _registers;
+    static map<string, ClassConstructor> _registers;
 
 public:
     static void reg(string_c className, ClassConstructor constructor);

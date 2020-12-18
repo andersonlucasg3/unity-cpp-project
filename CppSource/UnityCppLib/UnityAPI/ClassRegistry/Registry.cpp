@@ -1,12 +1,12 @@
 #include "Registry.h"
 
-map<string_c, ClassConstructor> Registry::_registers = map<string_c, ClassConstructor>();
+map<string, ClassConstructor> Registry::_registers = map<string, ClassConstructor>();
 
 void Registry::reg(string_c className, ClassConstructor constructor) {
-    _registers[className] = constructor;
+    _registers[string(className)] = constructor;
 }
 
 MonoBehaviour *Registry::create(string_c className, ManagedInstance instance, const GameObject *gameObject) {
-    ClassConstructor constructor = _registers[className];
+    ClassConstructor constructor = _registers[string(className)];
     return constructor(instance, gameObject);
 }
