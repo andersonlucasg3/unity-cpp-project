@@ -78,6 +78,7 @@ add_library(
         UnityCppLib/UnityAPI/ClassRegistry/Registry.cpp
         UnityCppLib/Game/ComponentsEntryPoint.h
         UnityCppLib/Game/ComponentsEntryPoint.cpp
+        #COMPONENTS_GO_HERE
 )
 
 target_sources(
