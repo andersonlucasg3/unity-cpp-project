@@ -18,7 +18,7 @@ namespace UnityCpp.NativeBridge.Scripting
                 return;
             }
 
-            MonoBehaviourBridge bridge = this;
+            NativeMonoBehaviourBridge bridge = this;
             IntPtr ptr = ReflectionHelpers.AllocObjectPtr(bridge);
             _nativeInstance = NativeMethods.createNativeMonoBehaviour.Invoke(_nativeClassName, ptr);
             if (_nativeInstance == IntPtr.Zero)

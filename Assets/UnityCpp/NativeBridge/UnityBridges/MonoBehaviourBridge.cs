@@ -1,14 +1,14 @@
 using JetBrains.Annotations;
-using UnityCpp.NativeBridge.Scripting;
+using UnityEngine;
 
 namespace UnityCpp.NativeBridge.UnityBridges
 {
-    public class MonoBehaviourBridge : ComponentBridge
+    public class MonoBehaviourBridge : BehaviourBridge
     {
-        [UsedImplicitly] public NativeMonoBehaviour monoBehaviour;
+        [UsedImplicitly] public MonoBehaviour unityMonoBehaviour;
 
-        private MonoBehaviourBridge(NativeMonoBehaviour behaviour) : base(behaviour) => monoBehaviour = behaviour;
+        protected MonoBehaviourBridge(MonoBehaviour monoBehaviour) : base(monoBehaviour) => unityMonoBehaviour = monoBehaviour;
 
-        public static implicit operator MonoBehaviourBridge(NativeMonoBehaviour behaviour) => new MonoBehaviourBridge(behaviour);
+        public static implicit operator MonoBehaviourBridge(MonoBehaviour monoBehaviour) => new MonoBehaviourBridge(monoBehaviour);
     }
 }

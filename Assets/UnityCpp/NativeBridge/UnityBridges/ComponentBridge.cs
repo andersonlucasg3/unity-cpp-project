@@ -19,7 +19,7 @@ namespace UnityCpp.NativeBridge.UnityBridges
             set => unityComponent.tag = value;
         }
         
-        public ComponentBridge(Component component) : base(component) => unityComponent = component;
+        protected ComponentBridge(Component component) : base(component) => unityComponent = component;
 
         public static implicit operator ComponentBridge(Component component) => new ComponentBridge(component);
         
