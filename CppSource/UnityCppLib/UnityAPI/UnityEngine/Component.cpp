@@ -25,7 +25,7 @@ namespace UnityEngine {
         } else {
             _gameObject = gameObject;
         }
-        _transform = gameObject->transform();
+        _transform = _gameObject->transform();
     }
 
     Component::~Component() = default;
