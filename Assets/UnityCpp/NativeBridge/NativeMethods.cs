@@ -18,6 +18,12 @@ namespace UnityCpp.NativeBridge
 
     public static class NativeMethods
     {
+        public delegate IntPtr CreateNativeMonoBehaviourInstance([MarshalAs(UnmanagedType.LPStr)] string className);
+        public static CreateNativeMonoBehaviourInstance createNativeMonoBehaviour;
+
+        public delegate void CallMonoBehaviourAwake(IntPtr instancePtr);
+        public static CallMonoBehaviourAwake callMonoBehaviourAwake;
+        
         #region SendMessage
         
         private delegate void UnityDebugLogDelegate([MarshalAs(UnmanagedType.LPStr)] string message);
@@ -38,7 +44,7 @@ namespace UnityCpp.NativeBridge
         private delegate void UnityDestructorDelegate(IntPtr instance);
         private delegate void SetDestructorDelegate([MarshalAs(UnmanagedType.FunctionPtr)] UnityDestructorDelegate del);
         private static SetDestructorDelegate _setManagedDestructor;
-        
+
         #endregion
         
         #region Type
@@ -90,6 +96,9 @@ namespace UnityCpp.NativeBridge
             
             _setUnitySendMessage = NativeAssembly.GetMethod<SetSendMessageDelegate>(assemblyHandle, "SetUnitySendMessageMethod");
             _setUnitySendMessage.Invoke(UnitySendMessageMethod);
+            
+            createNativeMonoBehaviour = NativeAssembly.GetMethod<CreateNativeMonoBehaviourInstance>(assemblyHandle, "CreateNativeMonoBehaviourInstance");
+            callMonoBehaviourAwake = NativeAssembly.GetMethod<CallMonoBehaviourAwake>(assemblyHandle, "CallMonoBehaviourAwake");
         }
 
         private static void SetTypeMethods(IntPtr assemblyHandle)
