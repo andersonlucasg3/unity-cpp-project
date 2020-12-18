@@ -72,7 +72,13 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/Members/MethodMember.h
         UnityCppLib/UnityAPI/UnityEngine/Behaviour.cpp
         UnityCppLib/UnityAPI/UnityEngine/Behaviour.h
-        UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.cpp UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.h)
+        UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.cpp
+        UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.h
+        UnityCppLib/UnityAPI/ClassRegistry/Registry.h
+        UnityCppLib/UnityAPI/ClassRegistry/Registry.cpp
+        UnityCppLib/Game/ComponentsEntryPoint.h
+        UnityCppLib/Game/ComponentsEntryPoint.cpp
+)
 
 target_sources(
         UnityCppLib
