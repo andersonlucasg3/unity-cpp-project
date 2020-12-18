@@ -45,6 +45,16 @@ namespace UnityCpp.NativeBridge.Scripting
             NativeMethods.monoBehaviourStop.Invoke(_nativeInstance);
         }
 
+        private void OnEnable()
+        {
+            NativeMethods.monoBehaviourOnEnable.Invoke(_nativeInstance);
+        }
+
+        private void OnDisable()
+        {
+            NativeMethods.monoBehaviourOnDisable.Invoke(_nativeInstance);
+        }
+
         private void FixedUpdate()
         {
             NativeMethods.monoBehaviourFixedUpdate.Invoke(_nativeInstance);

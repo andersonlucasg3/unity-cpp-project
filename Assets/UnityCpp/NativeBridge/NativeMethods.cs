@@ -21,6 +21,8 @@ namespace UnityCpp.NativeBridge
         public static MonoBehaviourMethod monoBehaviourOnDestroy;
         public static MonoBehaviourMethod monoBehaviourStart;
         public static MonoBehaviourMethod monoBehaviourStop;
+        public static MonoBehaviourMethod monoBehaviourOnEnable;
+        public static MonoBehaviourMethod monoBehaviourOnDisable;
         public static MonoBehaviourMethod monoBehaviourFixedUpdate;
         public static MonoBehaviourMethod monoBehaviourUpdate;
         public static MonoBehaviourMethod monoBehaviourLateUpdate;
@@ -105,6 +107,8 @@ namespace UnityCpp.NativeBridge
             monoBehaviourOnDestroy = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourOnDestroy");
             monoBehaviourStart = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourStart");
             monoBehaviourStop = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourStop");
+            monoBehaviourOnEnable = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourOnEnable");
+            monoBehaviourOnDisable = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourOnDisable");
             monoBehaviourFixedUpdate = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourFixedUpdate");
             monoBehaviourUpdate = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourUpdate");
             monoBehaviourLateUpdate = NativeAssembly.GetMethod<MonoBehaviourMethod>(assemblyHandle, "CallMonoBehaviourLateUpdate");

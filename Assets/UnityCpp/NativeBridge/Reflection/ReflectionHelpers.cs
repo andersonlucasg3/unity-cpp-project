@@ -40,7 +40,13 @@ namespace UnityCpp.NativeBridge.Reflection
             return (TOutput) handle.Target;
         }
 
-        public static bool TryGetMember(IntPtr typePtr, string name, MemberType memberType, out MemberInfo memberInfo)
+        public static void GetObjectAndInfo<TInfo>(IntPtr objectPtr, IntPtr infoPtr, out object objectInstance, out TInfo info)
+        {
+            objectInstance = ConvertPtrTo<object>(objectPtr);
+            info = ConvertPtrTo<TInfo>(infoPtr);
+        }
+        
+        private static bool TryGetMember(IntPtr typePtr, string name, MemberType memberType, out MemberInfo memberInfo)
         {
             Type type = ConvertPtrTo<Type>(typePtr);
             const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
@@ -58,12 +64,6 @@ namespace UnityCpp.NativeBridge.Reflection
 #endif
             Debug.LogError($"Unmanaged code trying to get member {name} of type {type} that does not exists.");
             return false;
-        }
-
-        public static void GetObjectAndInfo<TInfo>(IntPtr objectPtr, IntPtr infoPtr, out object objectInstance, out TInfo info)
-        {
-            objectInstance = ConvertPtrTo<object>(objectPtr);
-            info = ConvertPtrTo<TInfo>(infoPtr);
         }
     }
 }
