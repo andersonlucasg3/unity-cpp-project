@@ -72,7 +72,7 @@ add_library(
         UnityCppLib/UnityAPI/ManagedBridge/Members/MethodMember.h
         UnityCppLib/UnityAPI/UnityEngine/Behaviour.cpp
         UnityCppLib/UnityAPI/UnityEngine/Behaviour.h
-)
+        UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.cpp UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.h)
 
 target_sources(
         UnityCppLib

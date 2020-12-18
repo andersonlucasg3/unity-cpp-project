@@ -8,6 +8,10 @@ namespace UnityEngine {
 
         UnityEngine::Object::InitializeManagedBridge();
         UnityEngine::Component::InitializeManagedBridge();
+
+        UnityEngine::Behaviour::InitializeManagedBridge();
+        UnityEngine::MonoBehaviour::InitializeManagedBridge();
+
         UnityEngine::Transform::InitializeManagedBridge();
         UnityEngine::GameObject::InitializeManagedBridge();
     }
