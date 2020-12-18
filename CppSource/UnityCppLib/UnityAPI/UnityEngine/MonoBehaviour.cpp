@@ -1,4 +1,5 @@
 #include "MonoBehaviour.h"
+#include "UnityAPI/ClassRegistry/Registry.h"
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _monoBehaviourBridgeAssembly("UnityCpp.NativeBridge.UnityBridges.MonoBehaviourBridge");
@@ -24,5 +25,53 @@ namespace UnityEngine {
     void MonoBehaviour::InitializeManagedBridge() {
         _monoBehaviourBridgeType = ManagedType(_monoBehaviourBridgeAssembly);
         _monoBehaviourType = ManagedType(_monoBehaviourAssembly);
+    }
+}
+
+using namespace UnityEngine;
+
+extern "C" {
+    pointer_c CreateNativeMonoBehaviourMethod(string_c className, pointer_c managedInstance) {
+        return Registry::create(className, ManagedInstance(ManagedPointer(managedInstance)), nullptr);
+    }
+
+    MonoBehaviour *Convert(pointer_c instancePtr) {
+        return (MonoBehaviour *)instancePtr;
+    }
+
+    void CallMonoBehaviourAwake(pointer_c instancePtr) {
+        Convert(instancePtr)->Awake();
+    }
+
+    void CallMonoBehaviourOnDestroy(pointer_c instancePtr) {
+        Convert(instancePtr)->OnDestroy();
+    }
+
+    void CallMonoBehaviourStart(pointer_c instancePtr) {
+        Convert(instancePtr)->Start();
+    }
+
+    void CallMonoBehaviourStop(pointer_c instancePtr) {
+        Convert(instancePtr)->Stop();
+    }
+
+    void CallMonoBehaviourOnEnable(pointer_c instancePtr) {
+        Convert(instancePtr)->OnEnable();
+    }
+
+    void CallMonoBehaviourOnDisable(pointer_c instancePtr) {
+        Convert(instancePtr)->OnDisable();
+    }
+
+    void CallMonoBehaviourFixedUpdate(pointer_c instancePtr) {
+        Convert(instancePtr)->FixedUpdate();
+    }
+
+    void CallMonoBehaviourUpdate(pointer_c instancePtr) {
+        Convert(instancePtr)->Update();
+    }
+
+    void CallMonoBehaviourLateUpdate(pointer_c instancePtr) {
+        Convert(instancePtr)->LateUpdate();
     }
 }
