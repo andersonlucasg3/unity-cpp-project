@@ -24,15 +24,7 @@ target_include_directories(
 add_library(
         UnityCppLib
         SHARED
-        UnityCppLib/Components/Factory/ComponentFactory.cpp
-        UnityCppLib/Components/NativeComponent.cpp
-        UnityCppLib/Components/Factory/ComponentFactory.h
-        UnityCppLib/Components/NativeComponent.h
-        UnityCppLib/Game/TestComponent.cpp
-        UnityCppLib/Game/TestComponent.h
         UnityCppLib/UnityAPI/UnityAPIExtern.h
-        UnityCppLib/Game/ComponentsRegistration.h
-        UnityCppLib/Components/RequiredComponentDefines.h
         UnityCppLib/UnityAPI/UnityAPIExtern.cpp
         UnityCppLib/UnityAPI/UnityEngine/GameObject.cpp
         UnityCppLib/UnityAPI/UnityEngine/GameObject.h
@@ -69,7 +61,18 @@ add_library(
         UnityCppLib/UnityAPI/NetFramework/System.h
         UnityCppLib/UnityAPI/NetFramework/System.cpp
         UnityCppLib/UnityAPI/Helpers/Helpers.cpp
-        UnityCppLib/UnityAPI/Helpers/Helpers.h UnityCppLib/UnityAPI/UnityEngine/Vector3.cpp UnityCppLib/UnityAPI/UnityEngine/Vector3.h UnityCppLib/UnityAPI/UnityEngine/Quaternion.cpp UnityCppLib/UnityAPI/UnityEngine/Quaternion.h UnityCppLib/UnityAPI/ManagedBridge/UnmanagedValue.cpp UnityCppLib/UnityAPI/ManagedBridge/UnmanagedValue.h UnityCppLib/UnityAPI/ManagedBridge/Members/MethodMember.cpp UnityCppLib/UnityAPI/ManagedBridge/Members/MethodMember.h)
+        UnityCppLib/UnityAPI/Helpers/Helpers.h
+        UnityCppLib/UnityAPI/UnityEngine/Vector3.cpp
+        UnityCppLib/UnityAPI/UnityEngine/Vector3.h
+        UnityCppLib/UnityAPI/UnityEngine/Quaternion.cpp
+        UnityCppLib/UnityAPI/UnityEngine/Quaternion.h
+        UnityCppLib/UnityAPI/ManagedBridge/UnmanagedValue.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/UnmanagedValue.h
+        UnityCppLib/UnityAPI/ManagedBridge/Members/MethodMember.cpp
+        UnityCppLib/UnityAPI/ManagedBridge/Members/MethodMember.h
+        UnityCppLib/UnityAPI/UnityEngine/Behaviour.cpp
+        UnityCppLib/UnityAPI/UnityEngine/Behaviour.h
+)
 
 target_sources(
         UnityCppLib

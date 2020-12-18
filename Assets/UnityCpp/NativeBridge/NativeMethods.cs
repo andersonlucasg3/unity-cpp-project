@@ -219,12 +219,8 @@ namespace UnityCpp.NativeBridge
         }
 
         [MonoPInvokeCallback(typeof(UnityDestructorDelegate))]
-        private static void Destructor(IntPtr intPtr)
-        {
-            GCHandle handle = (GCHandle) intPtr;
-            handle.Free();
-        }
-        
+        private static void Destructor(IntPtr intPtr) => DeallocPtr(intPtr);
+
         #endregion
 
         #region Getter & Setter
