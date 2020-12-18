@@ -18,7 +18,13 @@ namespace UnityEngine {
     PropertyMember Component::_tagProperty = PropertyMember::null;
 
     Component::Component(ManagedInstance instance, const GameObject *gameObject) : Object(instance) {
-        _gameObject = gameObject;
+        if (gameObject == nullptr) {
+            UnmanagedValue value(::pointerType);
+            _gameObjectProperty.get(instance, &value);
+            _gameObject = new GameObject(ManagedInstance(ManagedPointer(value)));
+        } else {
+            _gameObject = gameObject;
+        }
         _transform = gameObject->transform();
     }
 
