@@ -41,7 +41,7 @@ namespace UnityEngine {
 using namespace UnityEngine;
 
 extern "C" {
-    pointer_c CreateNativeMonoBehaviourMethod(string_c className, pointer_c managedInstance) {
+    pointer_c CreateNativeMonoBehaviourInstance(string_c className, pointer_c managedInstance) {
         return Registry::create(className, ManagedInstance(ManagedPointer(managedInstance)), nullptr);
     }
 
