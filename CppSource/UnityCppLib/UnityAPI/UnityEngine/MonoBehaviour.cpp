@@ -14,6 +14,16 @@ namespace UnityEngine {
 
     MonoBehaviour::~MonoBehaviour() = default;
 
+    void MonoBehaviour::Awake() { }
+    void MonoBehaviour::OnDestroy() { }
+    void MonoBehaviour::Start() { }
+    void MonoBehaviour::Stop() { }
+    void MonoBehaviour::OnEnable() { }
+    void MonoBehaviour::OnDisable() { }
+    void MonoBehaviour::FixedUpdate() { }
+    void MonoBehaviour::Update() { }
+    void MonoBehaviour::LateUpdate() { }
+
     ManagedType MonoBehaviour::type() {
         return _monoBehaviourBridgeType;
     }

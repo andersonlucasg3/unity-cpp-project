@@ -1,8 +1,8 @@
 #include "Registry.h"
 
-map<string_c, Registry::ClassConstructor> Registry::_registers = map<string_c, ClassConstructor>();
+map<string_c, ClassConstructor> Registry::_registers = map<string_c, ClassConstructor>();
 
-void Registry::reg(string_c className, Registry::ClassConstructor constructor) {
+void Registry::reg(string_c className, ClassConstructor constructor) {
     _registers[className] = constructor;
 }
 

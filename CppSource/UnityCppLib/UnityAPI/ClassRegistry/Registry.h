@@ -6,8 +6,9 @@
 using namespace std;
 using namespace UnityEngine;
 
+typedef MonoBehaviour *(*ClassConstructor)(ManagedInstance instance, const GameObject *gameObject);
+
 class Registry {
-    typedef UnityEngine::MonoBehaviour *(*ClassConstructor)(ManagedInstance instance, const GameObject *gameObject);
 private:
     static map<string_c, ClassConstructor> _registers;
 
