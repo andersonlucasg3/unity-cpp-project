@@ -13,8 +13,8 @@ namespace CppEngine {
         static bool _running;
 
         static thread _thread;
-        static mutex _trashBarMutex;
-        static mutex _runningMutex;
+        static mutex _mutex;
+        static condition_variable _condition;
 
         static void garbageDisposer();
         static void incinerate();

@@ -9,22 +9,19 @@ namespace CppEngine {
     bool Trash::_running = false;
 
     thread Trash::_thread;
-    mutex Trash::_trashBarMutex;
-    mutex Trash::_runningMutex;
-
+    mutex Trash::_mutex;
+    condition_variable Trash::_condition;
 
     void Trash::garbageDisposer() {
         bool lockedRunning;
         do {
-            lock_guard<mutex> *trashBagGuard = new lock_guard<mutex>(_trashBarMutex);
-            incinerate();
-            delete trashBagGuard;
-
-            lock_guard<mutex> *runningGuard = new lock_guard<mutex>(_runningMutex);
-            lockedRunning = _running;
-            delete runningGuard;
-
             this_thread::sleep_for(chrono::milliseconds(100));
+
+            lock_guard guard(_mutex);
+            incinerate();
+            _condition.notify_one();
+            lockedRunning = _running;
+            _condition.notify_one();
         } while (lockedRunning);
     }
 
@@ -34,18 +31,18 @@ namespace CppEngine {
     }
 
     void Trash::add(Object *obj) {
-        lock_guard<mutex> *trashBagGuard = new lock_guard<mutex>(_trashBarMutex);
+        unique_lock lock(_mutex);
+        _condition.wait(lock);
         _trashBag.push_front(obj);
-        delete trashBagGuard;
+        lock.unlock();
     }
 
     void Trash::empty() {
-        lock_guard<mutex> *runningGuard = new lock_guard<mutex>(_runningMutex);
+        unique_lock lock(_mutex);
+        _condition.wait(lock);
         _running = false;
-        delete runningGuard;
-
+        lock.unlock();
         _thread.join();
-
         incinerate();
     }
 
