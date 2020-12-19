@@ -74,12 +74,12 @@ add_library(
         UnityCppLib/UnityAPI/UnityEngine/Behaviour.h
         UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.cpp
         UnityCppLib/UnityAPI/UnityEngine/MonoBehaviour.h
-        UnityCppLib/UnityAPI/ClassRegistry/Registry.h
-        UnityCppLib/UnityAPI/ClassRegistry/Registry.cpp
+        UnityCppLib/UnityAPI/CppEngine/Registry.h
+        UnityCppLib/UnityAPI/CppEngine/Registry.cpp
         UnityCppLib/Game/ComponentsEntryPoint.h
         UnityCppLib/Game/ComponentsEntryPoint.cpp
 #COMPONENTS_GO_HERE
-)
+        UnityCppLib/UnityAPI/CppEngine/Trash.cpp UnityCppLib/UnityAPI/CppEngine/Trash.h)
 
 target_sources(
         UnityCppLib

@@ -13,11 +13,17 @@
 
 using namespace System;
 
+namespace CppEngine {
+    class Trash;
+}
+
 namespace UnityEngine {
     using namespace ManagedBridge;
     using namespace ManagedBridge::Members;
 
     class Object {
+        friend class CppEngine::Trash;
+
     protected:
         static ManagedType _objectBridgeType;
         static ManagedType _objectType;

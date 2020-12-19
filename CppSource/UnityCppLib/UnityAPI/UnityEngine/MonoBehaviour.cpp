@@ -1,5 +1,7 @@
 #include "MonoBehaviour.h"
-#include "UnityAPI/ClassRegistry/Registry.h"
+#include "UnityAPI/CppEngine/Registry.h"
+
+using namespace CppEngine;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _monoBehaviourBridgeAssembly("UnityCpp.NativeBridge.UnityBridges.MonoBehaviourBridge");

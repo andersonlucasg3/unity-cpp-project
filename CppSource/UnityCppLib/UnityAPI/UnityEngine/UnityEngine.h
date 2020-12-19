@@ -8,5 +8,6 @@
 #include "GameObject.h"
 
 namespace UnityEngine {
-    void InitializeManagedBridge();
+    void InitializeEngine();
+    void DeInitializeEngine();
 }

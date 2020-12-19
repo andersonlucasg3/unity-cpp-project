@@ -7,8 +7,12 @@ using namespace UnityEngine;
 
 extern "C" {
     UNITY_EXPORT void InitializeNative() {
-        UnityEngine::InitializeManagedBridge();
+        UnityEngine::InitializeEngine();
 
         RegisterComponents();
+    }
+
+    UNITY_EXPORT void DeInitializeNative() {
+        UnityEngine::DeInitializeEngine();
     }
 }

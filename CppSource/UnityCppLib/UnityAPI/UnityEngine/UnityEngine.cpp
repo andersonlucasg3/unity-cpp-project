@@ -1,9 +1,12 @@
 #include "UnityEngine.h"
 
 #include "UnityAPI/NetFramework/System.h"
+#include "UnityAPI/CppEngine/Trash.h"
+
+using namespace CppEngine;
 
 namespace UnityEngine {
-    void InitializeManagedBridge() {
+    void InitializeEngine() {
         System::InitializeManagedBridge();
 
         UnityEngine::Object::InitializeManagedBridge();
@@ -14,5 +17,11 @@ namespace UnityEngine {
 
         UnityEngine::Transform::InitializeManagedBridge();
         UnityEngine::GameObject::InitializeManagedBridge();
+
+        Trash::setup();
+    }
+
+    void DeInitializeEngine() {
+        Trash::empty();
     }
 }
