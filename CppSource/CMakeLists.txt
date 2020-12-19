@@ -78,8 +78,10 @@ add_library(
         UnityCppLib/UnityAPI/CppEngine/Registry.cpp
         UnityCppLib/Game/ComponentsEntryPoint.h
         UnityCppLib/Game/ComponentsEntryPoint.cpp
+        UnityCppLib/UnityAPI/CppEngine/Trash.cpp
+        UnityCppLib/UnityAPI/CppEngine/Trash.h
 #COMPONENTS_GO_HERE
-        UnityCppLib/UnityAPI/CppEngine/Trash.cpp UnityCppLib/UnityAPI/CppEngine/Trash.h)
+)
 
 target_sources(
         UnityCppLib
