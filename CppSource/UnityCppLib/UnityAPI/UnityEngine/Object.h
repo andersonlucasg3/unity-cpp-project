@@ -5,6 +5,7 @@
 #include "UnityAPI/ManagedBridge/ManagedInstance.h"
 #include "UnityAPI/ManagedBridge/Members/PropertyMember.h"
 #include "UnityAPI/ManagedBridge/Members/ConstructorMember.h"
+#include "UnityAPI/ManagedBridge/Members/MethodMember.h"
 #include "UnityAPI/ManagedBridge/ManagedType.h"
 #include "UnityAPI/NetFramework/System.h"
 
@@ -24,6 +25,10 @@ namespace UnityEngine {
         static PropertyMember _nameProperty;
         static PropertyMember _hideFlagsProperty;
 
+        static MethodMember _destroyMethod;
+        static MethodMember _destroyImmediateMethod;
+        static MethodMember _dontDestroyOnLoadMethod;
+
         ManagedInstance _instance = ManagedInstance::null;
 
         explicit Object();
@@ -31,11 +36,15 @@ namespace UnityEngine {
         ~Object();
 
     public:
-        [[nodiscard,maybe_unused]] string_c name() const;
-        [[maybe_unused]] void setName(string_c name) const;
+        string_c name() const;
+        void setName(string_c name) const;
 
-        [[nodiscard,maybe_unused]] HideFlags hideFlags() const;
-        [[maybe_unused]] void setHideFlags(HideFlags flags) const;
+        HideFlags hideFlags() const;
+        void setHideFlags(HideFlags flags) const;
+
+        static void destroy(Object *obj, float t = 0.0);
+        static void destroyImmediate(Object *obj, bool allowDestroyingAssets = false);
+        static void dontDestroyOnLoad(Object *target);
 
         static ManagedType type();
         static ManagedType unityType();

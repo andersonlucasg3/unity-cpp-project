@@ -19,7 +19,7 @@ namespace ManagedBridge::Members {
     public:
         static const MethodMember null;
 
-        void callMethod(ManagedInstance instance, UnmanagedValue parameters[], int paramCount, UnmanagedValue *output);
+        void callMethod(ManagedInstance instance, UnmanagedValue parameters[], int paramCount, UnmanagedValue *output = nullptr);
         bool callMethodOut(ManagedInstance instance, UnmanagedValue parameters[], int paramCount, UnmanagedValue *output);
     };
 }

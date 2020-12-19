@@ -13,6 +13,10 @@ namespace UnityEngine {
     PropertyMember Object::_nameProperty = PropertyMember::null;
     PropertyMember Object::_hideFlagsProperty = PropertyMember::null;
 
+    MethodMember Object::_destroyMethod = MethodMember::null;
+    MethodMember Object::_destroyImmediateMethod = MethodMember::null;
+    MethodMember Object::_dontDestroyOnLoadMethod = MethodMember::null;
+
     Object::Object() = default;
 
     Object::Object(ManagedInstance instance) {
@@ -45,6 +49,24 @@ namespace UnityEngine {
         _nameProperty.setValue(_instance, &value);
     }
 
+    void Object::destroy(Object *obj, float t) {
+        ManagedPointer pointer = obj->_instance.toPointer();
+        UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(t) };
+        _destroyMethod.callMethod(ManagedInstance::null, parameters, 2);
+    }
+
+    void Object::destroyImmediate(Object *obj, bool allowDestroyingAssets) {
+        ManagedPointer pointer = obj->_instance.toPointer();
+        UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(allowDestroyingAssets) };
+        _destroyImmediateMethod.callMethod(ManagedInstance::null, parameters, 2);
+    }
+
+    void Object::dontDestroyOnLoad(Object *target) {
+        ManagedPointer pointer = target->_instance.toPointer();
+        UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()) };
+        _dontDestroyOnLoadMethod.callMethod(ManagedInstance::null, parameters, 1);
+    }
+
     ManagedType Object::type() {
         return _objectBridgeType;
     }
@@ -59,5 +81,9 @@ namespace UnityEngine {
 
         _nameProperty = _objectBridgeType.getProperty("name");
         _hideFlagsProperty = _objectBridgeType.getProperty("hideFlags");
+
+        _destroyMethod = _objectBridgeType.getMethod("Destroy");
+        _destroyImmediateMethod = _objectBridgeType.getMethod("DestroyImmediate");
+        _dontDestroyOnLoadMethod = _objectBridgeType.getMethod("DontDestroyOnLoad");
     }
 }

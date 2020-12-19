@@ -45,6 +45,10 @@ extern "C" {
         return Registry::create(className, ManagedInstance(ManagedPointer(managedInstance)), nullptr);
     }
 
+    void DestroyNativeMonoBehaviourInstance(pointer_c nativePointer) {
+        Object::destroyImmediate((Object *)nativePointer);
+    }
+
     MonoBehaviour *Convert(pointer_c instancePtr) {
         return (MonoBehaviour *)instancePtr;
     }
