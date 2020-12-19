@@ -16,13 +16,15 @@ namespace CppEngine {
     void Trash::garbageDisposer() {
         bool lockedRunning;
         do {
-            this_thread::sleep_for(chrono::milliseconds(100));
-
-            lock_guard<mutex> trashBagGuard(_trashBarMutex);
+            lock_guard<mutex> *trashBagGuard = new lock_guard<mutex>(_trashBarMutex);
             incinerate();
+            delete trashBagGuard;
 
-            lock_guard<mutex> runningGuard(_runningMutex);
+            lock_guard<mutex> *runningGuard = new lock_guard<mutex>(_runningMutex);
             lockedRunning = _running;
+            delete runningGuard;
+
+            this_thread::sleep_for(chrono::milliseconds(100));
         } while (lockedRunning);
     }
 
@@ -32,8 +34,9 @@ namespace CppEngine {
     }
 
     void Trash::add(Object *obj) {
-        lock_guard<mutex> lock(_trashBarMutex);
+        lock_guard<mutex> *trashBagGuard = new lock_guard<mutex>(_trashBarMutex);
         _trashBag.push_front(obj);
+        delete trashBagGuard;
     }
 
     void Trash::empty() {
