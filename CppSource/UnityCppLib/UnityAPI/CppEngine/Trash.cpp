@@ -5,24 +5,24 @@
 using namespace std;
 
 namespace CppEngine {
-    bool Trash::_running = false;
     list<Object *> Trash::_trashBag;
+    bool Trash::_running = false;
+
     thread Trash::_thread;
-    mutex Trash::_mutex;
+    mutex Trash::_trashBarMutex;
+    mutex Trash::_runningMutex;
+
 
     void Trash::garbageDisposer() {
         bool lockedRunning;
-        unique_lock<mutex> lock(_mutex);
         do {
-            lock.lock();
+            this_thread::sleep_for(chrono::milliseconds(100));
 
+            lock_guard<mutex> trashBagGuard(_trashBarMutex);
             incinerate();
 
+            lock_guard<mutex> runningGuard(_runningMutex);
             lockedRunning = _running;
-
-            lock.unlock();
-
-            this_thread::sleep_for(chrono::milliseconds(100));
         } while (lockedRunning);
     }
 
@@ -32,25 +32,18 @@ namespace CppEngine {
     }
 
     void Trash::add(Object *obj) {
-        unique_lock<mutex> lock(_mutex);
-        lock.lock();
-
+        lock_guard<mutex> lock(_trashBarMutex);
         _trashBag.push_front(obj);
-
-        lock.unlock();
     }
 
     void Trash::empty() {
-        unique_lock<mutex> lock(_mutex);
-        lock.lock();
-
+        lock_guard<mutex> *runningGuard = new lock_guard<mutex>(_runningMutex);
         _running = false;
+        delete runningGuard;
 
         _thread.join();
 
         incinerate();
-
-        lock.unlock();
     }
 
     void Trash::incinerate() {

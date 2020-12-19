@@ -10,9 +10,11 @@ namespace CppEngine {
     class Trash {
     private:
         static list<Object *> _trashBag;
-        static thread _thread;
-        static mutex _mutex;
         static bool _running;
+
+        static thread _thread;
+        static mutex _trashBarMutex;
+        static mutex _runningMutex;
 
         static void garbageDisposer();
         static void incinerate();

@@ -26,7 +26,7 @@ namespace UnityEngine {
     }
 
     Object::~Object() {
-        Managed::destroy(_instance);
+        Managed::destroy(_instance.toPointer());
     }
 
     HideFlags Object::hideFlags() const {
