@@ -13,16 +13,13 @@ namespace CppEngine {
     condition_variable Trash::_condition;
 
     void Trash::garbageDisposer() {
-        bool lockedRunning;
         do {
             this_thread::sleep_for(chrono::milliseconds(100));
 
             lock_guard guard(_mutex);
             incinerate();
             _condition.notify_one();
-            lockedRunning = _running;
-            _condition.notify_one();
-        } while (lockedRunning);
+        } while (_running);
     }
 
     void Trash::setup() {
@@ -38,10 +35,7 @@ namespace CppEngine {
     }
 
     void Trash::empty() {
-        unique_lock lock(_mutex);
-        _condition.wait(lock);
         _running = false;
-        lock.unlock();
         _thread.join();
         incinerate();
     }
