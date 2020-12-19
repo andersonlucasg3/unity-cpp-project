@@ -42,11 +42,14 @@ using namespace UnityEngine;
 
 extern "C" {
     pointer_c CreateNativeMonoBehaviourInstance(string_c className, pointer_c managedInstance) {
-        return Registry::create(className, ManagedInstance(ManagedPointer(managedInstance)), nullptr);
+        ManagedPointer ptr = ManagedPointer(managedInstance);
+        ManagedInstance instance = ManagedInstance(ptr);
+        MonoBehaviour *monoBehaviour = Registry::create(className, instance, nullptr);
+        return static_cast<pointer_c>(monoBehaviour);
     }
 
     void DestroyNativeMonoBehaviourInstance(pointer_c nativePointer) {
-        Object::destroyImmediate((Object *)nativePointer);
+        Object::destroyImmediate((MonoBehaviour *)nativePointer);
     }
 
     MonoBehaviour *Convert(pointer_c instancePtr) {
