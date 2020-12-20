@@ -55,14 +55,12 @@ namespace UnityEngine {
         ManagedPointer pointer = obj->_instance.toPointer();
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(t) };
         _destroyMethod.callMethod(ManagedInstance::null, parameters, 2);
-        Trash::add(obj);
     }
 
     void Object::destroyImmediate(Object *obj, bool allowDestroyingAssets) {
         ManagedPointer pointer = obj->_instance.toPointer();
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(allowDestroyingAssets) };
         _destroyImmediateMethod.callMethod(ManagedInstance::null, parameters, 2);
-        Trash::add(obj);
     }
 
     void Object::dontDestroyOnLoad(Object *target) {

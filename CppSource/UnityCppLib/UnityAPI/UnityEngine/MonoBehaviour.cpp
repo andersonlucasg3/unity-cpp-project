@@ -1,5 +1,6 @@
 #include "MonoBehaviour.h"
 #include "UnityAPI/CppEngine/Registry.h"
+#include "UnityAPI/CppEngine/Trash.h"
 
 using namespace CppEngine;
 
@@ -63,7 +64,9 @@ extern "C" {
     }
 
     void CallMonoBehaviourOnDestroy(pointer_c instancePtr) {
-        Convert(instancePtr)->OnDestroy();
+        MonoBehaviour *monoBehaviour = Convert(instancePtr);
+        monoBehaviour->OnDestroy();
+        Trash::add(monoBehaviour);
     }
 
     void CallMonoBehaviourStart(pointer_c instancePtr) {
