@@ -9,37 +9,48 @@ namespace CppEngine {
     bool Trash::_running = false;
 
     thread Trash::_thread;
-    sem_t *Trash::_incinerateSemaphore;
-    sem_t *Trash::_addSemaphore;
+    sem_t Trash::_incinerateSemaphore;
+    sem_t Trash::_addSemaphore;
+    sem_t Trash::_mutex;
 
     void Trash::garbageDisposer() {
         do {
-            sem_wait(_addSemaphore);
+            sem_wait(&_addSemaphore);
+
+            sem_wait(&_mutex);
             incinerate();
-            sem_post(_incinerateSemaphore);
+            sem_post(&_mutex);
+
+            sem_post(&_incinerateSemaphore);
             this_thread::sleep_for(chrono::milliseconds(100));
         } while (_running);
     }
 
     void Trash::setup() {
-        _incinerateSemaphore = sem_open("incinerate semaphore", O_CREAT);
-        _addSemaphore = sem_open("add semaphore", O_CREAT);
+        sem_init(&_incinerateSemaphore, 0, SEM_VALUE_MAX);
+        sem_init(&_addSemaphore, 0, 0);
+        sem_init(&_mutex, 0, 1);
         _running = true;
         _thread = thread(&garbageDisposer);
     }
 
     void Trash::add(Object *obj) {
-        sem_wait(_incinerateSemaphore);
+        sem_wait(&_incinerateSemaphore);
+
+        sem_wait(&_mutex);
         _trashBag.push_front(obj);
-        sem_post(_addSemaphore);
+        sem_post(&_mutex);
+
+        sem_post(&_addSemaphore);
     }
 
     void Trash::empty() {
         _running = false;
         _thread.join();
 
-        sem_close(_incinerateSemaphore);
-        sem_close(_addSemaphore);
+        sem_destroy(&_incinerateSemaphore);
+        sem_destroy(&_addSemaphore);
+        sem_destroy(&_mutex);
 
         incinerate();
     }

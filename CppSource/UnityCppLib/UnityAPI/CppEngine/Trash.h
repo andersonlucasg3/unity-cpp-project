@@ -14,8 +14,9 @@ namespace CppEngine {
         static bool _running;
 
         static thread _thread;
-        static sem_t *_incinerateSemaphore;
-        static sem_t *_addSemaphore;
+        static sem_t _incinerateSemaphore;
+        static sem_t _addSemaphore;
+        static sem_t _mutex;
 
         static void garbageDisposer();
         static void incinerate();
