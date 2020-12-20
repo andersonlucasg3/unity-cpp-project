@@ -3,6 +3,7 @@
 #include "UnityAPI/UnityEngine/Object.h"
 #include <list>
 #include <thread>
+#include <semaphore.h>
 
 using namespace UnityEngine;
 
@@ -13,8 +14,8 @@ namespace CppEngine {
         static bool _running;
 
         static thread _thread;
-        static mutex _mutex;
-        static condition_variable _condition;
+        static sem_t *_incinerateSemaphore;
+        static sem_t *_addSemaphore;
 
         static void garbageDisposer();
         static void incinerate();

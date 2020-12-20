@@ -9,34 +9,38 @@ namespace CppEngine {
     bool Trash::_running = false;
 
     thread Trash::_thread;
-    mutex Trash::_mutex;
-    condition_variable Trash::_condition;
+    sem_t *Trash::_incinerateSemaphore;
+    sem_t *Trash::_addSemaphore;
 
     void Trash::garbageDisposer() {
         do {
-            this_thread::sleep_for(chrono::milliseconds(100));
-
-            lock_guard guard(_mutex);
+            sem_wait(_addSemaphore);
             incinerate();
-            _condition.notify_one();
+            sem_post(_incinerateSemaphore);
+            this_thread::sleep_for(chrono::milliseconds(100));
         } while (_running);
     }
 
     void Trash::setup() {
+        _incinerateSemaphore = sem_open("incinerate semaphore", O_CREAT);
+        _addSemaphore = sem_open("add semaphore", O_CREAT);
         _running = true;
         _thread = thread(&garbageDisposer);
     }
 
     void Trash::add(Object *obj) {
-        unique_lock lock(_mutex);
-        _condition.wait(lock);
+        sem_wait(_incinerateSemaphore);
         _trashBag.push_front(obj);
-        lock.unlock();
+        sem_post(_addSemaphore);
     }
 
     void Trash::empty() {
         _running = false;
         _thread.join();
+
+        sem_close(_incinerateSemaphore);
+        sem_close(_addSemaphore);
+
         incinerate();
     }
 
