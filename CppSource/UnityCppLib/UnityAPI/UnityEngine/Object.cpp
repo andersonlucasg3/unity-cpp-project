@@ -25,9 +25,7 @@ namespace UnityEngine {
         _instance = instance;
     }
 
-    Object::~Object() {
-        Managed::destroy(_instance.toPointer());
-    }
+    Object::~Object() = default;
 
     HideFlags Object::hideFlags() const {
         UnmanagedValue value(UnmanagedType::intType);

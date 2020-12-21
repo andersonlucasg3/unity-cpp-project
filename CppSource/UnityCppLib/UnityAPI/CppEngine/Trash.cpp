@@ -61,6 +61,7 @@ namespace CppEngine {
             for (int index = 0; index < _trashBag.size(); ++index) {
                 advance(iterator, index);
                 Object *obj = *iterator;
+                Managed::destroy(obj->_instance.toPointer());
                 delete obj;
             }
             _trashBag.clear();
