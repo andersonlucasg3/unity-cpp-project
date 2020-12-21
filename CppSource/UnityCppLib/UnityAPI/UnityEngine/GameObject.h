@@ -43,7 +43,7 @@ namespace UnityEngine {
         explicit GameObject();
         explicit GameObject(string_c name);
         explicit GameObject(string_c name, ManagedType components[], int componentCount);
-        ~GameObject();
+        ~GameObject() override;
 
         bool activeSelf() const;
         bool activeInHierarchy() const;

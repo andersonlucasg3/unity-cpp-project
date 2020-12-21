@@ -39,7 +39,7 @@ namespace UnityEngine {
 
         explicit Object();
         explicit Object(ManagedInstance instance);
-        ~Object();
+        virtual ~Object();
 
     public:
         string_c name() const;

@@ -1,11 +1,13 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Debug.h"
+#include "UnityAPI/CppEngine/Trash.h"
 
 #include <type_traits>
 
 using namespace std;
 using namespace ManagedBridge;
+using namespace CppEngine;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _gameObjectBridgeAssembly("UnityCpp.NativeBridge.UnityBridges.GameObjectBridge");
@@ -66,7 +68,7 @@ namespace UnityEngine {
     }
 
     GameObject::~GameObject() {
-        delete _transform;
+        Trash::add(_transform);
     }
 
     bool GameObject::activeSelf() const {

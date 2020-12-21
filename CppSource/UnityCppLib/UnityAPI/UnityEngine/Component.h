@@ -20,7 +20,7 @@ namespace UnityEngine {
 
     protected:
         explicit Component(ManagedInstance instance, const GameObject *gameObject);
-        ~Component();
+        ~Component() override;
 
     public:
         [[nodiscard,maybe_unused]] const Transform *transform() const;

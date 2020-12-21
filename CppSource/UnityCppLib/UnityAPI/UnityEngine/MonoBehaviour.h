@@ -10,7 +10,7 @@ namespace UnityEngine {
 
     protected:
         explicit MonoBehaviour(ManagedInstance instance, const GameObject *gameObject);
-        ~MonoBehaviour();
+        ~MonoBehaviour() override;
 
     public:
         virtual void Awake();

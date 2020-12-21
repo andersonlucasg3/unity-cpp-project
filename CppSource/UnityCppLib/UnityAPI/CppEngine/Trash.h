@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UnityAPI/UnityEngine/Object.h"
-#include <list>
+#include <queue>
 #include <thread>
 #include <semaphore.h>
 
@@ -10,7 +10,7 @@ using namespace UnityEngine;
 namespace CppEngine {
     class Trash {
     private:
-        static list<Object *> _trashBag;
+        static queue<Object *> _trashBag;
         static bool _running;
 
         static thread _thread;

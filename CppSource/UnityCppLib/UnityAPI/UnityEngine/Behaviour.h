@@ -25,7 +25,7 @@ namespace UnityEngine {
 
     protected:
         explicit Behaviour(ManagedInstance instance, const GameObject *gameObject);
-        ~Behaviour();
+        ~Behaviour() override;
 
     public:
         bool enabled() const;

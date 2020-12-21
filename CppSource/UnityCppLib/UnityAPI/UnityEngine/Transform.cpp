@@ -1,5 +1,8 @@
 #include "Transform.h"
 #include "GameObject.h"
+#include "UnityAPI/CppEngine/Trash.h"
+
+using namespace CppEngine;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _transformBridgeAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.TransformBridge");
@@ -29,7 +32,7 @@ namespace UnityEngine {
         ManagedPointer pointer(value);
         ManagedPointer currentPointer = _parent->_instance.toPointer();
         if (currentPointer != pointer) {
-            delete _parent;
+            Trash::add(_parent);
             if (pointer != nullptr) {
                 _parent = new Transform(ManagedInstance(pointer));
             } else {

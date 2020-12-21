@@ -21,7 +21,7 @@ namespace UnityEngine {
 
     protected:
         explicit Transform(ManagedInstance instance, const GameObject *gameObject = nullptr);
-        ~Transform();
+        ~Transform() override;
 
     public:
         [[maybe_unused,nodiscard]] int childCount() const;

@@ -1,11 +1,9 @@
 #include "Trash.h"
-#include <thread>
-#include <list>
 
 using namespace std;
 
 namespace CppEngine {
-    list<Object *> Trash::_trashBag;
+    queue<Object *> Trash::_trashBag;
     bool Trash::_running = false;
 
     thread Trash::_thread;
@@ -38,7 +36,7 @@ namespace CppEngine {
         sem_wait(&_incinerateSemaphore);
 
         sem_wait(&_mutex);
-        _trashBag.push_front(obj);
+        _trashBag.push(obj);
         sem_post(&_mutex);
 
         sem_post(&_addSemaphore);
@@ -56,15 +54,11 @@ namespace CppEngine {
     }
 
     void Trash::incinerate() {
-        if (!_trashBag.empty()) {
-            list<Object *>::iterator iterator = _trashBag.begin();
-            for (int index = 0; index < _trashBag.size(); ++index) {
-                advance(iterator, index);
-                Object *obj = *iterator;
-                Managed::destroy(obj->_instance.toPointer());
-                delete obj;
-            }
-            _trashBag.clear();
+        while (!_trashBag.empty()) {
+            Object *obj = _trashBag.front();
+            _trashBag.pop();
+            Managed::destroy(obj->_instance.toPointer());
+            delete obj;
         }
     }
 }
