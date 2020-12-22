@@ -1,5 +1,9 @@
 #include "Trash.h"
 
+#if !defined(__APPLE__) && !defined(__MACH__)
+
+#endif
+
 using namespace std;
 
 namespace CppEngine {

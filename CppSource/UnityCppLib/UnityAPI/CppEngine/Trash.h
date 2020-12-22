@@ -3,7 +3,7 @@
 #include "UnityAPI/UnityEngine/Object.h"
 #include <queue>
 #include <thread>
-#include <semaphore.h>
+#include "./semaphores/multiplat_semaphore.h"
 
 using namespace UnityEngine;
 

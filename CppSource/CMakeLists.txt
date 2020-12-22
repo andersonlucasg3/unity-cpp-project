@@ -81,7 +81,7 @@ add_library(
         UnityCppLib/UnityAPI/CppEngine/Trash.cpp
         UnityCppLib/UnityAPI/CppEngine/Trash.h
 #COMPONENTS_GO_HERE
-)
+        UnityCppLib/UnityAPI/CppEngine/semaphores/multiplat_semaphore.cpp UnityCppLib/UnityAPI/CppEngine/semaphores/multiplat_semaphore.h)
 
 target_sources(
         UnityCppLib
@@ -100,4 +100,4 @@ if (APPLE)
 endif ()
 set(CMAKE_C_FLAGS "-wignored-attributes")
 
-set(LIBRARY_OUTPUT_PATH ../../Assets/Plugins/NativeComponents)
+set(LIBRARY_OUTPUT_PATH ../../Assets/Plugins/UnityCpp)
