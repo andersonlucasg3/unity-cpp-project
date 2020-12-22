@@ -4,7 +4,9 @@
 
 #include <semaphore.h>
 
-#else
+#endif
+
+#if defined(WIN32)
 
 #include "UnityAPI/NetFramework/System.h"
 
@@ -19,6 +21,5 @@ void sem_close(sem_t *semaphore);
 void sem_unlink(string_c semaphore);
 void sem_wait(sem_t *semaphore);
 void sem_post(sem_t *semaphore);
-
 
 #endif

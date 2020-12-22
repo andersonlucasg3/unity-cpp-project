@@ -1,3 +1,5 @@
+#if defined(WIN32)
+
 #include "multiplat_semaphore.h"
 
 #include <windows.h>
@@ -23,3 +25,5 @@ void sem_wait(sem_t *semaphore) {
 void sem_post(sem_t *semaphore) {
     ReleaseSemaphore(semaphore, 1, nullptr);
 }
+
+#endif
