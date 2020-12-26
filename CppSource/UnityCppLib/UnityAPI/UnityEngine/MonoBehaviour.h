@@ -30,3 +30,21 @@ namespace UnityEngine {
         static void destroy(MonoBehaviour *monoBehaviour);
     };
 }
+
+#define MONO_BEHAVIOUR_HEADER_CLASS(CLASS_NAME) \
+    protected:                \
+        CLASS_NAME(ManagedInstance instance, const GameObject *gameObject); \
+    public: \
+        static MonoBehaviour *Create(ManagedInstance instance, const GameObject *gameObject); \
+        static void Register();
+
+#define MONO_BEHAVIOUR_SOURCE_CLASS(CLASS_NAME) \
+    CLASS_NAME::CLASS_NAME(ManagedInstance instance, const GameObject *gameObject) : MonoBehaviour(instance, gameObject) { } \
+    \
+    MonoBehaviour * CLASS_NAME::Create(ManagedInstance instance, const GameObject *gameObject) { \
+        return new CLASS_NAME(instance, gameObject); \
+    } \
+    \
+    void CLASS_NAME::Register() { \
+        Registry::reg("#CLASS_NAME", &Create); \
+    }
