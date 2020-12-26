@@ -1,5 +1,4 @@
 #include "Object.h"
-#include "UnityAPI/CppEngine/Trash.h"
 
 using namespace std;
 using namespace ManagedBridge;
@@ -25,7 +24,9 @@ namespace UnityEngine {
         _instance = instance;
     }
 
-    Object::~Object() = default;
+    Object::~Object() {
+        Managed::destroy(_instance.toPointer());
+    }
 
     HideFlags Object::hideFlags() const {
         UnmanagedValue value(UnmanagedType::intType);
@@ -53,12 +54,14 @@ namespace UnityEngine {
         ManagedPointer pointer = obj->_instance.toPointer();
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(t) };
         _destroyMethod.callMethod(ManagedInstance::null, parameters, 2);
+        delete obj;
     }
 
     void Object::destroyImmediate(Object *obj, bool allowDestroyingAssets) {
         ManagedPointer pointer = obj->_instance.toPointer();
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(allowDestroyingAssets) };
         _destroyImmediateMethod.callMethod(ManagedInstance::null, parameters, 2);
+        delete obj;
     }
 
     void Object::dontDestroyOnLoad(Object *target) {

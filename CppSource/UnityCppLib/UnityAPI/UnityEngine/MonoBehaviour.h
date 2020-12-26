@@ -26,5 +26,7 @@ namespace UnityEngine {
         static ManagedType type();
         static ManagedType unityType();
         static void InitializeManagedBridge();
+
+        static void destroy(MonoBehaviour *monoBehaviour);
     };
 }

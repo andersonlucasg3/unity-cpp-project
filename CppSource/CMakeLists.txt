@@ -78,10 +78,6 @@ add_library(
         UnityCppLib/UnityAPI/CppEngine/Registry.cpp
         UnityCppLib/Game/ComponentsEntryPoint.h
         UnityCppLib/Game/ComponentsEntryPoint.cpp
-        UnityCppLib/UnityAPI/CppEngine/Trash.cpp
-        UnityCppLib/UnityAPI/CppEngine/Trash.h
-        UnityCppLib/UnityAPI/CppEngine/semaphores/multiplat_semaphore.cpp
-        UnityCppLib/UnityAPI/CppEngine/semaphores/multiplat_semaphore.h
 #COMPONENTS_GO_HERE
 )
 

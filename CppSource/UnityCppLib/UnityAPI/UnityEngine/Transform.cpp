@@ -1,6 +1,5 @@
 #include "Transform.h"
 #include "GameObject.h"
-#include "UnityAPI/CppEngine/Trash.h"
 
 using namespace CppEngine;
 
@@ -32,7 +31,7 @@ namespace UnityEngine {
         ManagedPointer pointer(value);
         ManagedPointer currentPointer = _parent->_instance.toPointer();
         if (currentPointer != pointer) {
-            Trash::add(_parent);
+            delete _parent;
             if (pointer != nullptr) {
                 _parent = new Transform(ManagedInstance(pointer));
             } else {

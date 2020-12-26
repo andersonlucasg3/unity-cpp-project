@@ -2,6 +2,10 @@
 
 #include <string>
 
+#if defined(__MINGW32__) || defined(__MINGW64__)
+#include <cstring>
+#endif // MinGW
+
 using namespace std;
 
 namespace ManagedBridge {

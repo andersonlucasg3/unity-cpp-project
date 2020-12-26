@@ -1,6 +1,5 @@
 #include "MonoBehaviour.h"
 #include "UnityAPI/CppEngine/Registry.h"
-#include "UnityAPI/CppEngine/Trash.h"
 
 using namespace CppEngine;
 
@@ -39,6 +38,10 @@ namespace UnityEngine {
         _monoBehaviourBridgeType = ManagedType(_monoBehaviourBridgeAssembly);
         _monoBehaviourType = ManagedType(_monoBehaviourAssembly);
     }
+
+    void MonoBehaviour::destroy(MonoBehaviour *monoBehaviour) {
+        delete monoBehaviour;
+    }
 }
 
 using namespace UnityEngine;
@@ -66,7 +69,7 @@ extern "C" {
     void CallMonoBehaviourOnDestroy(pointer_c instancePtr) {
         MonoBehaviour *monoBehaviour = Convert(instancePtr);
         monoBehaviour->OnDestroy();
-        Trash::add(monoBehaviour);
+        MonoBehaviour::destroy(monoBehaviour);
     }
 
     void CallMonoBehaviourStart(pointer_c instancePtr) {

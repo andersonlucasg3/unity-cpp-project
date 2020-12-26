@@ -1,7 +1,6 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Debug.h"
-#include "UnityAPI/CppEngine/Trash.h"
 
 #include <type_traits>
 
@@ -68,7 +67,7 @@ namespace UnityEngine {
     }
 
     GameObject::~GameObject() {
-        Trash::add(_transform);
+        delete _transform;
     }
 
     bool GameObject::activeSelf() const {
