@@ -46,5 +46,5 @@ namespace UnityEngine {
     } \
     \
     void CLASS_NAME::Register() { \
-        Registry::reg("#CLASS_NAME", &Create); \
+        Registry::reg(#CLASS_NAME, &Create); \
     }
