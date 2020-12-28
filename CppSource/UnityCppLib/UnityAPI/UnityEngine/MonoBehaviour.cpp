@@ -47,56 +47,56 @@ namespace UnityEngine {
 using namespace UnityEngine;
 
 extern "C" {
-    pointer_c CreateNativeMonoBehaviourInstance(string_c className, pointer_c managedInstance) {
+    UNITY_EXPORT pointer_c CreateNativeMonoBehaviourInstance(string_c className, pointer_c managedInstance) {
         ManagedPointer ptr = ManagedPointer(managedInstance);
         ManagedInstance instance = ManagedInstance(ptr);
         MonoBehaviour *monoBehaviour = Registry::create(className, instance, nullptr);
         return static_cast<pointer_c>(monoBehaviour);
     }
 
-    void DestroyNativeMonoBehaviourInstance(pointer_c nativePointer) {
-        Object::destroyImmediate((MonoBehaviour *)nativePointer);
+    UNITY_EXPORT void DestroyNativeMonoBehaviourInstance(pointer_c nativePointer) {
+        Object::destroyImmediate((MonoBehaviour *) nativePointer);
     }
 
-    MonoBehaviour *Convert(pointer_c instancePtr) {
-        return (MonoBehaviour *)instancePtr;
+    UNITY_EXPORT MonoBehaviour *Convert(pointer_c instancePtr) {
+        return (MonoBehaviour *) instancePtr;
     }
 
-    void CallMonoBehaviourAwake(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourAwake(pointer_c instancePtr) {
         Convert(instancePtr)->Awake();
     }
 
-    void CallMonoBehaviourOnDestroy(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourOnDestroy(pointer_c instancePtr) {
         MonoBehaviour *monoBehaviour = Convert(instancePtr);
         monoBehaviour->OnDestroy();
         MonoBehaviour::destroy(monoBehaviour);
     }
 
-    void CallMonoBehaviourStart(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourStart(pointer_c instancePtr) {
         Convert(instancePtr)->Start();
     }
 
-    void CallMonoBehaviourStop(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourStop(pointer_c instancePtr) {
         Convert(instancePtr)->Stop();
     }
 
-    void CallMonoBehaviourOnEnable(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourOnEnable(pointer_c instancePtr) {
         Convert(instancePtr)->OnEnable();
     }
 
-    void CallMonoBehaviourOnDisable(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourOnDisable(pointer_c instancePtr) {
         Convert(instancePtr)->OnDisable();
     }
 
-    void CallMonoBehaviourFixedUpdate(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourFixedUpdate(pointer_c instancePtr) {
         Convert(instancePtr)->FixedUpdate();
     }
 
-    void CallMonoBehaviourUpdate(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourUpdate(pointer_c instancePtr) {
         Convert(instancePtr)->Update();
     }
 
-    void CallMonoBehaviourLateUpdate(pointer_c instancePtr) {
+    UNITY_EXPORT void CallMonoBehaviourLateUpdate(pointer_c instancePtr) {
         Convert(instancePtr)->LateUpdate();
     }
 }
