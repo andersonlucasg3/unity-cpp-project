@@ -38,10 +38,6 @@ namespace UnityEngine {
         _monoBehaviourBridgeType = ManagedType(_monoBehaviourBridgeAssembly);
         _monoBehaviourType = ManagedType(_monoBehaviourAssembly);
     }
-
-    void MonoBehaviour::destroy(MonoBehaviour *monoBehaviour) {
-        delete monoBehaviour;
-    }
 }
 
 using namespace UnityEngine;
@@ -67,9 +63,7 @@ extern "C" {
     }
 
     UNITY_EXPORT void CallMonoBehaviourOnDestroy(pointer_c instancePtr) {
-        MonoBehaviour *monoBehaviour = Convert(instancePtr);
-        monoBehaviour->OnDestroy();
-        MonoBehaviour::destroy(monoBehaviour);
+        Convert(instancePtr)->OnDestroy();
     }
 
     UNITY_EXPORT void CallMonoBehaviourStart(pointer_c instancePtr) {
