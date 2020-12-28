@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "MonoBehaviour.h"
 
 using namespace std;
 using namespace ManagedBridge;
@@ -54,14 +55,18 @@ namespace UnityEngine {
         ManagedPointer pointer = obj->_instance.toPointer();
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(t) };
         _destroyMethod.callMethod(ManagedInstance::null, parameters, 2);
-        delete obj;
+        if (typeid(MonoBehaviour).before(typeid(obj))) {
+            delete obj;
+        }
     }
 
     void Object::destroyImmediate(Object *obj, bool allowDestroyingAssets) {
         ManagedPointer pointer = obj->_instance.toPointer();
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(allowDestroyingAssets) };
         _destroyImmediateMethod.callMethod(ManagedInstance::null, parameters, 2);
-        delete obj;
+        if (typeid(MonoBehaviour).before(typeid(obj))) {
+            delete obj;
+        }
     }
 
     void Object::dontDestroyOnLoad(Object *target) {
