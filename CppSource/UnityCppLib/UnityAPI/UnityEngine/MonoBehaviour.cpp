@@ -50,12 +50,12 @@ extern "C" {
         return static_cast<pointer_c>(monoBehaviour);
     }
 
-    UNITY_EXPORT void DestroyNativeMonoBehaviourInstance(pointer_c nativePointer) {
-        Object::destroyImmediate((MonoBehaviour *) nativePointer);
-    }
-
     UNITY_EXPORT MonoBehaviour *Convert(pointer_c instancePtr) {
         return (MonoBehaviour *) instancePtr;
+    }
+
+    UNITY_EXPORT void DestroyNativeMonoBehaviourInstance(pointer_c nativePointer) {
+        Object::objectDelete(Convert(nativePointer));
     }
 
     UNITY_EXPORT void CallMonoBehaviourAwake(pointer_c instancePtr) {

@@ -13,17 +13,11 @@
 
 using namespace System;
 
-namespace CppEngine {
-    class Trash;
-}
-
 namespace UnityEngine {
     using namespace ManagedBridge;
     using namespace ManagedBridge::Members;
 
     class Object {
-        friend class CppEngine::Trash;
-
     protected:
         static ManagedType _objectBridgeType;
         static ManagedType _objectType;
@@ -52,6 +46,7 @@ namespace UnityEngine {
         static void destroyImmediate(Object *obj, bool allowDestroyingAssets = false);
         static void dontDestroyOnLoad(Object *target);
 
+        static void objectDelete(Object *obj);
         static ManagedType type();
         static ManagedType unityType();
         static void InitializeManagedBridge();

@@ -56,7 +56,7 @@ namespace UnityEngine {
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(t) };
         _destroyMethod.callMethod(ManagedInstance::null, parameters, 2);
         if (typeid(MonoBehaviour).before(typeid(obj))) {
-            delete obj;
+            Object::objectDelete(obj);
         }
     }
 
@@ -65,7 +65,7 @@ namespace UnityEngine {
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()), UnmanagedValue(allowDestroyingAssets) };
         _destroyImmediateMethod.callMethod(ManagedInstance::null, parameters, 2);
         if (typeid(MonoBehaviour).before(typeid(obj))) {
-            delete obj;
+            Object::objectDelete(obj);
         }
     }
 
@@ -73,6 +73,10 @@ namespace UnityEngine {
         ManagedPointer pointer = target->_instance.toPointer();
         UnmanagedValue parameters[] = { UnmanagedValue(pointer.toManaged()) };
         _dontDestroyOnLoadMethod.callMethod(ManagedInstance::null, parameters, 1);
+    }
+
+    void Object::objectDelete(Object *obj) {
+        delete obj;
     }
 
     ManagedType Object::type() {
