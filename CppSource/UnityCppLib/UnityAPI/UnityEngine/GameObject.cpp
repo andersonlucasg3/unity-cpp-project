@@ -159,13 +159,14 @@ namespace UnityEngine {
         _gameObjectBridgeType = ManagedType(_gameObjectBridgeAssembly);
         _gameObjectType = ManagedType(_gameObjectAssembly);
 
-        _defaultConstructor = _gameObjectBridgeType.getConstructor(nullptr, 0);
+        ManagedType firstConstructorParams[] = { System::managedIntPtrType };
+        _defaultConstructor = _gameObjectBridgeType.getConstructor(firstConstructorParams, 1);
 
-        ManagedType secondConstructorParams[] = { System::managedStringType };
-        _secondConstructor = _gameObjectBridgeType.getConstructor(secondConstructorParams, 1);
+        ManagedType secondConstructorParams[] = { System::managedIntPtrType, System::managedStringType };
+        _secondConstructor = _gameObjectBridgeType.getConstructor(secondConstructorParams, 2);
 
-        ManagedType thirdConstructorParams[] = { System::managedStringType, System::managedArrayType };
-        _thirdConstructor = _gameObjectBridgeType.getConstructor(thirdConstructorParams, 2);
+        ManagedType thirdConstructorParams[] = { System::managedIntPtrType, System::managedStringType, System::managedArrayType };
+        _thirdConstructor = _gameObjectBridgeType.getConstructor(thirdConstructorParams, 3);
 
         _activeInHierarchyProperty = _gameObjectBridgeType.getProperty("activeInHierarchy");
         _sceneCullingMaskProperty = _gameObjectBridgeType.getProperty("sceneCullingMask");

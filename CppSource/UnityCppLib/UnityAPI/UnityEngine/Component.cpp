@@ -66,3 +66,12 @@ namespace UnityEngine {
         _tagProperty = _componentBridgeType.getProperty("tag");
     }
 }
+
+using namespace UnityEngine;
+
+extern "C" {
+    UNITY_EXPORT pointer_c GetNativeGameObjectInstance(pointer_c nativeInstance) {
+        Component *component = (Component *)nativeInstance;
+        return component->gameObject();
+    }
+}
