@@ -36,7 +36,9 @@ namespace UnityEngine {
         static MonoBehaviour *Create(ManagedInstance instance, const GameObject *gameObject); \
         static void Register();
 
-#define MONO_BEHAVIOUR_SOURCE_CLASS(CLASS_NAME) \
+#define MONO_BEHAVIOUR_SOURCE_CLASS(CLASS_NAME) MONO_BEHAVIOUR_SOURCE_CLASS_WITH_NAMESPACE("", CLASS_NAME)
+
+#define MONO_BEHAVIOUR_SOURCE_CLASS_WITH_NAMESPACE(NAMESPACE, CLASS_NAME) \
     CLASS_NAME::CLASS_NAME(ManagedInstance instance, const GameObject *gameObject) : MonoBehaviour(instance, gameObject) { } \
     \
     MonoBehaviour * CLASS_NAME::Create(ManagedInstance instance, const GameObject *gameObject) { \
@@ -44,5 +46,5 @@ namespace UnityEngine {
     } \
     \
     void CLASS_NAME::Register() { \
-        Registry::reg(#CLASS_NAME, &Create); \
+        Registry::reg(#NAMESPACE"::"#CLASS_NAME, &Create); \
     }
