@@ -6,7 +6,6 @@
 
 using namespace std;
 using namespace ManagedBridge;
-using namespace CppEngine;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _gameObjectBridgeAssembly("UnityCpp.NativeBridge.UnityBridges.GameObjectBridge");
