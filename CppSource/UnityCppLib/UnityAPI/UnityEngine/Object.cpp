@@ -3,7 +3,6 @@
 
 using namespace std;
 using namespace ManagedBridge;
-using namespace CppEngine;
 
 namespace UnityEngine {
     const ManagedAssemblyInfo _objectBridgeAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.ObjectBridge");

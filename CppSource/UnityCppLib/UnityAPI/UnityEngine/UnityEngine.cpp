@@ -2,8 +2,6 @@
 
 #include "UnityAPI/NetFramework/System.h"
 
-using namespace CppEngine;
-
 namespace UnityEngine {
     void InitializeEngine() {
         System::InitializeManagedBridge();

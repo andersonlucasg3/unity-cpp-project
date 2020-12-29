@@ -1,8 +1,6 @@
 #include "Transform.h"
 #include "GameObject.h"
 
-using namespace CppEngine;
-
 namespace UnityEngine {
     const ManagedAssemblyInfo _transformBridgeAssemblyInfo("UnityCpp.NativeBridge.UnityBridges.TransformBridge");
     const ManagedAssemblyInfo _transformAssemblyInfo("UnityEngine.Transform", "UnityEngine.dll");
